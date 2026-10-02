@@ -119,9 +119,10 @@ void PinyonShiftGpuFenceWait(PPCRegister& r3) {
   // Through TranslateVirtual: the fence word is in the 0xE0000000 physical
   // view, whose host mapping is offset.
   auto load = [memory](uint32_t address) {
-    return rex::byte_swap(
-        std::atomic_ref<uint32_t>(*memory->TranslateVirtual<uint32_t*>(address))
-            .load(std::memory_order_acquire));
+    // std::atomic_ref is unavailable on the Android NDK's libc++; the plain
+    // __atomic builtin has the same acquire semantics on guest-mapped memory.
+    auto* location = memory->TranslateVirtual<uint32_t*>(address);
+    return rex::byte_swap(__atomic_load_n(location, __ATOMIC_ACQUIRE));
   };
   const uint32_t device = load(r3.u32);
   if (!device || (*memory->TranslateVirtual(device + 11069) & 0x2)) {
