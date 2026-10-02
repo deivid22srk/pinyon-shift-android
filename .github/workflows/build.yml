@@ -42,6 +42,17 @@ jobs:
             libasound2-dev libpulse-dev libpipewire-0.3-dev \
             libx11-xcb-dev libwayland-dev libxkbcommon-dev wayland-protocols
 
+      - name: Install clang 20 for the generator (matches the SDK toolchain)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends software-properties-common lsb-release wget
+          wget -qO llvm.sh https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 20
+          sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-20 200
+          sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 200
+          clang++ --version | head -1
+
       - name: Verify the three game executables are loadable
         if: env.XEX_TOKEN != ''
         run: |
