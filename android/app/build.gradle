@@ -12,7 +12,9 @@ android {
 
     defaultConfig {
         applicationId 'dev.pinyon.shift'
-        minSdk 26
+        // API 29: pthread_sigqueue (APC delivery) and memfd_create are the
+        // levels the ShiftGlue Android support was written against.
+        minSdk 29
         targetSdk 35
         versionCode 3
         versionName '0.3.1.0'
