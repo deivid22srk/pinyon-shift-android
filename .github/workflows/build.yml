@@ -35,6 +35,13 @@ jobs:
             "platforms;android-35" "build-tools;35.0.0" \
             "ndk;27.2.12479018" "cmake;3.31.6" > /dev/null
 
+      - name: Install Linux build dependencies for the host-side generator
+        run: |
+          sudo apt-get update > /dev/null
+          sudo apt-get install -y \
+            libasound2-dev libpulse-dev libpipewire-0.3-dev \
+            libx11-xcb-dev libwayland-dev libxkbcommon-dev wayland-protocols
+
       - name: Verify the three game executables are loadable
         if: env.XEX_TOKEN != ''
         run: |
