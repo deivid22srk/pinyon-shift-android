@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launch icon: a simple vector monogram on a dark ground. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#101418"
+        android:pathData="M0,0h108v108h-108z" />
+    <path
+        android:fillColor="#D8A657"
+        android:pathData="M30,66 L30,42 L38,42 L54,56 L54,42 L62,42 L62,66 L54,66 L38,52 L38,66 Z" />
+    <path
+        android:fillColor="#7DAEA3"
+        android:pathData="M68,42 L88,42 L88,48 L76,48 L76,51 L86,51 L86,57 L76,57 L76,60 L88,60 L88,66 L68,66 Z" />
+</vector>

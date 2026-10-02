@@ -1,0 +1,179 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [android-port, main, dev]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    name: Build APKs (arm64 device + x86_64 emulator)
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    env:
+      XEX_TOKEN: ${{ secrets.XEX_REPO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install pinned Android SDK components
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-35" "build-tools;35.0.0" \
+            "ndk;27.2.12479018" "cmake;3.31.6" > /dev/null
+
+      - name: Verify the three game executables are loadable
+        if: env.XEX_TOKEN != ''
+        run: |
+          API=https://api.github.com/repos/deivid22srk/Forza1files
+          mkdir -p .local/game/base .local/logs
+          curl -sf -H "Authorization: token $XEX_TOKEN" "$API/releases/tags/Files" -o /tmp/release.json
+          python3 - <<'PY'
+          import json, os, subprocess, sys
+          rel = json.load(open('/tmp/release.json'))
+          token = os.environ['XEX_TOKEN']
+          expected = {'default.xex', 'SpeechFacade_default.xex', 'XMediaFacade_default.xex'}
+          found = {a['name']: a for a in rel.get('assets', []) if a['name'] in expected}
+          missing = expected - set(found)
+          if missing:
+              sys.exit(f"missing release assets: {missing}")
+          for name, a in found.items():
+              out = f".local/game/base/{name}"
+              subprocess.run([
+                  'curl', '-sfL',
+                  '-H', f'Authorization: token {token}',
+                  '-H', 'Accept: application/octet-stream',
+                  '-o', out, a['url'],
+              ], check=True)
+              print(name, os.path.getsize(out), 'bytes')
+          PY
+
+      - name: Check the executables against the supported-dumps manifest
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, sys
+          doc = json.load(open('config/supported-dumps.json'))
+          for exe in doc['dumps'][0]['executables']:
+              path = '.local/game/base/' + exe['guest_path']
+              data = open(path, 'rb').read()
+              if len(data) != exe['size_bytes']:
+                  sys.exit(f"{exe['guest_path']}: bad size")
+              digest = hashlib.sha256(data).hexdigest().upper()
+              if digest != exe['sha256']:
+                  sys.exit(f"{exe['guest_path']}: bad sha256")
+              print(exe['guest_path'], 'verified')
+          PY
+
+      - name: Build the code generator (x86-64 host tool)
+        run: |
+          cd thirdparty/shiftglue-sdk
+          cmake --preset linux-amd64
+          cmake --build out/build/linux-amd64 --config Release --target rexglue --parallel 4
+
+      - name: Generate the recompiled sources from the executables
+        run: |
+          thirdparty/shiftglue-sdk/out/linux-amd64/Release/rexglue \
+            --log-level info --log-file .local/logs/codegen.log \
+            codegen config/rexglue/pinyon_shift_manifest.toml --ignore-stamp
+          du -sh .local/generated/*
+          # The generator build tree is not needed past this point.
+          rm -rf thirdparty/shiftglue-sdk/out/build
+
+      - name: Build the device APK (arm64, release)
+        run: |
+          # Release falls back to the debug key when no release keystore is
+          # configured; create it so fresh runners can sign.
+          mkdir -p ~/.android
+          [ -f ~/.android/debug.keystore ] || keytool -genkeypair -v \
+            -keystore ~/.android/debug.keystore -storepass android -keypass android \
+            -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US" > /dev/null
+          cd android
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          ./gradlew :app:assembleDeviceRelease --no-daemon --stacktrace
+
+      - name: Build the emulator APK (x86_64, debug)
+        run: |
+          cd android
+          ./gradlew :app:assembleEmulatorDebug --no-daemon --stacktrace
+
+      - name: Stage unsigned/unreleased APKs for inspection
+        run: |
+          find android/app/build/outputs -name "*.apk" | xargs -I{} sh -c 'echo "{}: $(du -h "{}" | cut -f1)"'
+
+      - name: Upload APKs
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinyon-shift-apks
+          if-no-files-found: error
+          path: |
+            android/app/build/outputs/apk/device/release/*.apk
+            android/app/build/outputs/apk/emulator/debug/*.apk
+
+  smoke-test:
+    name: Emulator smoke test (boots without crash)
+    needs: apk
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Enable KVM
+        run: |
+          sudo -E swapoff -a || true
+          sudo -E rm -f /usr/local/bin/android-wait-for-avd || true
+          echo 'KVM devices:'; ls -l /dev/kvm
+
+      - name: Download the emulator APK
+        uses: actions/download-artifact@v4
+        with:
+          name: pinyon-shift-apks
+          path: apks
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Create the emulator and run the smoke test
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          target: google_apis
+          emulator-options: -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim -memory 4096
+          script: |
+            APK=$(find apks -name "*emulator*debug*.apk" | head -1)
+            echo "Installing $APK"
+            adb install -r "$APK"
+            adb logcat -c
+            adb shell am start -W -n dev.pinyon.shift/.PinyonActivity || true
+            sleep 120
+            adb logcat -d > full-logcat.txt || true
+            echo "--- crash scan ---"
+            if grep -E "Fatal signal|FATAL EXCEPTION|SIGSEGV|SIGBUS|SIGILL" full-logcat.txt; then
+              echo "CRASH DETECTED"; tail -80 full-logcat.txt; exit 1
+            fi
+            echo "--- pinyon/SDL startup markers ---"
+            grep -E "PinyonShift|SDL|rexglue|Vulkan" full-logcat.txt | head -40 || true
+            echo "No fatal signals or exceptions detected."
+
+      - name: Upload logcat
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-logcat
+          path: full-logcat.txt
+          if-no-files-found: ignore

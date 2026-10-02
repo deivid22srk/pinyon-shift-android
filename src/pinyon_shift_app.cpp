@@ -382,7 +382,8 @@ bool EnsureSupportedConfig(const std::filesystem::path& path, bool& created,
 std::unique_ptr<rex::ui::WindowedApp> PinyonShiftApp::Create(
     rex::ui::WindowedAppContext& context) {
   if (!pinyon_shift::diagnostics::InitializeEarly()) {
-    ExitProcess(ERROR_NOT_SUPPORTED);
+    // 50: ERROR_NOT_SUPPORTED, the code this exit has always had.
+    pinyon_shift::platform::ExitImmediately(50);
   }
   return std::unique_ptr<PinyonShiftApp>(
       new PinyonShiftApp(context, "pinyon_shift", PPCImageConfig));

@@ -16,88 +16,63 @@ endif()
 
 include(cmake/PinyonShiftRexGlue.cmake)
 
+# Host sources shared by every platform target. The crash reporter is picked
+# per platform below.
+set(PINYON_SHIFT_HOST_SOURCES
+    src/main.cpp
+    src/cpu_baseline_guard.cpp
+    src/fh1_render_test.cpp
+    src/pinyon_shift_app.cpp
+    src/pinyon_shift_diagnostics.cpp
+    src/pinyon_shift_runtime_hooks.cpp
+    src/save_backups.cpp
+    src/cheats.cpp
+    src/cheats_map.cpp
+    src/dlc_treasure_map.cpp
+    src/save/car_cards.cpp
+    src/save/live_profile.cpp
+    src/save/profile_body.cpp
+    src/mod/mod_host.cpp
+    src/mod/overlay_device.cpp
+    src/ui/fh1_ui_api.cpp
+    src/ui/ui_strings.cpp
+    src/ui/host_style.cpp
+    src/ui/hostui/fh1_archive.cpp
+    src/ui/hostui/glyph_atlas.cpp
+    src/ui/hostui/host_ui.cpp
+    src/ui/hostui/menu.cpp
+    src/ui/hostui/vector_font.cpp
+    src/ui/hostui/xds_texture.cpp
+    src/ui/settings_menu.cpp
+    src/ui/photo_export.cpp
+    src/ui/png_writer.cpp
+    src/ui/xam_dialogs.cpp
+    src/ui/achievements_menu.cpp
+    src/config/host_config.cpp
+    src/platform/host_platform.cpp
+    src/platform/sha256.cpp
+    ${REXSDK_DIR}/thirdparty/crypto/sha256.cpp
+    src/native_renderer/graphics_hooks.cpp
+    src/native_renderer/guest_output_renderer.cpp
+    src/native_renderer/shader_capture.cpp
+)
+
 if(PINYON_SHIFT_HOST_TESTS_ONLY)
     # No game target; the tests and tools below still build.
 elseif(WIN32)
-    add_executable(pinyon_shift WIN32
-        src/main.cpp
-        src/cpu_baseline_guard.cpp
-        src/fh1_render_test.cpp
-        src/pinyon_shift_app.cpp
-        src/pinyon_shift_diagnostics.cpp
-        src/crash_reporter_win.cpp
-        src/pinyon_shift_runtime_hooks.cpp
-        src/save_backups.cpp
-        src/cheats.cpp
-        src/cheats_map.cpp
-        src/dlc_treasure_map.cpp
-        src/save/car_cards.cpp
-        src/save/live_profile.cpp
-        src/save/profile_body.cpp
-        src/mod/mod_host.cpp
-        src/mod/overlay_device.cpp
-        src/ui/fh1_ui_api.cpp
-        src/ui/ui_strings.cpp
-        src/ui/host_style.cpp
-        src/ui/hostui/fh1_archive.cpp
-        src/ui/hostui/glyph_atlas.cpp
-        src/ui/hostui/host_ui.cpp
-        src/ui/hostui/menu.cpp
-        src/ui/hostui/vector_font.cpp
-        src/ui/hostui/xds_texture.cpp
-        src/ui/settings_menu.cpp
-        src/ui/photo_export.cpp
-        src/ui/png_writer.cpp
-        src/ui/xam_dialogs.cpp
-        src/ui/achievements_menu.cpp
-        src/config/host_config.cpp
-        src/platform/host_platform.cpp
-        src/platform/sha256.cpp
-        ${REXSDK_DIR}/thirdparty/crypto/sha256.cpp
-        src/native_renderer/graphics_hooks.cpp
-        src/native_renderer/guest_output_renderer.cpp
-        src/native_renderer/shader_capture.cpp
-    )
-else()
-    add_executable(pinyon_shift
-        src/main.cpp
-        src/cpu_baseline_guard.cpp
-        src/fh1_render_test.cpp
-        src/pinyon_shift_app.cpp
-        src/pinyon_shift_diagnostics.cpp
+    list(APPEND PINYON_SHIFT_HOST_SOURCES src/crash_reporter_win.cpp)
+    add_executable(pinyon_shift WIN32 ${PINYON_SHIFT_HOST_SOURCES})
+elseif(ANDROID)
+    # Android: the host is libmain.so, loaded by the SDL3 Java activity, which
+    # calls SDL_RunApp -> SDL_main (see windowed_app_main_sdl.cpp in the SDK).
+    list(APPEND PINYON_SHIFT_HOST_SOURCES
         src/crash_reporter_posix.cpp
-        src/pinyon_shift_runtime_hooks.cpp
-        src/save_backups.cpp
-        src/cheats.cpp
-        src/cheats_map.cpp
-        src/dlc_treasure_map.cpp
-        src/save/car_cards.cpp
-        src/save/live_profile.cpp
-        src/save/profile_body.cpp
-        src/mod/mod_host.cpp
-        src/mod/overlay_device.cpp
-        src/ui/fh1_ui_api.cpp
-        src/ui/ui_strings.cpp
-        src/ui/host_style.cpp
-        src/ui/hostui/fh1_archive.cpp
-        src/ui/hostui/glyph_atlas.cpp
-        src/ui/hostui/host_ui.cpp
-        src/ui/hostui/menu.cpp
-        src/ui/hostui/vector_font.cpp
-        src/ui/hostui/xds_texture.cpp
-        src/ui/settings_menu.cpp
-        src/ui/photo_export.cpp
-        src/ui/png_writer.cpp
-        src/ui/xam_dialogs.cpp
-        src/ui/achievements_menu.cpp
-        src/config/host_config.cpp
-        src/platform/host_platform.cpp
-        src/platform/sha256.cpp
-        ${REXSDK_DIR}/thirdparty/crypto/sha256.cpp
-        src/native_renderer/graphics_hooks.cpp
-        src/native_renderer/guest_output_renderer.cpp
-        src/native_renderer/shader_capture.cpp
-    )
+        src/android_host_jni.cpp)
+    add_library(pinyon_shift SHARED ${PINYON_SHIFT_HOST_SOURCES})
+    set_target_properties(pinyon_shift PROPERTIES OUTPUT_NAME main)
+else()
+    list(APPEND PINYON_SHIFT_HOST_SOURCES src/crash_reporter_posix.cpp)
+    add_executable(pinyon_shift ${PINYON_SHIFT_HOST_SOURCES})
 endif()
 
 add_executable(pinyon_shift_fh1_ui_api_tests EXCLUDE_FROM_ALL

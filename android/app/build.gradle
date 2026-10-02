@@ -1,0 +1,129 @@
+plugins {
+    id 'com.android.application'
+}
+
+// Pinned NDK: r27c (LTS) with 16 KB page-size support.
+def PINYON_NDK = '27.2.12479018'
+
+android {
+    namespace 'dev.pinyon.shift'
+    compileSdk 35
+    ndkVersion PINYON_NDK
+
+    defaultConfig {
+        applicationId 'dev.pinyon.shift'
+        minSdk 26
+        targetSdk 35
+        versionCode 3
+        versionName '0.3.1.0'
+
+        externalNativeBuild {
+            cmake {
+                // c++_shared: the runtime, GPU plugin, host and the two
+                // generated facade libraries must share one STL.
+                arguments '-DANDROID_STL=c++_shared',
+                          '-DREXGLUE_USE_D3D12=OFF',
+                          '-DREXGLUE_ENABLE_TRACY=OFF',
+                          '-DPINYON_SHIFT_FROZEN_CODEGEN=ON',
+                          '-DPINYON_SHIFT_CAPTURE_PERFORMANCE=OFF'
+            }
+        }
+    }
+
+    // Release: the player-facing build, arm64 devices only.
+    // Debug: x86_64 included so the APK runs on an emulator for CI checks.
+    def releaseAbis = ['arm64-v8a']
+    def debugAbis = ['x86_64']
+
+    externalNativeBuild {
+        cmake {
+            path file('CMakeLists.txt')
+            version '3.31.6'
+        }
+    }
+
+    signingConfigs {
+        // CI provides a keystore through the environment; without it, release
+        // falls back to the debug key so the APK stays installable.
+        release {
+            def keystorePath = System.getenv('PINYON_KEYSTORE_PATH')
+            def keystorePassword = System.getenv('PINYON_KEYSTORE_PASSWORD')
+            def keyAlias = System.getenv('PINYON_KEY_ALIAS') ?: 'pinyonshift'
+            def keyPassword = System.getenv('PINYON_KEY_PASSWORD') ?: keystorePassword
+            if (keystorePath && keystorePassword && file(keystorePath).exists()) {
+                storeFile file(keystorePath)
+                storePassword keystorePassword
+                keyAlias keyAlias
+                keyPassword keyPassword
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release.storeFile != null
+                ? signingConfigs.release
+                : signingConfigs.debug
+        }
+        debug {
+        }
+    }
+
+    flavorDimensions 'target'
+    productFlavors {
+        device {
+            dimension 'target'
+            ndk {
+                abiFilters.addAll(releaseAbis)
+            }
+        }
+        emulator {
+            dimension 'target'
+            ndk {
+                abiFilters.addAll(debugAbis)
+            }
+        }
+    }
+
+    // The facade libraries, the GPU plugin and the runtime are loaded at
+    // runtime by name from nativeLibraryDir; they must be extracted to the
+    // filesystem (not loaded straight from the APK).
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    lint {
+        abortOnError false
+    }
+
+    // The SDL3 Java support lives in the pinned SDK submodule: single source
+    // of truth, no vendored copy.
+    sourceSets {
+        main {
+            java.srcDirs += file('../../thirdparty/shiftglue-sdk/thirdparty/sdl3/android-project/app/src/main/java/org/libsdl/app')
+        }
+    }
+
+    // The project gamepad mapping database, staged from the host config.
+    def controllerDb = rootProject.file('../../config/gamecontrollerdb.txt')
+    def generatedAssets = layout.buildDirectory.dir('generated/pinyonAssets')
+    tasks.register('copyControllerDb', Copy) {
+        from(controllerDb)
+        into(generatedAssets)
+    }
+    android.sourceSets.main.assets.srcDir(generatedAssets)
+    tasks.matching { it.name.contains('Asset') || it.name.startsWith('preBuild') }
+         .configureEach { dependsOn tasks.named('copyControllerDb') }
+}
+
+dependencies {
+}

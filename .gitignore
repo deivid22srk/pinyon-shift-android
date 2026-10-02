@@ -39,6 +39,16 @@ build/
 out/
 cmake-build-*/
 CMakeUserPresets.json
+
+# Android build state.
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/.idea/
+android/*.keystore
+android/*.jks
+android/keystore.properties
 .cache/
 __pycache__/
 *.py[cod]
