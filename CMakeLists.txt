@@ -75,6 +75,10 @@ else()
     add_executable(pinyon_shift ${PINYON_SHIFT_HOST_SOURCES})
 endif()
 
+# Host-side tests and tools. They never build on a device target: AGP's
+# externalNativeBuild compiles the whole configured target graph, and the
+# tests are Windows/desktop-only.
+if(NOT ANDROID)
 add_executable(pinyon_shift_fh1_ui_api_tests EXCLUDE_FROM_ALL
     tests/ui/fh1_ui_api_test.cpp
     src/ui/fh1_ui_api.cpp
@@ -167,6 +171,7 @@ if(WIN32)
     add_executable(pinyon_shift_thread_sampler EXCLUDE_FROM_ALL tools/thread_sampler.cpp)
     target_link_libraries(pinyon_shift_thread_sampler PRIVATE dbghelp)
 endif()
+endif()  # NOT ANDROID
 
 if(NOT PINYON_SHIFT_HOST_TESTS_ONLY)
 pinyon_shift_attach_rexglue(pinyon_shift)
@@ -199,7 +204,8 @@ endif()  # NOT PINYON_SHIFT_HOST_TESTS_ONLY
 
 # Sample mods (NP-7.6): plain C libraries against include/pinyon_mod.h. Not
 # part of the default build; tools/install-sample-mod.py copies one into a
-# state directory's mods/.
+# state directory's mods/. Desktop only - Android does not load file mods.
+if(NOT ANDROID)
 add_library(pinyon_shift_mod_hello_telemetry MODULE EXCLUDE_FROM_ALL
     mods_src/samples/hello_telemetry/hello_telemetry.c)
 target_include_directories(pinyon_shift_mod_hello_telemetry PRIVATE include)
@@ -207,3 +213,4 @@ set_target_properties(pinyon_shift_mod_hello_telemetry PROPERTIES
     OUTPUT_NAME hello_telemetry
     PREFIX ""
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/mods/hello_telemetry/code")
+endif()
