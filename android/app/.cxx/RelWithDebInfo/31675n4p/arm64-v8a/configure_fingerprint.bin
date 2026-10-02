@@ -1,93 +1,0 @@
-C/C++ Structured Log7
-5
-3/home/z/my-project/work/pinyon-shift/CMakeLists.txtC
-A
-?com.android.build.gradle.internal.cxx.io.EncodedFileFingerPrint	Àœ¼õ4? ‡Åˆô4x
-v
-t/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/additional_project_files.txt	Àœ¼õ4¥¢	 ¸—¼õ4u
-s
-q/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/android_gradle_build.json	Àœ¼õ4ğ« È—¼õ4z
-x
-v/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/android_gradle_build_mini.json	Àœ¼õ4†¢ ±œ¼õ4g
-e
-c/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/build.ninja	Àœ¼õ4à“Û Œ–¼õ4k
-i
-g/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/build.ninja.txt	Àœ¼õ4p
-n
-l/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/build_file_index.txt	Ûœ¼õ4Ã ³Ê±õ4q
-o
-m/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/compile_commands.json	Ûœ¼õ4	¦™¿ Œ–¼õ4u
-s
-q/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/compile_commands.json.bin	Ûœ¼õ4
-® Œ–¼õ4{
-y
-w/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/metadata_generation_command.txt	Ûœ¼õ4Á	 ³Ê±õ4n
-l
-j/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/prefab_config.json	Ûœ¼õ4( ³Ê±õ4s
-q
-o/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/symbol_folder_index.txt	Ûœ¼õ4n ³Ê±õ4C
-A
-?/home/z/my-project/work/pinyon-shift/android/app/CMakeLists.txt	Ûœ¼õ4× Çï¨ô4P
-N
-L/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/CMakeLists.txt	Ûœ¼õ4é^ –˜÷ó4Z
-X
-V/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/audio/CMakeLists.txt	Ûœ¼õ4¢ Ø•„ó4\
-Z
-X/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/CMakeLists.txt	Üœ¼õ4Â Ù•„ó4Y
-W
-U/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/core/CMakeLists.txt	Üœ¼õ4İ  ÒŒ»õ4_
-]
-[/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/filesystem/CMakeLists.txt	Üœ¼õ4ÿ ›˜÷ó4]
-[
-Y/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/graphics/CMakeLists.txt	Üœ¼õ4è6 ›˜÷ó4Z
-X
-V/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/input/CMakeLists.txt	Üœ¼õ4ä ¦–„ó4[
-Y
-W/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/kernel/CMakeLists.txt	Üœ¼õ4Ë ¦–„ó4\
-Z
-X/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/rexglue/CMakeLists.txt	Üœ¼õ4Ğ «–„ó4[
-Y
-W/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/system/CMakeLists.txt	Üœ¼õ4¿ ¬–„ó4W
-U
-S/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/ui/CMakeLists.txt	Üœ¼õ4÷) §˜÷ó4[
-Y
-W/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/CMakeLists.txt	Üœ¼õ4Õ ©˜÷ó4b
-`
-^/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/disasm/CMakeLists.txt	Üœ¼õ4Ø º–„ó4_
-]
-[/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/fmt/CMakeLists.txt	Üœ¼õ4à™ ±Õô4c
-a
-_/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/CMakeLists.txt	Üœ¼õ4†n Ä˜®ô4l
-j
-h/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/External/CMakeLists.txt	İœ¼õ4É Ä˜®ô4s
-q
-o/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/OGLCompilersDLL/CMakeLists.txt	İœ¼õ4¿ Å˜®ô4i
-g
-e/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/SPIRV/CMakeLists.txt	İœ¼õ4 Ã% Å˜®ô4k
-i
-g/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/glslang/CMakeLists.txt	İœ¼õ4!¡C ÷™®ô4|
-z
-x/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/glslang/OSDependent/Unix/CMakeLists.txt	İœ¼õ4"® “š®ô4j
-h
-f/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/gtests/CMakeLists.txt	İœ¼õ4#Ş# ”š®ô4j
-h
-f/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/CMakeLists.txt	İœ¼õ4$œ
- €Ï¬ô4}
-{
-y/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/lib/linkernsbypass/CMakeLists.txt	İœ¼õ4%Û Óò¯õ4s
-q
-o/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/CMakeLists.txt	İœ¼õ4&¬	 Ï¬ô4`
-^
-\/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/CMakeLists.txt	İœ¼õ4'›‚	 »ğô4b
-`
-^/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/CMakeLists.txt	İœ¼õ4(» È£Ÿô4i
-g
-e/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spirv-headers/CMakeLists.txt	İœ¼õ4)± Òà¬ô4b
-`
-^/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/utfcpp/CMakeLists.txt	İœ¼õ4*Ó “©ô4j
-h
-f/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-headers/CMakeLists.txt	İœ¼õ4+. «ü¬ô4s
-q
-o/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-memory-allocator/CMakeLists.txt	İœ¼õ4,¦ ª­ô4s
-q
-o/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/xxHash/cmake_unofficial/CMakeLists.txt	İœ¼õ4-¹< œ©ô4
