@@ -1,0 +1,973 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "pinyon_shift_host/rexglue-artifacts/librexcodegenrd.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"add_dependencies",
+			"add_compile_options",
+			"add_compile_definitions",
+			"include_directories",
+			"target_include_directories",
+			"target_precompile_headers",
+			"rex_target_pch"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/cmake/rex_pch.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 83,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 106,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 89,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 125,
+				"parent" : 4
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 132,
+				"parent" : 4
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 261,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 195,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 31,
+				"parent" : 4
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 171,
+				"parent" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 1,
+				"line" : 266,
+				"parent" : 4
+			},
+			{
+				"command" : 6,
+				"file" : 0,
+				"line" : 93,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 91,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 2,
+				"line" : 5,
+				"parent" : 13
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O2 -g -DNDEBUG -std=c++23 -fPIC"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-mcmodel=small"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-fno-strict-aliasing"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-ffp-model=strict"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-fno-char8_t"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-pthread"
+				},
+				{
+					"fragment" : "-Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/CMakeFiles/rexcodegen.dir/cmake_pch.hxx -x c++-header"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 8,
+					"define" : "REXGLUE_BUILD_CONFIG=\"RelWithDebInfo\""
+				},
+				{
+					"backtrace" : 9,
+					"define" : "REXGLUE_ENABLE_PERF_COUNTERS"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "REX_HAS_VULKAN=1"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "REX_PLATFORM_LINUX=1"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "SPDLOG_COMPILED_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "SPDLOG_FMT_EXTERNAL"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 11,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/inja/single_include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/inja/third_party/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/disasm"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/generated/templates"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde/simde"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/fmt/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/sdl3/include-revision"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/xxHash/cmake_unofficial/.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-headers/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-memory-allocator/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/tomlplusplus/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spirv-tools/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "23"
+			},
+			"precompileHeaders" : 
+			[
+				{
+					"backtrace" : 14,
+					"header" : "<algorithm>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<array>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<cstddef>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<cstdint>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<cstring>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<functional>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<memory>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<optional>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<string>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<string_view>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<utility>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<vector>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/platform.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/types.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/assert.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/cvar.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/logging.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/codegen/function_types.h>"
+				}
+			],
+			"sourceIndexes" : 
+			[
+				0
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O2 -g -DNDEBUG -std=c++23 -fPIC"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-mcmodel=small"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-fno-strict-aliasing"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-ffp-model=strict"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-fno-char8_t"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-Wextra"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-pthread"
+				},
+				{
+					"fragment" : "-Winvalid-pch -Xclang -include-pch -Xclang /home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/CMakeFiles/rexcodegen.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/CMakeFiles/rexcodegen.dir/cmake_pch.hxx"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 8,
+					"define" : "REXGLUE_BUILD_CONFIG=\"RelWithDebInfo\""
+				},
+				{
+					"backtrace" : 9,
+					"define" : "REXGLUE_ENABLE_PERF_COUNTERS"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "REX_HAS_VULKAN=1"
+				},
+				{
+					"backtrace" : 10,
+					"define" : "REX_PLATFORM_LINUX=1"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "SPDLOG_COMPILED_LIB"
+				},
+				{
+					"backtrace" : 2,
+					"define" : "SPDLOG_FMT_EXTERNAL"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 11,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/inja/single_include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/inja/third_party/include"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/disasm"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/generated/templates"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde/simde"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/fmt/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/sdl3/include-revision"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/xxHash/cmake_unofficial/.."
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-headers/include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-memory-allocator/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/tomlplusplus/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spirv-tools/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					2
+				],
+				"standard" : "23"
+			},
+			"precompileHeaders" : 
+			[
+				{
+					"backtrace" : 14,
+					"header" : "<algorithm>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<array>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<cstddef>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<cstdint>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<cstring>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<functional>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<memory>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<optional>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<string>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<string_view>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<utility>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<vector>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/platform.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/types.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/assert.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/cvar.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/logging.h>"
+				},
+				{
+					"backtrace" : 14,
+					"header" : "<rex/codegen/function_types.h>"
+				}
+			],
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "xxhash::@8e556e2ee43283ae8d97"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "disasm::@5638a796fb07e50cea0b"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "fmt::@3ace85ac803cc164503f"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "spdlog::@0b817fcf7a6c91279be3"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "SDL3-static::@55da8cc12362dd703333"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "rexruntime::@138a510ad0a276a8cf3f"
+		},
+		{
+			"backtrace" : 3,
+			"id" : "embed_templates::@28cd96f2f7c947efbd2e"
+		}
+	],
+	"id" : "rexcodegen::@28cd96f2f7c947efbd2e",
+	"name" : "rexcodegen",
+	"nameOnDisk" : "librexcodegenrd.a",
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host/rexglue-sdk/src/codegen",
+		"source" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38
+			]
+		},
+		{
+			"name" : "Precompile Header File",
+			"sourceIndexes" : 
+			[
+				39
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"path" : ".cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/CMakeFiles/rexcodegen.dir/cmake_pch.hxx.cxx",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/codegen.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/codegen_flags.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/analyze.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/code_emitter.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/decoded_binary.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/codegen_writer.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/output_partition.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/output_stamp.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/config.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/function_graph.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/function_scanner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/sig_scanner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/vtable_scanner.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/binary_view.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/instruction_dispatch.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/test_support.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/codegen_context.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/phase_register.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/phase_scan.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/phase_discover.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/phase_gapfill.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/phase_merge.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/phase_validate.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/template_registry.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/manifest.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/project_recompiler.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/ppc/opcode.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/ppc/instruction.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/ppc/disasm.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/context.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/comparison.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/arithmetic.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/logical.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/control_flow.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/floating_point.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/memory.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/system.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/builders/vector.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"path" : ".cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/src/codegen/CMakeFiles/rexcodegen.dir/cmake_pch.hxx",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

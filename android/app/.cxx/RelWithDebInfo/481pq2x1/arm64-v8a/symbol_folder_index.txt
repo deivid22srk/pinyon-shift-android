@@ -1,0 +1,1 @@
+/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/481pq2x1/obj/arm64-v8a

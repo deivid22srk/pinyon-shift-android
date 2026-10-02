@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host/rexglue-sdk/src/kernel",
+		"source" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/kernel"
+	}
+}

@@ -1,0 +1,72 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 177,
+				"parent" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"id" : "pinyon_shift::@51e6d6ca29c90822aedf"
+		}
+	],
+	"id" : "pinyon_shift_stage_controller_mappings::@51e6d6ca29c90822aedf",
+	"name" : "pinyon_shift_stage_controller_mappings",
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host",
+		"source" : "/home/z/my-project/work/pinyon-shift"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : ".cxx/RelWithDebInfo/481pq2x1/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_stage_controller_mappings",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : ".cxx/RelWithDebInfo/481pq2x1/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_stage_controller_mappings.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

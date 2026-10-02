@@ -1,0 +1,272 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "pinyon_shift_host/rexglue-artifacts/libhook_implrd.so"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"target_link_libraries",
+			"add_compile_options",
+			"target_compile_options",
+			"add_compile_definitions",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/lib/linkernsbypass/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 1,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 4,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 1,
+				"line" : 18,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 125,
+				"parent" : 5
+			},
+			{
+				"command" : 2,
+				"file" : 2,
+				"line" : 132,
+				"parent" : 5
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 3,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 195,
+				"parent" : 5
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 31,
+				"parent" : 5
+			},
+			{
+				"command" : 4,
+				"file" : 2,
+				"line" : 171,
+				"parent" : 5
+			},
+			{
+				"command" : 5,
+				"file" : 0,
+				"line" : 5,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O2 -g -DNDEBUG -std=c++23 -fPIC -fvisibility=hidden"
+				},
+				{
+					"backtrace" : 6,
+					"fragment" : "-mcmodel=small"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-fno-strict-aliasing"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-ffp-model=strict"
+				},
+				{
+					"backtrace" : 7,
+					"fragment" : "-fno-char8_t"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 8,
+					"fragment" : "-Wextra"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 9,
+					"define" : "REXGLUE_BUILD_CONFIG=\"RelWithDebInfo\""
+				},
+				{
+					"backtrace" : 10,
+					"define" : "REXGLUE_ENABLE_PERF_COUNTERS"
+				},
+				{
+					"backtrace" : 11,
+					"define" : "REX_PLATFORM_LINUX=1"
+				},
+				{
+					"define" : "hook_impl_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 12,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/../../include"
+				},
+				{
+					"backtrace" : 2,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/lib/linkernsbypass/."
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "23"
+			},
+			"sourceIndexes" : 
+			[
+				0
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "linkernsbypass::@0817622f7b073f5f74f0"
+		}
+	],
+	"id" : "hook_impl::@98c431870c2d4dca6281",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments  -Wl,--gc-sections",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "pinyon_shift_host/rexglue-artifacts/liblinkernsbypassrd.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-llog",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "-landroid",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 4,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX",
+		"sysroot" : 
+		{
+			"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+		}
+	},
+	"name" : "hook_impl",
+	"nameOnDisk" : "libhook_implrd.so",
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host/rexglue-sdk/thirdparty/libadrenotools/src/hook",
+		"source" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/hook_impl.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/hook_impl.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/hook_impl_params.h",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

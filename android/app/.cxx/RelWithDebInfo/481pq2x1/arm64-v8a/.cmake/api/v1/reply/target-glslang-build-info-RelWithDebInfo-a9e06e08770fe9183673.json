@@ -1,0 +1,73 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 265,
+				"parent" : 0
+			}
+		]
+	},
+	"id" : "glslang-build-info::@274a0dc04dbc685c0349",
+	"name" : "glslang-build-info",
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host/rexglue-sdk/thirdparty/glslang",
+		"source" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				0
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				1,
+				2
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"isGenerated" : true,
+			"path" : ".cxx/RelWithDebInfo/481pq2x1/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/glslang/CMakeFiles/glslang-build-info",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : ".cxx/RelWithDebInfo/481pq2x1/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/glslang/CMakeFiles/glslang-build-info.rule",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : ".cxx/RelWithDebInfo/481pq2x1/arm64-v8a/include/glslang/build_info.h.rule",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "UTILITY"
+}

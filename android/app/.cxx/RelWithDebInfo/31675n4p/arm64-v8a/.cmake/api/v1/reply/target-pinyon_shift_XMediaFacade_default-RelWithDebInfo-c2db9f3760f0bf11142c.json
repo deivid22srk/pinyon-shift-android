@@ -1,0 +1,969 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/libpinyon_shift_XMediaFacade_default.so"
+		}
+	],
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"pinyon_shift_add_generated_module",
+			"include",
+			"target_link_libraries",
+			"set_property",
+			"find_package",
+			"sdl_generic_link_dependency",
+			"sdl_link_dependency",
+			"add_dependencies",
+			"target_compile_options",
+			"pinyon_shift_apply_recomp_settings",
+			"rexglue_apply_target_settings",
+			"rexglue_configure_module_target",
+			"target_include_directories",
+			"target_precompile_headers",
+			"set_source_files_properties"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/cmake/PinyonShiftRexGlue.cmake",
+			"/home/z/my-project/work/pinyon-shift/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/system/CMakeLists.txt",
+			"/home/z/my-project/android-sdk/cmake/3.31.6/share/cmake-3.31/Modules/FindThreads.cmake",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/cmake/sdlcommands.cmake",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/CMakeLists.txt",
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/cmake/rexglue_helpers.cmake"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 17,
+				"parent" : 0
+			},
+			{
+				"file" : 0,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 348,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 331,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 337,
+				"parent" : 3
+			},
+			{
+				"file" : 2
+			},
+			{
+				"command" : 3,
+				"file" : 2,
+				"line" : 81,
+				"parent" : 6
+			},
+			{
+				"file" : 4
+			},
+			{
+				"command" : 5,
+				"file" : 4,
+				"line" : 158,
+				"parent" : 8
+			},
+			{
+				"file" : 3,
+				"parent" : 9
+			},
+			{
+				"command" : 4,
+				"file" : 3,
+				"line" : 238,
+				"parent" : 10
+			},
+			{
+				"file" : 6
+			},
+			{
+				"command" : 7,
+				"file" : 6,
+				"line" : 1120,
+				"parent" : 12
+			},
+			{
+				"command" : 6,
+				"file" : 5,
+				"line" : 98,
+				"parent" : 13
+			},
+			{
+				"command" : 3,
+				"file" : 5,
+				"line" : 79,
+				"parent" : 14
+			},
+			{
+				"command" : 7,
+				"file" : 6,
+				"line" : 1464,
+				"parent" : 12
+			},
+			{
+				"command" : 6,
+				"file" : 5,
+				"line" : 98,
+				"parent" : 16
+			},
+			{
+				"command" : 3,
+				"file" : 5,
+				"line" : 79,
+				"parent" : 17
+			},
+			{
+				"command" : 7,
+				"file" : 6,
+				"line" : 1571,
+				"parent" : 12
+			},
+			{
+				"command" : 6,
+				"file" : 5,
+				"line" : 98,
+				"parent" : 19
+			},
+			{
+				"command" : 3,
+				"file" : 5,
+				"line" : 79,
+				"parent" : 20
+			},
+			{
+				"command" : 3,
+				"file" : 4,
+				"line" : 269,
+				"parent" : 8
+			},
+			{
+				"command" : 8,
+				"file" : 0,
+				"line" : 339,
+				"parent" : 3
+			},
+			{
+				"command" : 10,
+				"file" : 0,
+				"line" : 338,
+				"parent" : 3
+			},
+			{
+				"command" : 9,
+				"file" : 0,
+				"line" : 223,
+				"parent" : 24
+			},
+			{
+				"command" : 12,
+				"file" : 0,
+				"line" : 341,
+				"parent" : 3
+			},
+			{
+				"command" : 11,
+				"file" : 7,
+				"line" : 212,
+				"parent" : 26
+			},
+			{
+				"command" : 9,
+				"file" : 7,
+				"line" : 54,
+				"parent" : 27
+			},
+			{
+				"command" : 13,
+				"file" : 0,
+				"line" : 336,
+				"parent" : 3
+			},
+			{
+				"command" : 14,
+				"file" : 0,
+				"line" : 221,
+				"parent" : 24
+			},
+			{
+				"command" : 15,
+				"file" : 0,
+				"line" : 217,
+				"parent" : 2
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O2 -g -DNDEBUG -std=c++23 -fPIC -fvisibility=hidden"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-gline-tables-only"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-march=armv8-a"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-pthread"
+				},
+				{
+					"fragment" : "-Winvalid-pch -fpch-instantiate-templates -Xclang -emit-pch -Xclang -include -Xclang /home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_XMediaFacade_default.dir/cmake_pch.hxx -x c++-header"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "REXGLUE_ENABLE_PERF_COUNTERS"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "REX_HAS_VULKAN=1"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "SPDLOG_COMPILED_LIB"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "SPDLOG_FMT_EXTERNAL"
+				},
+				{
+					"define" : "pinyon_shift_XMediaFacade_default_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 29,
+					"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde/simde"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/fmt/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/sdl3/include-revision"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/xxHash/cmake_unofficial/.."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-headers/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-memory-allocator/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/tomlplusplus/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spirv-tools/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					5
+				],
+				"standard" : "23"
+			},
+			"precompileHeaders" : 
+			[
+				{
+					"backtrace" : 30,
+					"header" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_pch.h"
+				}
+			],
+			"sourceIndexes" : 
+			[
+				0
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -O2 -g -DNDEBUG -std=c++23 -fPIC -fvisibility=hidden"
+				},
+				{
+					"backtrace" : 25,
+					"fragment" : "-gline-tables-only"
+				},
+				{
+					"backtrace" : 28,
+					"fragment" : "-march=armv8-a"
+				},
+				{
+					"backtrace" : 5,
+					"fragment" : "-pthread"
+				},
+				{
+					"backtrace" : 31,
+					"fragment" : "-gline-tables-only"
+				},
+				{
+					"fragment" : "-Winvalid-pch -Xclang -include-pch -Xclang /home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_XMediaFacade_default.dir/cmake_pch.hxx.pch -Xclang -include -Xclang /home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_XMediaFacade_default.dir/cmake_pch.hxx"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 5,
+					"define" : "REXGLUE_ENABLE_PERF_COUNTERS"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "REX_HAS_VULKAN=1"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "SPDLOG_COMPILED_LIB"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "SPDLOG_FMT_EXTERNAL"
+				},
+				{
+					"define" : "pinyon_shift_XMediaFacade_default_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 29,
+					"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/simde/simde"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/fmt/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/sdl3/include-revision"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/xxHash/cmake_unofficial/.."
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-headers/include"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-memory-allocator/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/tomlplusplus/include"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spirv-tools/include"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					5
+				],
+				"standard" : "23"
+			},
+			"precompileHeaders" : 
+			[
+				{
+					"backtrace" : 30,
+					"header" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_pch.h"
+				}
+			],
+			"sourceIndexes" : 
+			[
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42
+			],
+			"sysroot" : 
+			{
+				"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+			}
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 23,
+			"id" : "pinyon_shift_codegen::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "xxhash::@8e556e2ee43283ae8d97"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "fmt::@3ace85ac803cc164503f"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "spdlog::@0b817fcf7a6c91279be3"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "SDL3-static::@55da8cc12362dd703333"
+		},
+		{
+			"backtrace" : 5,
+			"id" : "rexruntime::@138a510ad0a276a8cf3f"
+		}
+	],
+	"id" : "pinyon_shift_XMediaFacade_default::@51e6d6ca29c90822aedf",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-Wl,--build-id=sha1 -Wl,--no-rosegment -Wl,--no-undefined-version -Wl,--fatal-warnings -Wl,--no-undefined -Qunused-arguments  -Wl,--gc-sections",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "-Wl,-u,JNI_OnLoad",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "pinyon_shift_host/rexglue-artifacts/librexruntimerd.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "pinyon_shift_host/rexglue-artifacts/libspdlogrd.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "pinyon_shift_host/rexglue-artifacts/libfmtrd.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 11,
+				"fragment" : "-pthread",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "pinyon_shift_host/rexglue-artifacts/libSDL3rd.a",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 15,
+				"fragment" : "-lm",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 18,
+				"fragment" : "-lOpenSLES",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-ldl",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 22,
+				"fragment" : "-llog",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 21,
+				"fragment" : "-landroid",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 7,
+				"fragment" : "pinyon_shift_host/rexglue-artifacts/libxxhashrd.a",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-latomic -lm",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX",
+		"sysroot" : 
+		{
+			"path" : "/home/z/my-project/android-sdk/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/sysroot"
+		}
+	},
+	"name" : "pinyon_shift_XMediaFacade_default",
+	"nameOnDisk" : "libpinyon_shift_XMediaFacade_default.so",
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host",
+		"source" : "/home/z/my-project/work/pinyon-shift"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42
+			]
+		},
+		{
+			"name" : "Precompile Header File",
+			"sourceIndexes" : 
+			[
+				43
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"path" : ".cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_XMediaFacade_default.dir/cmake_pch.hxx.cxx",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_init.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_register.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.0.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.1.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.2.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.3.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.4.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.5.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.6.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.7.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.8.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.9.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.10.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.11.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.12.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.13.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.14.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.15.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.16.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.17.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.18.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.19.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.20.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.21.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.22.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.23.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.24.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.25.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.26.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.27.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.28.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.29.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.30.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.31.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.32.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.33.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.34.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.35.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.36.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.37.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.38.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 1,
+			"path" : "/home/z/my-project/work/pinyon-shift/.local/generated/xmedia/pinyon_shift_recomp.39.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"path" : ".cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/CMakeFiles/pinyon_shift_XMediaFacade_default.dir/cmake_pch.hxx",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "SHARED_LIBRARY"
+}

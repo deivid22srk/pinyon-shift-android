@@ -1,0 +1,125 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 364,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 365,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 394,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 401,
+				"parent" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 407,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "include",
+			"paths" : 
+			[
+				{
+					"from" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/include",
+					"to" : "."
+				}
+			],
+			"type" : "directory"
+		},
+		{
+			"backtrace" : 2,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"pinyon_shift_host/rexglue-artifacts/libspdlogrd.a"
+			],
+			"targetId" : "spdlog::@0b817fcf7a6c91279be3",
+			"targetIndex" : 51,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 3,
+			"component" : "Unspecified",
+			"destination" : "lib/pkgconfig",
+			"paths" : 
+			[
+				".cxx/RelWithDebInfo/31675n4p/arm64-v8a/spdlog.pc"
+			],
+			"type" : "file"
+		},
+		{
+			"backtrace" : 4,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/spdlog",
+			"exportName" : "spdlog",
+			"exportTargets" : 
+			[
+				{
+					"id" : "spdlog::@0b817fcf7a6c91279be3",
+					"index" : 51
+				},
+				{
+					"id" : "spdlog_header_only::@0b817fcf7a6c91279be3",
+					"index" : 0
+				}
+			],
+			"paths" : 
+			[
+				"pinyon_shift_host/rexglue-sdk/thirdparty/spdlog/CMakeFiles/Export/5b93ed3f55f9d470264c31a33fb13826/spdlogConfigTargets.cmake"
+			],
+			"type" : "export"
+		},
+		{
+			"backtrace" : 5,
+			"component" : "Unspecified",
+			"destination" : "lib/cmake/spdlog",
+			"paths" : 
+			[
+				".cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/spdlog/spdlogConfig.cmake",
+				".cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-sdk/thirdparty/spdlog/spdlogConfigVersion.cmake"
+			],
+			"type" : "file"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host/rexglue-sdk/thirdparty/spdlog",
+		"source" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog"
+	}
+}

@@ -2,6 +2,7 @@ package dev.pinyon.shift;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.libsdl.app.SDLActivity;
 
@@ -38,6 +39,7 @@ public class PinyonActivity extends SDLActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         copyAssetToFiles("gamecontrollerdb.txt");
+        notifyIfGameDataMissing();
     }
 
     @Override
@@ -49,6 +51,21 @@ public class PinyonActivity extends SDLActivity {
         nativeSetEnvironment(
                 getFilesDir() != null ? getFilesDir().getAbsolutePath() : null,
                 external != null ? external.getAbsolutePath() : null);
+    }
+
+    private void notifyIfGameDataMissing() {
+        java.io.File external = getExternalFilesDir(null);
+        if (external == null) {
+            Log.w(TAG, "External storage unavailable; cannot locate game data");
+            return;
+        }
+        java.io.File gameBase = new java.io.File(external, "game/base");
+        if (!gameBase.isDirectory()) {
+            Toast.makeText(this,
+                    "Game data not found. Copy the extracted disc files to "
+                            + gameBase.getAbsolutePath(),
+                    Toast.LENGTH_LONG).show();
+        }
     }
 
     private boolean copyAssetToFiles(String name) {

@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host",
+		"source" : "/home/z/my-project/work/pinyon-shift"
+	}
+}

@@ -1,0 +1,77 @@
+{
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_custom_target",
+			"add_dependencies"
+		],
+		"files" : 
+		[
+			"/home/z/my-project/work/pinyon-shift/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 133,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 134,
+				"parent" : 0
+			}
+		]
+	},
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_fh1_ui_api_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_fh1_shader_pack_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_hostui_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_host_config_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_profile_body_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_car_cards_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_fh1_edram_tiles_tests::@51e6d6ca29c90822aedf"
+		},
+		{
+			"backtrace" : 2,
+			"id" : "pinyon_shift_mod_hello_telemetry::@51e6d6ca29c90822aedf"
+		}
+	],
+	"id" : "pinyon_shift_host_tests::@51e6d6ca29c90822aedf",
+	"name" : "pinyon_shift_host_tests",
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host",
+		"source" : "/home/z/my-project/work/pinyon-shift"
+	},
+	"sources" : [],
+	"type" : "UTILITY"
+}

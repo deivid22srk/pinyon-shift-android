@@ -1,0 +1,391 @@
+{
+  "buildFiles": [
+    "/home/z/my-project/work/pinyon-shift/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/android/app/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/audio/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/codegen/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/core/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/filesystem/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/graphics/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/input/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/kernel/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/rexglue/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/system/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/src/ui/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/disasm/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/fmt/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/External/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/OGLCompilersDLL/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/SPIRV/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/glslang/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/glslang/OSDependent/Unix/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/gtests/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/lib/linkernsbypass/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/libadrenotools/src/hook/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/sdl3/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spdlog/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/spirv-headers/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/utfcpp/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-headers/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/vulkan-memory-allocator/CMakeLists.txt",
+    "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/xxHash/cmake_unofficial/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/z/my-project/android-sdk/cmake/3.31.6/bin/ninja",
+      "-C",
+      "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/z/my-project/android-sdk/cmake/3.31.6/bin/ninja",
+    "-C",
+    "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "SPIRV::@579047c69b473045b22d": {
+      "artifactName": "SPIRV",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libSPIRVrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_fh1_ui_api_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_fh1_ui_api_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_fh1_ui_api_tests",
+      "runtimeFiles": []
+    },
+    "fmt::@3ace85ac803cc164503f": {
+      "artifactName": "fmt",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libfmtrd.a",
+      "runtimeFiles": []
+    },
+    "aes128::@6f992e335b81d8e83b12": {
+      "artifactName": "aes128",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libaes128rd.a",
+      "runtimeFiles": []
+    },
+    "glslang-build-info::@274a0dc04dbc685c0349": {
+      "artifactName": "glslang-build-info",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "rexfilesystem::@3de6f178e48a91271c58": {
+      "artifactName": "rexfilesystem",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "disasm::@5638a796fb07e50cea0b": {
+      "artifactName": "disasm",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libdisasmrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_fh1_texture_import::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_fh1_texture_import",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_fh1_texture_import",
+      "runtimeFiles": []
+    },
+    "rexcodegen::@28cd96f2f7c947efbd2e": {
+      "artifactName": "rexcodegen",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexcodegenrd.a",
+      "runtimeFiles": []
+    },
+    "o1heap::@6f992e335b81d8e83b12": {
+      "artifactName": "o1heap",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libo1heaprd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_stage_rexruntime::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_stage_rexruntime",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "tiny-aes::@6f992e335b81d8e83b12": {
+      "artifactName": "tiny-aes",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libtiny-aesrd.a",
+      "runtimeFiles": []
+    },
+    "OSDependent::@d39a3cc2283f82cfc70c": {
+      "artifactName": "OSDependent",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libOSDependentrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_SpeechFacade_default::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_SpeechFacade_default",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/libpinyon_shift_SpeechFacade_default.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "pinyon_shift_hostui_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_hostui_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_hostui_tests",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "pinyon_shift_host_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_host_tests",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/libmain.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexgpu-fh1rd.so",
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "mspack::@6f992e335b81d8e83b12": {
+      "artifactName": "mspack",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libmspackrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_car_cards_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_car_cards_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_car_cards_tests",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "xxhash::@8e556e2ee43283ae8d97": {
+      "artifactName": "xxhash",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libxxhashrd.a",
+      "runtimeFiles": []
+    },
+    "glslang::@ba774e28f293ede5ab97": {
+      "artifactName": "glslang",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libglslangrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_fh1_shader_pack_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_fh1_shader_pack_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_fh1_shader_pack_tests",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "rexui::@b55b0a1e1b87dea7506b": {
+      "artifactName": "rexui",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_mod_hello_telemetry::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_mod_hello_telemetry",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/mods/hello_telemetry/code/hello_telemetry.so",
+      "runtimeFiles": []
+    },
+    "rexglue::@4d6bfd435325febcb6f3": {
+      "artifactName": "rexglue",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/rexgluerd",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "pinyon_shift_recomp::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_recomp",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "gsl_alloc_hook::@98c431870c2d4dca6281": {
+      "artifactName": "gsl_alloc_hook",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libgsl_alloc_hookrd.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libhook_implrd.so"
+      ]
+    },
+    "pinyon_shift_fh1_edram_tiles_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_fh1_edram_tiles_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_fh1_edram_tiles_tests",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "rexinput::@e10dc5314da390ceb9ba": {
+      "artifactName": "rexinput",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "SDL3-static::@55da8cc12362dd703333": {
+      "artifactName": "SDL3-static",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libSDL3rd.a",
+      "runtimeFiles": []
+    },
+    "libavutil::@6f992e335b81d8e83b12": {
+      "artifactName": "libavutil",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/liblibavutilrd.a",
+      "runtimeFiles": []
+    },
+    "OGLCompiler::@ffe15a79dc18adaff6fd": {
+      "artifactName": "OGLCompiler",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libOGLCompilerrd.a",
+      "runtimeFiles": []
+    },
+    "linkernsbypass::@0817622f7b073f5f74f0": {
+      "artifactName": "linkernsbypass",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/liblinkernsbypassrd.a",
+      "runtimeFiles": []
+    },
+    "rexruntime::@138a510ad0a276a8cf3f": {
+      "artifactName": "rexruntime",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so",
+      "runtimeFiles": []
+    },
+    "file_redirect_hook::@98c431870c2d4dca6281": {
+      "artifactName": "file_redirect_hook",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libfile_redirect_hookrd.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libhook_implrd.so"
+      ]
+    },
+    "pinyon_shift_codegen::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_codegen",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_stage_controller_mappings::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_stage_controller_mappings",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "rexgpu-fh1::@51bed05735eceae44993": {
+      "artifactName": "rexgpu-fh1",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexgpu-fh1rd.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "SDL3_test::@55da8cc12362dd703333": {
+      "artifactName": "SDL3_test",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libSDL3_testrd.a",
+      "runtimeFiles": []
+    },
+    "MachineIndependent::@ba774e28f293ede5ab97": {
+      "artifactName": "MachineIndependent",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libMachineIndependentrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_host_config_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_host_config_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_host_config_tests",
+      "runtimeFiles": []
+    },
+    "hook_impl::@98c431870c2d4dca6281": {
+      "artifactName": "hook_impl",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libhook_implrd.so",
+      "runtimeFiles": []
+    },
+    "adrenotools::@08463aa79611ab9b86b1": {
+      "artifactName": "adrenotools",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libadrenotoolsrd.a",
+      "runtimeFiles": []
+    },
+    "imgui::@6f992e335b81d8e83b12": {
+      "artifactName": "imgui",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "rexaudio::@0943ef16c3de6bd958de": {
+      "artifactName": "rexaudio",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "main_hook::@98c431870c2d4dca6281": {
+      "artifactName": "main_hook",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libmain_hookrd.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libhook_implrd.so"
+      ]
+    },
+    "rexcore::@b7b62dcd66b9dbd7ab10": {
+      "artifactName": "rexcore",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "embed_templates::@28cd96f2f7c947efbd2e": {
+      "artifactName": "embed_templates",
+      "abi": "arm64-v8a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_fh1_archive_extract::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_fh1_archive_extract",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_fh1_archive_extract",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "GenericCodeGen::@ba774e28f293ede5ab97": {
+      "artifactName": "GenericCodeGen",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libGenericCodeGenrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_XMediaFacade_default::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_XMediaFacade_default",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/libpinyon_shift_XMediaFacade_default.so",
+      "runtimeFiles": [
+        "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/librexruntimerd.so"
+      ]
+    },
+    "libavcodec::@6f992e335b81d8e83b12": {
+      "artifactName": "libavcodec",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/liblibavcodecrd.a",
+      "runtimeFiles": []
+    },
+    "pinyon_shift_profile_body_tests::@51e6d6ca29c90822aedf": {
+      "artifactName": "pinyon_shift_profile_body_tests",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/build/intermediates/cxx/RelWithDebInfo/31675n4p/obj/arm64-v8a/pinyon_shift_profile_body_tests",
+      "runtimeFiles": []
+    },
+    "spdlog::@0b817fcf7a6c91279be3": {
+      "artifactName": "spdlog",
+      "abi": "arm64-v8a",
+      "output": "/home/z/my-project/work/pinyon-shift/android/app/.cxx/RelWithDebInfo/31675n4p/arm64-v8a/pinyon_shift_host/rexglue-artifacts/libspdlogrd.a",
+      "runtimeFiles": []
+    }
+  }
+}

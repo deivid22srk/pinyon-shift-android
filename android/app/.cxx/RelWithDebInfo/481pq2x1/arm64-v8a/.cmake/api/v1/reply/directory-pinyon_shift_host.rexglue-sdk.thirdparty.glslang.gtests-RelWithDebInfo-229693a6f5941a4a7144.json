@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "pinyon_shift_host/rexglue-sdk/thirdparty/glslang/gtests",
+		"source" : "/home/z/my-project/work/pinyon-shift/thirdparty/shiftglue-sdk/thirdparty/glslang/gtests"
+	}
+}
