@@ -132,3 +132,60 @@ Close the launcher and preview, then delete the extracted launcher folder and
 preview does not install a Windows service or registry startup entry. Microsoft
 Visual Studio Build Tools are shared system tools and should be removed
 separately from **Installed apps** only if no other development work uses them. The original ISO remains wherever you stored it.
+
+## Android port
+
+### The game folder is not accepted
+
+The picker expects the folder extracted from the disc — the same one the
+Windows launcher produces — and it must contain `media/ui`; a raw `.iso`
+cannot be played. When the folder was moved, renamed or the drive is
+unplugged, the picker says so and asks for a new selection. A selection made
+through the SAF picker only takes effect on the next app start, because the
+game process reads the location once at boot: close a running game (swipe the
+app away from Recents) before switching folders.
+
+On Android 11 and newer the app needs All Files Access to read non-media
+files where they are; on Android 10 it needs the storage permission. Devices
+whose system picker refuses folders (MIUI/HyperOS) can use **Browse folders
+instead**, which walks the filesystem directly once All Files Access is
+granted. If a folder shows as ready but files still fail to open, re-grant
+the permission — some devices report it while still hiding files behind FUSE.
+
+### The device has too little room
+
+The game content is read in place, but saves, shader caches, logs and crash
+reports live in the app's internal storage (`files/state` inside the app
+sandbox) and grow over the first launches while pipelines warm up. The
+picker shows a warning when internal storage has under 512 MB usable. Free
+space on the device rather than deleting game content: the cache files are
+rebuilt automatically, but a full volume makes the first minutes of play
+stutter and can abort saving.
+
+### The game does not start on a device with no Vulkan 1.1
+
+The game renders through Vulkan 1.1. When the device does not report that
+feature level, the picker shows a warning next to **Ready to play**, and the
+runtime exits during startup with the reason in the log. This is expected on
+devices whose GPU stack predates Vulkan 1.1; there is no software fallback.
+
+### The custom GPU driver did not load
+
+After installing an AdrenoTools package (for example a Mesa Turnip ZIP) the
+startup log should show `Custom GPU driver <name>: loaded <library> through
+adrenotools`, and the Vulkan device name changes to the Turnip one instead of
+`Qualcomm ...`. When it says `adrenotools could not load`, the reason follows
+on the same line and the game falls back to the system driver — the session
+still works, just without the custom driver's behavior. The selection and
+the GPU turbo switch apply on the next game start.
+
+### The game crashed
+
+The runtime installs a signal handler on Android that writes a report for
+SIGABRT-class crashes under `files/state/crashes` inside the app's sandbox
+and prints the pending ones to the log on the next boot, so a crash that
+seemed silent is still recorded. Hardware faults go to the system's own
+tombstone instead. Attach the most recent report file from that folder
+(plus `files/state/logs/runtime.log`, which carries the build provenance) to
+a GitHub issue, together with the last actions before the crash. Reports
+contain the signal, fault address and a backtrace, not saves or game content.
