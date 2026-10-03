@@ -57,6 +57,14 @@
         android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
+    <!-- The title creates UDP/TCP sockets during the intro-to-menu transition
+         (NetDll_socket / XNet). Android's kernel networking refuses AF_INET
+         socket creation with EACCES to apps without the INTERNET permission
+         (paranoid networking): the guest received -1 from NetDll_socket and
+         crashed dereferencing a null pointer right after. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <!-- Rumble support -->
     <uses-permission android:name="android.permission.VIBRATE" />
 

@@ -19,6 +19,16 @@ translations.** You need your own retail disc image to build and to play.
 - The Gradle project still carries a local-only `emulator` flavor (x86_64,
   debug) that is not built in CI; use it for your own desktop-emulator
   experiments with `:app:assembleEmulatorDebug`.
+- The custom GPU driver (Turnip) loads and renders on device; the intro FMV
+  and menu draw. Build #23 narrowed the two remaining on-device failures to
+  (1) the intro video's `k_16_16_16_16` presentation resolve, skipped by the
+  native executor so the FMV drew as thin strips — fixed by adding pack 5 to
+  the FH1 resolve shader — and (2) a SIGSEGV right after the first
+  `NetDll_socket` call: Android's kernel networking refuses AF_INET socket
+  creation without the `INTERNET` permission, the guest kept the -1 and read
+  through a null pointer during the intro-to-menu transition. The manifest
+  now requests `INTERNET`/`ACCESS_NETWORK_STATE`, and `NetDll_socket` plus
+  empty `InterlockedPopEntrySList` pops are logged for follow-ups.
 
 ## Building
 
