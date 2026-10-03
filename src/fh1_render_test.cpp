@@ -144,6 +144,8 @@ const char* PresenterName(rex::system::NativeGuestOutputPresenter presenter) {
   switch (presenter) {
     case rex::system::NativeGuestOutputPresenter::kNativeExecutor:
       return "native";
+    case rex::system::NativeGuestOutputPresenter::kNull:
+      return "null";
   }
   return "unknown";
 }
