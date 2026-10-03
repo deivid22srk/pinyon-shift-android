@@ -3199,7 +3199,10 @@ void PinyonShiftUiPauseItemInsert(PPCContext& context, uint8_t* base,
          {"frame_saved_owner", read_word(context.r1.u32 + 160u)},
          {"frame_saved_lr", read_word(context.r1.u32 + 168u)}});
   }
-  if (is_menu_item) {
+  // Device logs show these diagnostic dumps account for ~95% of all M2_EVENT
+  // logcat lines (193 of 206 in a 3-minute session) even when nothing requests
+  // UI tracing, so they follow the same opt-in gate as the record events above.
+  if (is_menu_item && UiTraceEnabled()) {
     const uint32_t dump_ordinal =
         g_ui_record_dump_count.fetch_add(1, std::memory_order_relaxed) + 1u;
     if (dump_ordinal <= 8u) {
