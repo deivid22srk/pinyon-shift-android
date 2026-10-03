@@ -10,3 +10,4 @@
 | 37152590349 | 8ca9619 | push | ❌ FALHOU 2min | guard de contrato: pin rexglue.revision desatualizado (404fa7ee≠f4df688) — funcionou como projetado |
 | 37152863464 | 346c642 | push | em andamento | pin corrigido + compilação do SDK (P1+P2+P3) |
 | 37152863464 | 346c642 | push | ✅ VERDE ~67min | SDK recompilado (P1+P2+P3 do f4df688); ccache SDK quente a partir de agora |
+| 37154598345 | fd56120 | push | ✅ VERDE ~24min | APK com todos os fixes: FMV race (P3), cópia por nível (P2), máscaras (P1), controllerdb, fontes, MTP dirs, environment.txt |

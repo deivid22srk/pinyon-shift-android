@@ -75,3 +75,6 @@
   (Press Start, cutscenes, tutorial do carro) com frames limpos intercalados → race,
   alvo exato do P3. Novo fix: `e342e7b` (stringtables/en + dynamicpost/colourgradingmaps
   no repair MTP). Run 8 disparado para o HEAD.
+- 21:50 UTC — Run 8 (37154598345, fd56120) VERDE ~24 min: **APK candidato pronto** para o
+  dono testar no device (FMV corrompido, mosaico em folhagem/LOD, gamepad, diretórios
+  MTP). Próxima evidência esperada: novo log/vídeo do dono.
