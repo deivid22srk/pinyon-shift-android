@@ -144,6 +144,7 @@ public class GamePickerActivity extends Activity {
         }
 
         if (isGameContentRoot(dir)) {
+            repairMtpDroppedDirectories(dir);
             statusTitle.setText(R.string.picker_status_ready);
             statusDetail.setText(R.string.picker_status_ready_detail);
             permissionButton.setVisibility(View.GONE);
@@ -161,6 +162,20 @@ public class GamePickerActivity extends Activity {
     /** True when the folder looks like the extracted disc content. */
     private static boolean isGameContentRoot(File dir) {
         return new File(dir, "media" + File.separator + "ui").isDirectory();
+    }
+
+    /**
+     * Recreates disc directories that MTP copies are known to drop: file
+     * transfer over MTP skips empty folders, and the disc has some the game
+     * expects to open (the runtime log shows game:\\Media\\effects\\ failing
+     * with STATUS_NO_SUCH_FILE on copies made over USB). Creating them is a
+     * no-op when they are already there.
+     */
+    private static void repairMtpDroppedDirectories(File root) {
+        File media = new File(root, "media");
+        if (media.isDirectory()) {
+            new File(media, "effects").mkdirs();
+        }
     }
 
     /** True when the folder only seems to hold disc image files. */
@@ -333,9 +348,10 @@ public class GamePickerActivity extends Activity {
                 Toast.makeText(this, R.string.picker_no_all_files_screen, Toast.LENGTH_LONG).show();
             }
         } else {
-            requestPermissions(
-                    new String[]{"android.permission.READ_EXTERNAL_STORAGE"},
-                    REQUEST_READ_STORAGE);
+            requestPermissions(new String[]{
+                    "android.permission.READ_EXTERNAL_STORAGE",
+                    "android.permission.WRITE_EXTERNAL_STORAGE",
+            }, REQUEST_READ_STORAGE);
         }
     }
 
