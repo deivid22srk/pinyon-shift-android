@@ -94,6 +94,12 @@ the system driver (and a logged reason) when it fails. `GPU turbo` runs the
 Adreno at its highest clocks while the game is shown. Everything applies on
 the next game start.
 
+How to tell the custom driver really loaded: the startup log shows
+`Custom GPU driver <name>: loaded <library> through adrenotools` (and the
+Vulkan device name becomes the Turnip one, e.g. `Mesa Turnip ...`, instead of
+`Qualcomm ...`). If it says `adrenotools could not load`, the reason follows
+on the same line and the game runs on the system driver.
+
 Bluetooth and USB gamepads are supported through SDL3 (the project's
 `config/gamecontrollerdb.txt` ships in the APK and is loaded at startup).
 Touch input falls back to SDL finger events.
