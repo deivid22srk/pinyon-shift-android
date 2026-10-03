@@ -200,7 +200,7 @@ public class GamePickerActivity extends Activity {
 
     /** True when the system reports the Vulkan 1.1 feature level (0x00401000). */
     private boolean hasVulkan11() {
-        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_VERSION,
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_HARDWARE_VERSION,
                 0x00401000);
     }
 

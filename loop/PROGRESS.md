@@ -35,3 +35,10 @@
 - 18:02 UTC — Run 1 (37140676682) VERDE em 31min: gate 16 KB confirma 10/10 libs em
   p_align=16384; ccache populado (0.5 GB); APK 53M. Run 2 disparado para o HEAD
   (valida L3/M0/M1, aquece ccache, popula cache de codegen).
+- 18:20 UTC — Run 2 (37142696303, ba1e332) FALHOU: javac não encontra
+  `PackageManager.FEATURE_VULKAN_VERSION` (constante inventada no L3; correta:
+  `FEATURE_VULKAN_HARDWARE_VERSION`). Corrigido no working tree; lição registrada.
+- 18:20 UTC — Log de device real recebido do dono (log4.zip: logcat + vídeo) —
+  Motorola Edge 30 Fusion (tundra), Android 14, Adreno 660, driver custom Turnip
+  (Mesa 26.3.0-devel) carregado via adrenotools; sessão saudável ~30 fps.
+  Análise completa em artifacts/logs4/LOG_ANALYSIS.md; top achados no BACKLOG (P1*).

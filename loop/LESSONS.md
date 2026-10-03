@@ -20,3 +20,12 @@
 5. **Evidência antes de otimizar**: o APK de 53 MB não tem gordura de debug — .text de
    78 MB é o código recompilado do jogo. "Reduzir APK" sem inspecionar o ELF seria perda
    de tempo.
+## 2026-10-03 — Run 2 (ba1e332) vermelho
+- **Bug**: `PackageManager.FEATURE_VULKAN_VERSION` não existe — o correto é
+  `FEATURE_VULKAN_HARDWARE_VERSION` (API 24). A revisão adversarial do L3 validou a
+  semântica (`hasSystemFeature(String,int)`, encoding 0x00401000) mas não a existência
+  da constante no android.jar.
+- **Lição**: nomes de constantes Java precisam ser verificados contra o SDK real
+  (android.jar / docs) antes do push; revisão de estilo/semântica não pega isso.
+  Sem SDK local, o CI é o gate real — mudanças Java devem ser tratadas como
+  "aguardando-CI" obrigatório e preferir compilar antes de empilhar mais commits.
