@@ -611,12 +611,17 @@ catch { [Console]::Error.Write($_.Exception.Message); exit 2 }
 
     def test_8bitdo_ultimate_2c_wired_mapping_is_shipped(self):
         mappings = (ROOT / "config/gamecontrollerdb.txt").read_text(encoding="utf-8")
+        # The shipped database also carries the community project's entries for
+        # the same hardware; the project's own lines (distinguished by their
+        # controller name) must still be present with the exact bindings.
         matching = [
             line for line in mappings.splitlines()
             if line and not line.startswith("#") and "c82d00001d300000" in line.lower()
         ]
-        self.assertEqual(len(matching), 2)
-        for line in matching:
+        self.assertGreaterEqual(len(matching), 2)
+        project_lines = [line for line in matching if "Ultimate 2C Wired Controller" in line]
+        self.assertEqual(len(project_lines), 2)
+        for line in project_lines:
             for binding in (
                 "a:b0", "b:b1", "lefttrigger:a3", "righttrigger:a4",
                 "leftx:a0", "lefty:a1", "rightx:a2", "righty:a5",
