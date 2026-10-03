@@ -17,6 +17,13 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <system_error>
+
+#include <rex/logging.h>
 
 #if defined(__GLIBC__) || defined(__APPLE__)
 #include <execinfo.h>
@@ -26,7 +33,21 @@
 namespace pinyon_shift::diagnostics::crash {
 namespace {
 
+// On Android the guest emulation NEEDS the hardware fault signals: the SDK's
+// MMIO handler services write-watch faults for GPU memory coherence, and the
+// SEH handlers turn guest __try into C++ exceptions. A sigaction handler is
+// dispatched FIRST (bionic's signal chain runs the most recent registration
+// before anything else), so claiming these signals here would kill the
+// process on the first fault the emulator was about to handle — on Windows
+// this reporter only ever sees faults nobody handled, because
+// SetUnhandledExceptionFilter runs last. Keep that semantic by only claiming
+// SIGABRT on Android; unhandled hardware faults still reach the system
+// tombstone, which logcat records with the full backtrace.
+#if defined(__ANDROID__)
+constexpr int kSignals[] = {SIGABRT};
+#else
 constexpr int kSignals[] = {SIGSEGV, SIGBUS, SIGILL, SIGFPE, SIGABRT};
+#endif
 // "<crash_root>/<session>-" prepared at install; the handler appends the
 // signal name, so it never allocates.
 std::array<char, 4096> g_report_prefix{};
@@ -115,6 +136,42 @@ void Handler(int signal, siginfo_t* info, void* context) {
 
 }  // namespace
 
+// Reports from previous sessions hold the fault address and PC of crashes
+// whose death was otherwise silent (the reporter writes the file and the
+// process ends before anything logs). Surface them on the next boot: on a
+// phone the session file is the only record, tombstones being unreadable
+// without root. Replayed files are renamed so each crash is logged once.
+void ReplayExistingReports(const std::filesystem::path& crash_root) {
+  std::error_code error;
+  std::filesystem::directory_iterator iterator(crash_root,
+                                               std::filesystem::directory_options::skip_permission_denied,
+                                               error);
+  if (error) {
+    return;
+  }
+  for (const auto& entry : iterator) {
+    std::error_code entry_error;
+    if (!entry.is_regular_file(entry_error) ||
+        entry.path().extension() != ".txt") {
+      continue;
+    }
+    std::ifstream input(entry.path(), std::ios::binary);
+    if (!input) {
+      continue;
+    }
+    std::ostringstream contents;
+    contents << input.rdbuf();
+    std::string text = contents.str();
+    if (text.size() > 16 * 1024) {
+      text.resize(16 * 1024);
+    }
+    REXLOG_WARN("Crash report from a previous session ({}):\n{}",
+                   entry.path().filename().string(), text);
+    std::filesystem::rename(entry.path(),
+                            entry.path().string() + ".logged", entry_error);
+  }
+}
+
 void Install(const std::filesystem::path& crash_root, const std::string& session_id) {
   const std::string prefix = (crash_root / session_id).string() + "-";
   g_report_prefix_length = std::min(prefix.size(), g_report_prefix.size() - 1);
@@ -128,6 +185,7 @@ void Install(const std::filesystem::path& crash_root, const std::string& session
   stack.ss_sp = g_signal_stack.data();
   stack.ss_size = g_signal_stack.size();
   sigaltstack(&stack, nullptr);
+  ReplayExistingReports(crash_root);
   Refresh();
 }
 
