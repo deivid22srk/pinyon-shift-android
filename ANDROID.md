@@ -13,11 +13,12 @@ translations.** You need your own retail disc image to build and to play.
 
 ## Status
 
-- CI builds the APK on every push: arm64-v8a (release) and x86_64 (debug,
-  used for the emulator smoke test).
-- CI also boots the x86_64 APK in an Android emulator (API 33) and checks the
-  startup sequence for crashes (see the `smoke-test` job and the
-  `pinyon-shift-apks` artifact).
+- CI builds the release APK on every push: **arm64-v8a only** (see the
+  `pinyon-shift-apk` artifact). There is no emulator/x86 build and no
+  automated device test in CI — testing happens on real hardware.
+- The Gradle project still carries a local-only `emulator` flavor (x86_64,
+  debug) that is not built in CI; use it for your own desktop-emulator
+  experiments with `:app:assembleEmulatorDebug`.
 
 ## Building
 
@@ -34,8 +35,8 @@ pipeline is:
    (`.local/generated/`, ignored by git);
 4. cross-compile the runtime, the FH1 Vulkan GPU plugin, the generated game
    code (main XEX + SpeechFacade + XMediaFacade modules) and the Android host
-   (`libmain.so`) with the NDK for arm64-v8a and x86_64;
-5. package and sign the APKs.
+   (`libmain.so`) with the NDK for arm64-v8a;
+5. package and sign the APK.
 
 For local builds you need: JDK 21, Android SDK with NDK r27c and CMake 3.31,
 plus the steps above (generator + codegen) run first. Then:
