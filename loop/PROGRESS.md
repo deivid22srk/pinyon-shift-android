@@ -32,3 +32,6 @@
   - Evidência APK baseline baixada e inspecionada: 9/10 libs com p_align 0x1000 (4 KB) —
     confirma o bug corrigido por ae2b344; libmain.so 108 MB sem .debug_* (strip já ocorre;
     tamanho é código real do jogo) → item M5 fechado sem ação.
+- 18:02 UTC — Run 1 (37140676682) VERDE em 31min: gate 16 KB confirma 10/10 libs em
+  p_align=16384; ccache populado (0.5 GB); APK 53M. Run 2 disparado para o HEAD
+  (valida L3/M0/M1, aquece ccache, popula cache de codegen).

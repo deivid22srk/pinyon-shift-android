@@ -17,3 +17,6 @@ explícita.
 | p_align arm64 (antes do fix) | presumido 4096 (NDK r27 não alinha por padrão) | confirmar no gate | run 37140676682 |
 | p_align arm64 (medido, baseline) | 9/10 libs em 0x1000 | gate garante 0x4000 | ae2b344 |
 | Suíte de tooling | 231 testes, 1 falha (pin SDK) | OK no CI a cada push | 3280b0a |
+| ELF p_align arm64 (depois) | 10/10 libs = 16384 | gate verde | run 37140676682 |
+| Duração CI frio com cache setup | 31 min (37140676682) | aquecido: aguardando | próximo run |
+| ccache hit rate | frio 0/1140 (0.5GB salvo) | medir no run aquecido | próximo run |
