@@ -207,14 +207,18 @@ public class GamePickerActivity extends Activity {
     /**
      * Recreates disc directories that MTP copies are known to drop: file
      * transfer over MTP skips empty folders, and the disc has some the game
-     * expects to open (the runtime log shows game:\\Media\\effects\\ failing
-     * with STATUS_NO_SUCH_FILE on copies made over USB). Creating them is a
-     * no-op when they are already there.
+     * expects to open. The runtime log of a build 33 session shows
+     * game:\media\effects\, game:\media\stringtables\en\ and
+     * game:\media\dynamicpost\colourgradingmaps\ failing with
+     * STATUS_NO_SUCH_FILE (0xc000000f) on copies made over USB. Creating them
+     * is a no-op when they are already there.
      */
     private static void repairMtpDroppedDirectories(File root) {
         File media = new File(root, "media");
         if (media.isDirectory()) {
             new File(media, "effects").mkdirs();
+            new File(new File(media, "stringtables"), "en").mkdirs();
+            new File(new File(media, "dynamicpost"), "colourgradingmaps").mkdirs();
         }
     }
 
