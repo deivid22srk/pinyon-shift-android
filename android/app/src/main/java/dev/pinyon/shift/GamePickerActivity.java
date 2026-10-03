@@ -68,6 +68,9 @@ public class GamePickerActivity extends Activity {
     private static final int REQUEST_READ_STORAGE = 43;
     private static final int REQUEST_PICK_DRIVER_ZIP = 44;
 
+    /** Below this the app cannot comfortably keep saves, caches and logs. */
+    private static final long LOW_STORAGE_BYTES = 512L * 1024 * 1024;
+
     private TextView statusTitle;
     private TextView statusPath;
     private TextView statusDetail;
@@ -154,7 +157,7 @@ public class GamePickerActivity extends Activity {
         if (isGameContentRoot(dir)) {
             repairMtpDroppedDirectories(dir);
             statusTitle.setText(R.string.picker_status_ready);
-            statusDetail.setText(R.string.picker_status_ready_detail);
+            statusDetail.setText(readyDetail());
             permissionButton.setVisibility(View.GONE);
             playButton.setEnabled(true);
         } else {
@@ -170,6 +173,35 @@ public class GamePickerActivity extends Activity {
     /** True when the folder looks like the extracted disc content. */
     private static boolean isGameContentRoot(File dir) {
         return new File(dir, "media" + File.separator + "ui").isDirectory();
+    }
+
+    /**
+     * The ready-state detail line: the normal in-place note plus the device
+     * warnings the game would otherwise only reveal after a failed start (a
+     * missing Vulkan 1.1 report, or internal storage too full for saves and
+     * caches). Warnings, not blockers: the native runtime repeats both checks
+     * with the authoritative answer and its own error reporting.
+     */
+    private String readyDetail() {
+        StringBuilder detail = new StringBuilder(
+                getString(R.string.picker_status_ready_detail));
+        if (!hasVulkan11()) {
+            Log.w(TAG, "Device does not report the Vulkan 1.1 feature level");
+            detail.append('\n').append(getString(R.string.picker_warning_no_vulkan));
+        }
+        File files = getFilesDir();
+        long usable = files != null ? files.getUsableSpace() : -1L;
+        if (usable >= 0 && usable < LOW_STORAGE_BYTES) {
+            Log.w(TAG, "Internal storage low: " + usable + " bytes usable");
+            detail.append('\n').append(getString(R.string.picker_warning_low_storage));
+        }
+        return detail.toString();
+    }
+
+    /** True when the system reports the Vulkan 1.1 feature level (0x00401000). */
+    private boolean hasVulkan11() {
+        return getPackageManager().hasSystemFeature(PackageManager.FEATURE_VULKAN_VERSION,
+                0x00401000);
     }
 
     /**

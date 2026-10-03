@@ -8,6 +8,8 @@
     <string name="picker_status_none_hint">Choose the folder with the game content.</string>
     <string name="picker_status_ready">Ready to play</string>
     <string name="picker_status_ready_detail">The game reads this folder in place — nothing is copied.</string>
+    <string name="picker_warning_no_vulkan">Warning: this device does not report Vulkan 1.1, which the game requires. The game may fail to start.</string>
+    <string name="picker_warning_low_storage">Warning: internal storage is running low. Saves, shader caches and logs need room on the device.</string>
     <string name="picker_status_need_permission">Storage access needed</string>
     <string name="picker_status_missing">Game folder not available</string>
     <string name="picker_status_missing_detail">The selected folder is not there anymore (unplugged drive, renamed or deleted). Select it again.</string>
