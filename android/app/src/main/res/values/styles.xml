@@ -7,4 +7,18 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <!-- Game picker: dark Material with an amber accent, dialogs match. -->
+    <style name="PinyonPickerTheme" parent="@android:style/Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/picker_background</item>
+        <item name="android:colorAccent">@color/picker_accent</item>
+        <item name="android:colorPrimary">@color/picker_background</item>
+        <item name="android:colorPrimaryDark">@color/picker_background</item>
+        <item name="android:alertDialogTheme">@style/PinyonPickerDialogTheme</item>
+    </style>
+
+    <style name="PinyonPickerDialogTheme" parent="@android:style/Theme.Material.Dialog.Alert">
+        <item name="android:colorAccent">@color/picker_accent</item>
+        <item name="android:windowBackground">@color/picker_card</item>
+    </style>
 </resources>

@@ -40,6 +40,18 @@
         android:name="android.permission.BLUETOOTH"
         android:maxSdkVersion="30" />
 
+    <!-- Game content is read in place from wherever the player put it
+         (selected on the picker screen, XenDroid-style). Non-media files on
+         shared storage are only reachable through a real path with:
+         - Android 10 (API 29): READ_EXTERNAL_STORAGE + the legacy storage flag
+           (requestLegacyExternalStorage on the application element).
+         - Android 11+ (API 30+): All Files Access (MANAGE_EXTERNAL_STORAGE).
+         The SAF folder picker selects the folder; no copy is ever made. -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+
     <!-- Rumble support -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
@@ -52,7 +64,22 @@
         android:appCategory="game"
         android:enableOnBackInvokedCallback="false"
         android:hardwareAccelerated="true"
+        android:requestLegacyExternalStorage="true"
         android:theme="@style/PinyonTheme">
+
+        <!-- Launcher: the game location picker, then the game itself. -->
+        <activity
+            android:name=".GamePickerActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="layoutDirection|locale|fontScale|fontWeightAdjustment|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation|density|colorMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".PinyonActivity"
@@ -64,10 +91,6 @@
             android:resizeableActivity="false"
             android:preferMinimalPostProcessing="true"
             android:configChanges="layoutDirection|locale|fontScale|fontWeightAdjustment|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation|density|colorMode">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <!-- Let Android know we can handle some USB devices (gamepads)
                  and should receive the attach event. -->
             <intent-filter>

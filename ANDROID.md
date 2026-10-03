@@ -57,17 +57,30 @@ echo "sdk.dir=$ANDROID_HOME" > local.properties
 
 ## Game data layout
 
-The APK ships without game content. Copy the files extracted from your own
-disc (the same folder the Windows launcher produces, ~2400 files, ~7.2 GB) to
-the app's external files directory:
+The APK ships without game content. On the first launch a picker screen
+(modeled after XenDroid's game library) asks for the game location: select
+the folder extracted from your own disc (the same folder the Windows
+launcher produces, ~2400 files, ~7.2 GB) and it is read **in place — nothing
+is copied into the app**. The folder must contain `media/ui` (the host UI
+reads fonts and button art from there); a raw `.iso` cannot be used
+directly. The selection is remembered; use `Select game folder` again to
+change it.
 
-```
-/storage/emulated/0/Android/data/dev.pinyon.shift/files/game/base/
-```
+The picker resolves the SAF selection to the folder's real device path, so
+the runtime needs permission to read non-media files where they are:
 
-Over USB (MTP) or a file manager, no storage permission is needed — it is the
-app's own scoped directory. The saves, caches, logs and settings live in the
-app's internal storage (`files/state` inside the app sandbox).
+- Android 11+ (API 30+): grant All Files Access when prompted.
+- Android 10 (API 29): grant storage access when prompted.
+
+`Browse folders instead` walks the filesystem directly for devices whose
+system picker refuses folders (MIUI/HyperOS). The legacy
+`Android/data/dev.pinyon.shift/files/game/base` location (copied over USB)
+keeps working when no folder was picked. Saves, caches, logs and settings
+live in the app's internal storage (`files/state` inside the app sandbox).
+
+A freshly selected folder takes effect on the next app start: the game
+process reads the location once at boot, so close a running game (swipe the
+app away from Recents) before switching to another folder.
 
 Bluetooth and USB gamepads are supported through SDL3 (the project's
 `config/gamecontrollerdb.txt` ships in the APK and is loaded at startup).

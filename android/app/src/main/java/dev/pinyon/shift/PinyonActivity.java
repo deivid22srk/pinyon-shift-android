@@ -18,10 +18,11 @@ import org.libsdl.app.SDLActivity;
  * Storage layout:
  * - Internal files dir (files/): state root (saves, caches, config, logs) and
  *   the extracted gamecontrollerdb.txt.
- * - External files dir (Android/data/dev.pinyon.shift/files/): game/base/
- *   holds the game content the player extracted from their own disc; copy it
- *   over USB or with a file manager. No storage permission is required for
- *   the app's own external files directory.
+ * - Game content: wherever the player selected it on the picker screen
+ *   (GamePickerActivity), read in place — nothing is copied. It arrives
+ *   through the {@link GamePickerActivity#EXTRA_GAME_ROOT} intent extra, with
+ *   the picker's saved selection as the fallback; when neither exists the
+ *   legacy Android/data/dev.pinyon.shift/files/game/base location is used.
  */
 public class PinyonActivity extends SDLActivity {
     private static final String TAG = "PinyonShift";
@@ -50,10 +51,33 @@ public class PinyonActivity extends SDLActivity {
         java.io.File external = getExternalFilesDir(null);
         nativeSetEnvironment(
                 getFilesDir() != null ? getFilesDir().getAbsolutePath() : null,
-                external != null ? external.getAbsolutePath() : null);
+                external != null ? external.getAbsolutePath() : null,
+                resolveGameRoot());
+    }
+
+    /**
+     * The game content location set on the picker screen: the intent extra
+     * from a fresh start, then the picker's saved selection. Null leaves the
+     * native default (game/base in this app's external files directory).
+     */
+    private String resolveGameRoot() {
+        String fromIntent = getIntent() != null
+                ? getIntent().getStringExtra(GamePickerActivity.EXTRA_GAME_ROOT)
+                : null;
+        if (fromIntent != null && !fromIntent.isEmpty()) {
+            return fromIntent;
+        }
+        return getSharedPreferences(GamePickerActivity.PREFS_NAME, MODE_PRIVATE)
+                .getString(GamePickerActivity.PREF_GAME_ROOT, null);
     }
 
     private void notifyIfGameDataMissing() {
+        String gameRoot = resolveGameRoot();
+        if (gameRoot != null) {
+            // The player picked a location; the game reports problems through
+            // its own startup logging if it cannot be read.
+            return;
+        }
         java.io.File external = getExternalFilesDir(null);
         if (external == null) {
             Log.w(TAG, "External storage unavailable; cannot locate game data");
@@ -62,8 +86,7 @@ public class PinyonActivity extends SDLActivity {
         java.io.File gameBase = new java.io.File(external, "game/base");
         if (!gameBase.isDirectory()) {
             Toast.makeText(this,
-                    "Game data not found. Copy the extracted disc files to "
-                            + gameBase.getAbsolutePath(),
+                    "No game selected. Pick your game folder on the next screen.",
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -85,5 +108,6 @@ public class PinyonActivity extends SDLActivity {
         }
     }
 
-    static native void nativeSetEnvironment(String internalFilesDir, String externalFilesDir);
+    static native void nativeSetEnvironment(String internalFilesDir, String externalFilesDir,
+            String gameRoot);
 }

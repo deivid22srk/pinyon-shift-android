@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Pinyon Shift</string>
+
+    <!-- Game location picker -->
+    <string name="picker_subtitle">Xbox 360 game port — select your game to play</string>
+    <string name="picker_status_none">No game selected</string>
+    <string name="picker_status_none_hint">Choose the folder with the game content.</string>
+    <string name="picker_status_ready">Ready to play</string>
+    <string name="picker_status_ready_detail">The game reads this folder in place — nothing is copied.</string>
+    <string name="picker_status_need_permission">Storage access needed</string>
+    <string name="picker_status_missing">Game folder not available</string>
+    <string name="picker_status_missing_detail">The selected folder is not there anymore (unplugged drive, renamed or deleted). Select it again.</string>
+    <string name="picker_status_invalid">This is not the game content</string>
+    <string name="picker_status_iso_hint">Disc image (.iso/.xex) files cannot be played directly. Select the folder extracted from the disc (it contains a media folder) — the same one the Windows launcher uses.</string>
+    <string name="picker_help_location">Select the folder extracted from your game disc (the one containing media/ui). It stays where it is and is read in place. Internal storage gives the best streaming speed.</string>
+    <string name="picker_help_all_files_access">Grant All Files Access so the app can read the game content where it is, without copying it.</string>
+    <string name="picker_help_read_storage">Grant storage access so the app can read the game content where it is, without copying it.</string>
+    <string name="picker_select_button">Select game folder</string>
+    <string name="picker_permission_button">Grant storage access</string>
+    <string name="picker_browse_button">Browse folders instead</string>
+    <string name="picker_play_button">PLAY</string>
+    <string name="picker_no_saf">No folder picker is available on this device — use Browse folders instead.</string>
+    <string name="picker_no_all_files_screen">Could not open the All Files Access settings — enable it for this app from Android Settings.</string>
+    <string name="picker_unresolvable_location">That location has no device folder path — pick a folder from device storage (or use Browse folders).</string>
+    <string name="picker_browse_title">Select game folder</string>
+    <string name="picker_browse_use_folder">Use this folder</string>
+    <string name="picker_browse_empty">(empty or inaccessible)</string>
 </resources>
