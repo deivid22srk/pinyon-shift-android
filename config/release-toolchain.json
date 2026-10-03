@@ -51,8 +51,8 @@
     "executable": "python.exe"
   },
   "rexglue": {
-    "repository": "https://github.com/arcanite24/shiftglue-sdk",
-    "revision": "4de586bf9c626f4184c4f6cbe767283be523bab3",
+    "repository": "https://github.com/deivid22srk/shiftglue-sdk",
+    "revision": "8e1d2dd15a6331e40959174b800c0779a320881c",
     "submodule_path": "thirdparty/shiftglue-sdk",
     "fallback_path": ".local/rexglue"
   }

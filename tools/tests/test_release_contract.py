@@ -118,7 +118,9 @@ catch { [Console]::Error.Write($_.Exception.Message); exit 2 }
             self.assertRegex(item["sha256"], r"^[0-9A-F]{64}$")
         self.assertTrue(data["visual_studio"]["bootstrap_url"].startswith("https://"))
         rexglue = data["rexglue"]
-        self.assertEqual(rexglue["repository"], "https://github.com/arcanite24/shiftglue-sdk")
+        # The Android-port fork carries the SDK branch the whole project
+        # (launcher included) builds against.
+        self.assertEqual(rexglue["repository"], "https://github.com/deivid22srk/shiftglue-sdk")
         self.assertRegex(rexglue["revision"], r"^[0-9a-f]{40}$")
 
     def test_shiftglue_submodule_matches_the_release_pin(self):

@@ -43,7 +43,9 @@ class NativeRendererContractTests(unittest.TestCase):
             self.assertNotIn(token, source)
 
         cmake = (ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
-        self.assertEqual(cmake.count("src/native_renderer/graphics_hooks.cpp"), 2)
+        # Once: the guest_output_renderer host tool was retired with the GPU
+        # corpus (2550904), only the hooked renderer build references it now.
+        self.assertEqual(cmake.count("src/native_renderer/graphics_hooks.cpp"), 1)
 
     def test_census_ledger_tracks_exact_starting_baseline(self):
         ledger = (ROOT / "docs/native-renderer/archive/RENDER_PASS_CENSUS.md").read_text(
