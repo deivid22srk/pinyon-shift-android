@@ -1,4 +1,4 @@
 [submodule "thirdparty/shiftglue-sdk"]
         path = thirdparty/shiftglue-sdk
 	url = https://github.com/deivid22srk/shiftglue-sdk.git
-	branch = port-base
+	branch = android-port
