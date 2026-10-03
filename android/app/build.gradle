@@ -28,6 +28,13 @@ android {
                           '-DREXGLUE_ENABLE_TRACY=OFF',
                           '-DPINYON_SHIFT_FROZEN_CODEGEN=ON',
                           '-DPINYON_SHIFT_CAPTURE_PERFORMANCE=OFF'
+                // CI wires ccache through compiler launchers (PINYON_CCACHE=1
+                // plus the ccache cache in build.yml); local builds keep the
+                // default launchers.
+                if (System.getenv('PINYON_CCACHE') == '1') {
+                    arguments '-DCMAKE_C_COMPILER_LAUNCHER=ccache',
+                              '-DCMAKE_CXX_COMPILER_LAUNCHER=ccache'
+                }
             }
         }
     }

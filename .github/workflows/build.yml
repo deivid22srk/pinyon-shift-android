@@ -9,6 +9,12 @@ on:
 permissions:
   contents: read
 
+# Newer commits supersede in-flight runs of the same ref: the loop keeps the
+# queue short without paying for builds of stale states.
+concurrency:
+  group: apk-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   apk:
     name: Build APK (arm64 device)
@@ -16,6 +22,8 @@ jobs:
     timeout-minutes: 300
     env:
       XEX_TOKEN: ${{ secrets.XEX_REPO_TOKEN }}
+      # Opts the Gradle/CMake build into ccache launchers (see build.gradle).
+      PINYON_CCACHE: '1'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -27,6 +35,24 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+
+      # The NDK tree compiles ~1200 targets; warm ccache turns most follow-up
+      # runs into recompiles of the files that actually changed.
+      - name: Restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-arm64-${{ runner.os }}-${{ hashFiles('src/**', 'include/**', 'tests/**', 'thirdparty/shiftglue-sdk/src/**', 'thirdparty/shiftglue-sdk/include/**', 'CMakeLists.txt', 'cmake/**', 'config/rexglue/**', 'android/app/CMakeLists.txt', 'android/app/build.gradle') }}
+          restore-keys: ccache-arm64-${{ runner.os }}-
+
+      - name: Restore Gradle caches
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/wrapper
+            ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/app/build.gradle') }}
+          restore-keys: gradle-${{ runner.os }}-
 
       - name: Install pinned Android SDK components
         run: |
@@ -40,7 +66,17 @@ jobs:
           sudo apt-get update > /dev/null
           sudo apt-get install -y \
             libasound2-dev libpulse-dev libpipewire-0.3-dev \
-            libx11-xcb-dev libwayland-dev libxkbcommon-dev wayland-protocols
+            libx11-xcb-dev libwayland-dev libxkbcommon-dev wayland-protocols \
+            ccache
+
+      - name: Configure ccache
+        run: |
+          ccache --set-config=max_size=5G
+          ccache --set-config=compiler_check=content
+          # The build uses target_precompile_headers; without this sloppiness
+          # ccache misses every TU compiled with a PCH.
+          ccache --set-config=sloppiness=pch_defines,time_macros
+          ccache --zero-stats
 
       - name: Install clang 20 for the generator (matches the SDK toolchain)
         run: |
@@ -122,6 +158,9 @@ jobs:
           cd android
           echo "sdk.dir=$ANDROID_HOME" > local.properties
           ./gradlew :app:assembleDeviceRelease --no-daemon --stacktrace
+
+      - name: Show ccache stats
+        run: ccache --show-stats
 
       - name: Stage the APK for inspection
         run: |
