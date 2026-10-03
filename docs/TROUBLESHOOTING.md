@@ -208,6 +208,10 @@ session:
   these right after loading a save are the audio decoder skipping data past
   a stream boundary; they are counted, bounded and do not repeat during
   normal playback.
+- `[warning] [krnl] [NtCreateFile] FAILED: path='\Device\Image'` and
+  `path='d:\DebugOptions.ini'`: the title probing for a device namespace
+  entry point and for an optional developer-only settings file that the
+  retail dump never ships. Both failures are expected on every boot.
 
 ### Advanced: environment overrides
 
