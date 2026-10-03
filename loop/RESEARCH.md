@@ -27,3 +27,27 @@ release notes)
 - Subagente de leitura profunda produziu matriz de aplicabilidade ao Android
   (NP-14.1..14.6, PB-1.1, PB-2.13, PB-8.3, PB-4.2 etc.) — ver loop/BACKLOG.md e
   worklog.md (Task 3-a). Fonte: repositório, dados de 2026-09-28/30.
+
+### A5. Exigência 16 KB no Google Play — confirmada (pesquisa web, 2026-10-03)
+- Fontes: developer.android.com (guia 16 KB), github.com/Android-AOSP issue "Support 16 KB
+  page sizes - Google Play compatibility" (17/07/2025), dev.to (26/09/2025),
+  learn.microsoft.com (10/10/2025). Consenso: desde 1º de novembro de 2025, novos apps e
+  atualizações enviados ao Play visando Android 15+ exigem suporte a páginas de 16 KB nos
+  binários nativos.
+- Aplicação: valida o gate do commit ae2b344 (o APK tinha 9/10 libs em 4 KB — evidência
+  medida no artefato do run 37129069405).
+
+### A6. Shader cache on-disk em drivers mobile — corroboração da cena de emulação
+- Fonte: canal de emulação (t.me, changelog de build Winlator/GameHub-Switch): "Enabled
+  on-disk shader cache on Android to reduce shader recompilation" + fix de detecção de
+  chip Adreno 830.
+- Aplicação: a cena trata cache on-disk como melhoria essencial em Android; o port já tem
+  isso ativo (PB-2.13, ver A1). Nenhuma ação adicional; confirma prioridade de não regredir.
+- Risco: fonte secundária não verificável em profundidade — tratada como corroboração
+  fraca, não como instrução.
+
+### A7. Mali vs Adreno (filament #8028, 09/08/2024)
+- Mali em devices low-end não sofre OOM no mesmo conteúdo que trava Adreno em alguns
+  cenários — perfis de memória divergem por vendor. Aplicação: reforça M3 (orçamento de
+  memória por tier) como pendência que exige medição em device; não adotar defaults
+  cegos.
