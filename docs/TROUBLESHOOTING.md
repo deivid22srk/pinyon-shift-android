@@ -189,3 +189,22 @@ tombstone instead. Attach the most recent report file from that folder
 (plus `files/state/logs/runtime.log`, which carries the build provenance) to
 a GitHub issue, together with the last actions before the crash. Reports
 contain the signal, fault address and a backtrace, not saves or game content.
+
+### Log lines that can be ignored
+
+A captured log (logcat) of a healthy session contains noise that is not part
+of a bug report's problem — verified against a real Adreno 660 + Turnip
+session:
+
+- `avc: denied { execstack }` from `SDLActivity`: the kernel refusing to mark
+  the process stack executable. The game does not rely on it; all shipped
+  libraries declare a non-executable stack.
+- `AHardwareBuffer: GraphicBuffer(w=4, h=4 ...) failed`: the Turnip driver
+  probing allocator capabilities at startup, not a game allocation.
+- `vendor.mesa.*` permission denials and `MESA Gralloc doesn't support
+  lock_ycbcr`: Turnip querying system properties and gralloc features it
+  does not use for the game's rendering path.
+- `[warning] [apu] XmaContext N: cannot resolve logical packet`: a few of
+  these right after loading a save are the audio decoder skipping data past
+  a stream boundary; they are counted, bounded and do not repeat during
+  normal playback.
