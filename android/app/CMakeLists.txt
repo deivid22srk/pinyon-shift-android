@@ -9,6 +9,16 @@ project(pinyon_shift_android LANGUAGES C CXX)
 
 get_filename_component(PINYON_SHIFT_HOST_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../.." ABSOLUTE)
 
+# 16 KB page-size compatibility (Android 15+ devices; Google Play requires
+# 16 KB-aligned native code for new and updated apps since November 2025).
+# This flag is load-bearing: NDK r27 (the pinned toolchain) does NOT align to
+# 16 KB by default (only r28+ does), so without it every shared library is
+# 4 KB-aligned and crashes on 16 KB-page devices. It applies to every target
+# defined below, including the SDK subdirectory.
+if(ANDROID)
+    add_link_options(-Wl,-z,max-page-size=16384)
+endif()
+
 # Android x86_64 (emulator) targets the same audited SSE4.1 baseline the
 # desktop build enforces; aarch64 builds use NEON through simde.
 if(CMAKE_ANDROID_ARCH_ABI STREQUAL "x86_64")

@@ -166,6 +166,30 @@ jobs:
         run: |
           find android/app/build/outputs -name "*.apk" | xargs -I{} sh -c 'echo "{}: $(du -h "{}" | cut -f1)"'
 
+      - name: Verify 16 KB ELF alignment (Android 15+ page-size devices)
+        run: |
+          READELF="$ANDROID_HOME/ndk/27.2.12479018/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-readelf"
+          APK=$(find android/app/build/outputs/apk/device/release -name '*.apk' | head -1)
+          [ -n "$APK" ] || { echo "ERROR: release APK not found"; exit 1; }
+          TMP=$(mktemp -d)
+          unzip -q "$APK" 'lib/*' -d "$TMP"
+          LIBS=$(find "$TMP/lib" -name '*.so')
+          [ -n "$LIBS" ] || { echo "ERROR: no native libraries in APK"; exit 1; }
+          fail=0
+          for so in $LIBS; do
+            max=0
+            for a in $("$READELF" -lW "$so" | awk '$1=="LOAD" {print $NF}'); do
+              v=$(( a ))
+              [ "$v" -gt "$max" ] && max=$v
+            done
+            echo "$(basename "$so"): max LOAD p_align = $max"
+            if [ "$max" -lt 16384 ]; then
+              echo "ERROR: $(basename "$so") is not 16 KB aligned (max $max)"
+              fail=1
+            fi
+          done
+          exit $fail
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
