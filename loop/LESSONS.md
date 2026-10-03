@@ -29,3 +29,10 @@
   (android.jar / docs) antes do push; revisão de estilo/semântica não pega isso.
   Sem SDK local, o CI é o gate real — mudanças Java devem ser tratadas como
   "aguardando-CI" obrigatório e preferir compilar antes de empilhar mais commits.
+- **Lição 2 (run 6)**: bump do submodule do SDK exige bump do pin
+  `config/release-toolchain.json` (rexglue.revision) no mesmo commit — o guard
+  M0 falha rápido (2 min) no CI. Rodar `python3 tools/tests/test_release_contract.py`
+  localmente antes de empurrar bumps de submodule.
+- **Lição 3**: `.gitignore` tinha `BACKLOG.md` global → `loop/BACKLOG.md` nunca foi
+  versionado (adds silenciosamente pulados). Sempre conferir `git status` depois de
+  `git add` de diretórios.

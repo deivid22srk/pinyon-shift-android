@@ -51,3 +51,27 @@
     (193/206 M2_EVENT no log eram desses dumps).
   - feat(ui): fonte do host no Android (/system/fonts Roboto/Noto) — commit a seguir.
   - Run 4 (37150419137) disparado para 823b324.
+- 19:05 UTC — Ciclo 4 (fixes de render SDK-side, revisão adversarial completa):
+  Auditoria do caminho de texturas (subagente 7-d + revisão do orquestrador, APIs
+  verificadas uma a uma) → patch f4df688 no fork do SDK (branch
+  auto/android-improvements-20261003):
+  (1) P3: fast path de CPU para planos de vídeo (port 1:1 do D3D12; race com o
+      decodificador era a causa provável do FMV corrompido);
+  (2) P2: um vkCmdCopyBufferToImage por nível (mosaico em LOD distante);
+  (3) P1: máscaras trocadas no scratch buffer novo (bug latente).
+  Submodule pin atualizado 404fa7ee → f4df688. CI valida a compilação completa.
+- 19:35 UTC — Run 7 (37152863464, 346c642) em andamento (SDK recompila ~180 TUs de
+  texture_cache + dependentes). Enquanto compila:
+  - `76474ae` feat(android): environment.txt no external dir (sem override de paths/
+    driver; destrava captura de shaders on-device → pipeline do pack .pnsp).
+  - `2b8f699` fix(test): kNull no switch do render test — repo 100% limpo de warnings
+    C/C++ próprios (restam ~700 do SDK/thirdparty → S4).
+  - Documentação: linhas de log benignas (Turnip/SELinux/XMA) no TROUBLESHOOTING;
+    L6 (mensagem de falha de boot) aberto; NP-4.10 re-escopado p/ desktop.
+- 21:20 UTC — Run 7 VERDE: patches de render do SDK (fast path de vídeo P3, cópia por
+  nível P2, máscaras P1) compilam no NDK e o APK fecha. Este é o candidato para
+  validar os bugs do log4/build33 no device.
+- 21:25 UTC — build33.zip analisado (7 screenshots + log): confirma FMV corrompido
+  (Press Start, cutscenes, tutorial do carro) com frames limpos intercalados → race,
+  alvo exato do P3. Novo fix: `e342e7b` (stringtables/en + dynamicpost/colourgradingmaps
+  no repair MTP). Run 8 disparado para o HEAD.

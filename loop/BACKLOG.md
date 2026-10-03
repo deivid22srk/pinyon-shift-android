@@ -81,3 +81,10 @@ Estados: `aberto`, `em-andamento`, `aguardando-CI`, `feito <hash>`, `revertido`,
   no Turnip) → fallback chunked VMA economiza ~⅓ do device-local pico 1430/2087 MB.
   SDK-side (fork shiftglue-sdk), prioridade alta para devices de 8 GB.
 - [re-escopado] NP-4.10 — auditoria 7-d: device Android roda a 1x (sem texturas escaladas) → o mosaico no Adreno 660 NÃO é o NP-4.10 (que é 2x/3x no D3D12 desktop). Mosaico mobile atacado pelo P2 (cópia por nível, f4df688). Re-escopar NP-4.10 para desktop.
+- [aberto] L6 — **Mensagem de falha de boot no Android**: quando o runtime falha na
+  inicialização (Vulkan, conteúdo, XEX), o processo SDL sai silenciosamente; o motivo
+  só está no runtime.log. Melhor UX: diálogo do SDK (ShowMessageBox) ou Toast Java via
+  JNI com o último erro antes do exit. Esforço M (precisa de design repo+SDK).
+- [aberto] S4 — **Warnings do SDK no NDK** (~700; texture_cache 180, vk_mem_alloc 54,
+  fpscr 34...): limpeza no fork do SDK, prioridade baixa (qualidade, não runtime).
+  Repo-side L4 está limpo (1 fix em 2b8f699).

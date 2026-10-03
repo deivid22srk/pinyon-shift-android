@@ -20,3 +20,17 @@ explícita.
 | ELF p_align arm64 (depois) | 10/10 libs = 16384 | gate verde | run 37140676682 |
 | Duração CI frio com cache setup | 31 min (37140676682) | aquecido: aguardando | próximo run |
 | ccache hit rate | frio 0/1140 (0.5GB salvo) | medir no run aquecido | próximo run |
+
+## 2026-10-03 — Ciclo 3/4 (evidência de device + fixes de render)
+
+| Métrica | Antes | Depois | Como medir |
+|---|---|---|---|
+| Duração do CI (branch) | 28 min (run 1, ccache frio) | 15 min (run 5, ccache + codegen quentes) | `gh run list`, runs 37140676682 → 37150524858 |
+| Compilação NDK incremental | miss total | ccache 1140 TUs (0.5 GB) no 1º run | logs do CI, passo ccache --show-stats |
+| Gate 16 KB | 0/10 libs (p_align 0x1000 no APK antigo) | 10/10 libs (p_align 16384) | passo readelf do CI |
+| Linhas M2_EVENT ui.record.* no logcat | 193/206 eventos (~170 lin/s burst no menu) | 0 (atrás de PINYON_SHIFT_UI_TRACE) | log4 vs novo log do dono |
+| gamecontrollerdb.txt no APK | ausente (task NO-SOURCE) | empacotado (../config) | log do passo copyControllerDb |
+| Fonte dos diálogos host | SDK debug font | Roboto/Noto (/system/fonts) | log "Host UI font ..." no boot |
+| PSOs traduzidos em runtime (1º boot) | 371 (sem pack) | igual até pack existir; caminho p/ pack agora aberto (environment.txt + captura on-device) | log "Creating graphics pipeline state" |
+| Falha de contrato de release | detectada só no release | falha em 2 min no CI (guard M0 funcionou) | run 37152590349 |
+| FMV corrompido (Adreno 660/Turnip) | banda repetida + combing | aguardando validação visual do dono com APK do run 7 | vídeo log4 vs novo vídeo |
