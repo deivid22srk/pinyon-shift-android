@@ -51,3 +51,33 @@ release notes)
   cenários — perfis de memória divergem por vendor. Aplicação: reforça M3 (orçamento de
   memória por tier) como pendência que exige medição em device; não adotar defaults
   cegos.
+
+## 2026-10-03 — Análise do log4.zip + vídeo (device real: Edge 30 Fusion, Adreno 660, Turnip Mesa 26.3.0-devel)
+
+**Fonte**: logcat 3 min (03_10-12-55-20_628.log) + vídeo 2:42 com FMV e gameplay.
+Análise completa: artifacts/logs4/LOG_ANALYSIS.md (subagente 7-a).
+
+**Estado da sessão**: saudável (~29-32 fps, full speed p/ 30 fps do FH1), boot 0,93 s
+até 1ª frame, driver Turnip carregado com sucesso via adrenotools, sem crash/ANR.
+
+**Bugs visuais confirmados no vídeo (frames em artifacts/logs4/frames/)**:
+1. FMV corrompido (0:20-1:40; XMediaFacade carregado +16s→+92s no log = janela exata):
+   f_003/f_007 = banda de imagem real repetida 4x (720/4=180 linhas) + pontilhado
+   vermelho/azul no topo + resto preto; f_009/f_010 = área do carro com linhas
+   horizontais interlaced. No Windows/D3D12 o mesmo jogo renderiza FMV limpo →
+   bug específico do backend Vulkan (NP-15.6: Vulkan ainda não qualificado em
+   nenhuma plataforma).
+2. Gameplay (2:05+): artefatos em mosaico/blocos em folhagem e terreno distante
+   (f_013, f_016) = NP-4.10 (artefatos 2x/3x).
+
+**Mapa técnico para investigação (texture_cache)**:
+- O FMV é desenhado pelo título como TRÊS PLANOS 8-bit (YUV) com VS 7156CE05/PS
+  31511D87 (NP-2.9 tem o censo). Sem tratamento YUV especial nos backends.
+- Vulkan tem DUAS rotas de upload em texture_cache.cpp: compute copy para texturas
+  escaladas (linhas ~1906-1920, pipelines texture_copy_buffer_image_{1,2,4}w_cs) e
+  queue copy vkCmdCopyBufferToImage (linha ~1975, bufferRowLength = x_pitch_blocks *
+  host_block_width). D3D12 usa compute load path com host_pitch explícito.
+- HostLayout (linha 1456) parece correto; auditoria linha a linha das rotas pendente
+  (tentativa de subagente falhou 4x por timeout de infra — retomar).
+- Pista adicional no log: "MESA Gralloc doesn't support lock_ycbcr (video buffers
+  won't be supported)" no boot do SDL.

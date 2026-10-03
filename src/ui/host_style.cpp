@@ -28,6 +28,14 @@ std::vector<std::filesystem::path> SystemFontCandidates() {
 #elif defined(__APPLE__)
   candidates.push_back("/System/Library/Fonts/Supplemental/Arial.ttf");
   candidates.push_back("/Library/Fonts/Arial.ttf");
+#elif defined(__ANDROID__)
+  // Android has no /usr/share/fonts; system TTFs live in /system/fonts, which
+  // apps can read. Roboto is guaranteed and covers Latin, Greek and Cyrillic
+  // (the ranges below), so host dialogs no longer fall back to the SDK debug
+  // font — the device log showed exactly that fallback (log4, L307).
+  candidates.push_back("/system/fonts/Roboto-Regular.ttf");
+  candidates.push_back("/system/fonts/NotoSans-Regular.ttf");
+  candidates.push_back("/system/fonts/DroidSans.ttf");
 #else
   candidates.push_back("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf");
   candidates.push_back("/usr/share/fonts/TTF/DejaVuSans.ttf");

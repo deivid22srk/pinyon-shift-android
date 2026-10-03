@@ -42,3 +42,12 @@
   Motorola Edge 30 Fusion (tundra), Android 14, Adreno 660, driver custom Turnip
   (Mesa 26.3.0-devel) carregado via adrenotools; sessão saudável ~30 fps.
   Análise completa em artifacts/logs4/LOG_ANALYSIS.md; top achados no BACKLOG (P1*).
+- 18:35 UTC — Run 3 (37144257670, 90b896f) VERDE ~11 min: fix FEATURE_VULKAN_HARDWARE_VERSION.
+- 18:40 UTC — Ciclo 3 (evidência de device real):
+  - `823b324` fix(android): copyControllerDb apontava para fora do repo (../../config
+    relativo a android/) → NO-SOURCE perpétuo, gamecontrollerdb.txt nunca foi
+    empacotado; corrigido para ../config.
+  - `6b07cfd` fix(diagnostics): dumps ui.record.* atrás de PINYON_SHIFT_UI_TRACE
+    (193/206 M2_EVENT no log eram desses dumps).
+  - feat(ui): fonte do host no Android (/system/fonts Roboto/Noto) — commit a seguir.
+  - Run 4 (37150419137) disparado para 823b324.
