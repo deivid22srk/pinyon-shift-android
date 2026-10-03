@@ -230,3 +230,27 @@ After playing through the scenes that stutter, the capture folder can be
 compressed and attached to an issue, or turned into a `.pnsp` pack with
 `tools/native-shader-pack.py`; the pack goes into the app's state
 `cache` folder so the first boot skips the runtime shader translations.
+
+### Image quality tuning (pinyon_shift.toml)
+
+The app's graphics knobs live in `pinyon_shift.toml` inside the state folder
+(`Android/data/dev.pinyon.shift/files/state/config/pinyon_shift.toml`), one
+`name = value` per line. The game is a 2012 console title: depth of field,
+motion blur and sub-HD render targets are part of its native look, and
+low-resolution FMV upscaling is inherent to the source videos. If the image
+feels too soft, the following keys help (restart the app after editing unless
+noted otherwise):
+
+- `disable_motion_blur = true` — removes the per-frame camera blur.
+- `disable_depth_of_field = true` — removes the focus blur on near/far objects
+  (the biggest single contributor to the "out of focus" look).
+- `anisotropic_override = 5` — force 16x anisotropic filtering (the default is
+  3, which is 4x); keeps road and terrain textures sharp at oblique angles.
+  This one hot-reloads, so it can be changed while the game is running.
+- `draw_resolution_scale_x = 2` / `draw_resolution_scale_y = 2` — renders the
+  3D scene at double resolution (heavy: needs a fast GPU and much more memory).
+
+For video debugging, `fh1_fmv_debug = true` makes the runtime log the video
+plane fast-path loads (snapshot completeness of the decoded frames) to the
+logcat — attach a capture of the intro video playing when reporting black or
+torn video frames.

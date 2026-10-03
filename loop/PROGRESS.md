@@ -98,3 +98,12 @@
 - 22:29 UTC — Run 9 (37157374544, 66d7d97) VERDE ~22 min: fix do crash do FMV compilado
   (SDK eb22432). Push do c407d25 (community gamecontrollerdb + docs ruído benigno) e
   docs de loop; run 10 disparado — APK combinado (crash fix + mappings Android).
+- 23:15 UTC — Dono testou o APK do run 9 (build #37): **crash do FMV SUMIU** (0 fatal
+  signals no log de 404 KB). Novos sintomas: (1) vídeo da intro pisca preto (~75% preto
+  por blackdetect; frames pretos = tira de ruído no topo + corpo preto — snapshot parcial
+  do decodificador ou starvation de decode; mecanismo a fechar com fh1_fmv_debug);
+  (2) "embaçado" na gameplay — FH1 nativo tem DoF/motion blur fortes + aniso 4x default;
+  knobs do pinyon_shift.toml documentados no TROUBLESHOOTING (disable DoF/MB, aniso 16x
+  hot-reload). build #38 falhou no contrato do 8BitDo (5≠2 — DB da comunidade trouxe
+  entradas do mesmo GUID) → teste atualizado; #39 verde; #40 = pin 35811db (instrumentação
+  fh1_fmv_debug) + docs.

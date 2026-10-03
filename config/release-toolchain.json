@@ -52,7 +52,7 @@
   },
   "rexglue": {
     "repository": "https://github.com/deivid22srk/shiftglue-sdk",
-    "revision": "eb2243222908e459d2b77470b98cbfae12eb7075",
+    "revision": "35811dbdda5e46a5752ea9623823179e00a34a25",
     "submodule_path": "thirdparty/shiftglue-sdk",
     "fallback_path": ".local/rexglue"
   }

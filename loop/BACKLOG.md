@@ -17,7 +17,7 @@ Estados: `aberto`, `em-andamento`, `aguardando-CI`, `feito <hash>`, `revertido`,
   Impacto médio, risco baixo, esforço S–M.
 - [aberto] L4 — **Warnings do NDK no código do repo** (coletar do log do CI e corrigir os
   do repo; os do SDK ficam para o fork do SDK). Impacto médio, risco baixo, esforço S–M.
-- [aberto] L5 — **PinyonActivity**: revisar ciclo de vida (pause/resume, surface loss) e
+- [feito-revisao (sem acao)] L5 — **PinyonActivity**: revisar ciclo de vida (pause/resume, surface loss) e
   mensagens de falha Vulkan (ANDROID.md promete "clear log" — validar e melhorar UI se
   a mensagem não chega ao usuário). Impacto médio, risco baixo, esforço S.
 

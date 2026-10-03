@@ -13,3 +13,4 @@
 | 37154598345 | fd56120 | push | ✅ VERDE ~24min | APK com todos os fixes: FMV race (P3), cópia por nível (P2), máscaras (P1), controllerdb, fontes, MTP dirs, environment.txt |
 | 37157374544 | 66d7d97 | dispatch 22:07Z | em andamento | fix do crash FMV: RequestPartial→Request no fast path; codegen cache HIT; docs de loop retidos |
 | 37157374544 | 66d7d97 | dispatch 22:07Z | ✅ VERDE ~22 min | APK com fix do crash FMV (Request full-page); codegen cache HIT validado |
+| 37159868488 | eaccb23 | dispatch 22:53Z | ✅ VERDE ~25 min | community controllerdb + contrato 8BitDo aceita entradas da comunidade (5 GUIDs) |
