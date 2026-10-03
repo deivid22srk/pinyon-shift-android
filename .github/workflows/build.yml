@@ -54,6 +54,12 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('android/gradle/wrapper/gradle-wrapper.properties', 'android/app/build.gradle') }}
           restore-keys: gradle-${{ runner.os }}-
 
+      # Fail fast on release-contract drift (for example an SDK submodule
+      # bump that missed the release-toolchain pin) before paying for the
+      # native build. The Linux suite skips the PowerShell-only tests.
+      - name: Test release tooling
+        run: python3 -m unittest discover -s tools/tests -p "test_*.py"
+
       - name: Install pinned Android SDK components
         run: |
           yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
