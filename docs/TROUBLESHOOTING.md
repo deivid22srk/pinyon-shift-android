@@ -208,3 +208,21 @@ session:
   these right after loading a save are the audio decoder skipping data past
   a stream boundary; they are counted, bounded and do not repeat during
   normal playback.
+
+### Advanced: environment overrides
+
+The app reads an optional `environment.txt` from its external files dir
+(`Android/data/dev.pinyon.shift/files/`), one `KEY=VALUE` per line, `#`
+comments allowed. It can only add variables that are not already set by the
+app (storage paths and the GPU driver selection from the picker always win),
+so it is safe for opt-in diagnostics. The main use is enabling the shader
+capture for precompiled shader pack generation:
+
+```
+PINYON_SHIFT_NATIVE_SHADER_CAPTURE_DIR=/storage/emulated/0/shader-capture
+```
+
+After playing through the scenes that stutter, the capture folder can be
+compressed and attached to an issue, or turned into a `.pnsp` pack with
+`tools/native-shader-pack.py`; the pack goes into the app's state
+`cache` folder so the first boot skips the runtime shader translations.

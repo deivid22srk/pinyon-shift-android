@@ -24,6 +24,7 @@
 #include <jni.h>
 
 #include <cstdlib>
+#include <fstream>
 #include <string>
 
 namespace {
@@ -38,6 +39,66 @@ std::string JniToString(JNIEnv* env, jstring value) {
     env->ReleaseStringUTFChars(value, chars);
   }
   return result;
+}
+
+std::string Trim(const std::string& value) {
+  const auto begin = value.find_first_not_of(" \t\r");
+  if (begin == std::string::npos) {
+    return {};
+  }
+  const auto end = value.find_last_not_of(" \t\r");
+  return value.substr(begin, end - begin + 1);
+}
+
+// Optional user-provided overrides, read from environment.txt in the app's
+// external files dir (writable over USB/MTP without root). Lines are
+// KEY=VALUE; empty lines and # comments are ignored. Values never override a
+// variable that is already set: the paths and driver selection above are
+// derived from the app's own state (storage locations, picker screen) and a
+// file must not fight them, and every other variable defaults to what the
+// runtime was built with. This is what makes opt-in diagnostics such as
+// PINYON_SHIFT_NATIVE_SHADER_CAPTURE_DIR (shader pack captures for
+// precompiled .pnsp generation) reachable on device.
+constexpr const char* kFixedEnvironmentKeys[] = {
+    "HOME", "PINYON_SHIFT_STATE_ROOT", "PINYON_SHIFT_GAME_ROOT",
+    "REX_HID_MAPPINGS_FILE", "REX_ANDROID_DRIVERS_DIR",
+    "REX_ANDROID_GPU_DRIVER", "REX_ANDROID_GPU_TURBO"};
+
+void ApplyUserEnvironmentFile(const std::string& external) {
+  if (external.empty()) {
+    return;
+  }
+  std::ifstream file(external + "/environment.txt");
+  if (!file) {
+    return;
+  }
+  std::string line;
+  while (std::getline(file, line)) {
+    const std::string trimmed = Trim(line);
+    if (trimmed.empty() || trimmed[0] == '#') {
+      continue;
+    }
+    const auto equals = trimmed.find('=');
+    if (equals == std::string::npos || equals == 0) {
+      continue;
+    }
+    const std::string key = Trim(trimmed.substr(0, equals));
+    const std::string value = Trim(trimmed.substr(equals + 1));
+    if (key.empty() || value.empty()) {
+      continue;
+    }
+    bool fixed = false;
+    for (const char* fixed_key : kFixedEnvironmentKeys) {
+      if (key == fixed_key) {
+        fixed = true;
+        break;
+      }
+    }
+    if (fixed) {
+      continue;
+    }
+    setenv(key.c_str(), value.c_str(), 0);
+  }
 }
 
 }  // namespace
@@ -65,6 +126,9 @@ Java_dev_pinyon_shift_PinyonActivity_nativeSetEnvironment(
   } else if (!external.empty()) {
     setenv("PINYON_SHIFT_GAME_ROOT", (external + "/game/base").c_str(), 1);
   }
+  // Last, so the fixed variables above are already in place when the
+  // denylist is checked, and the file's no-override rule is meaningful.
+  ApplyUserEnvironmentFile(external);
 }
 
 // The custom Vulkan driver (Mesa Turnip and friends) picked on the picker
