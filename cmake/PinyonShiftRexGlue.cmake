@@ -63,7 +63,9 @@ if(PINYON_SHIFT_CAPTURE_PERFORMANCE)
     add_compile_definitions(REXGLUE_ENABLE_PERF_COUNTERS)
 endif()
 
-if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
+# The audited AMD64 baseline is a desktop-build contract. Android x86_64
+# (emulator) builds select their flags through the Gradle shim instead.
+if(NOT ANDROID AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
     if(NOT PINYON_SHIFT_CPU_BASELINE MATCHES "^(sse4\\.1|fma)$")
         message(FATAL_ERROR
             "Pinyon Shift supports the audited SSE4.1 AMD64 baseline and its FMA3 "
