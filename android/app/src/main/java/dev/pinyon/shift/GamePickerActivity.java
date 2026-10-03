@@ -39,6 +39,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,10 +60,13 @@ public class GamePickerActivity extends Activity {
     static final String PREFS_NAME = "pinyon_game";
     static final String PREF_GAME_ROOT = "game_root";
     static final String PREF_GAME_URI = "game_tree_uri";
+    static final String PREF_GPU_DRIVER = "gpu_driver";
+    static final String PREF_GPU_TURBO = "gpu_turbo";
 
     private static final int REQUEST_PICK_TREE = 41;
     private static final int REQUEST_ALL_FILES = 42;
     private static final int REQUEST_READ_STORAGE = 43;
+    private static final int REQUEST_PICK_DRIVER_ZIP = 44;
 
     private TextView statusTitle;
     private TextView statusPath;
@@ -69,6 +74,7 @@ public class GamePickerActivity extends Activity {
     private Button selectButton;
     private Button permissionButton;
     private Button browseButton;
+    private Button driverButton;
     private Button playButton;
 
     private boolean autoOpenedPicker = false;
@@ -84,11 +90,13 @@ public class GamePickerActivity extends Activity {
         selectButton = findViewById(R.id.picker_select_button);
         permissionButton = findViewById(R.id.picker_permission_button);
         browseButton = findViewById(R.id.picker_browse_button);
+        driverButton = findViewById(R.id.picker_driver_button);
         playButton = findViewById(R.id.picker_play_button);
 
         selectButton.setOnClickListener(v -> openDocumentPicker());
         permissionButton.setOnClickListener(v -> requestStorageAccess());
         browseButton.setOnClickListener(v -> openFolderBrowser(Environment.getExternalStorageDirectory()));
+        driverButton.setOnClickListener(v -> openDriverDialog());
         playButton.setOnClickListener(v -> startGame());
 
         refreshUi();
@@ -228,6 +236,11 @@ public class GamePickerActivity extends Activity {
             handleTreeResult(data);
         } else if (requestCode == REQUEST_ALL_FILES) {
             refreshUi();
+        } else if (requestCode == REQUEST_PICK_DRIVER_ZIP) {
+            if (resultCode != RESULT_OK || data == null || data.getData() == null) {
+                return;
+            }
+            importDriverZip(data.getData());
         }
     }
 
@@ -433,6 +446,135 @@ public class GamePickerActivity extends Activity {
             });
         };
         updater[0].run();
+    }
+
+    // ---------------------------------------------------------- gpu drivers
+
+    /** The selected custom driver folder name; empty means the system driver. */
+    static String currentGpuDriver(SharedPreferences prefs) {
+        return prefs.getString(PREF_GPU_DRIVER, "");
+    }
+
+    private void openDriverDialog() {
+        List<GpuDrivers.InstalledDriver> installed = GpuDrivers.list(this);
+
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        int pad = (int) (16 * getResources().getDisplayMetrics().density);
+        content.setPadding(pad, pad, pad, 0);
+
+        TextView note = new TextView(this);
+        note.setText(R.string.picker_driver_active_note);
+        note.setTextSize(12);
+        note.setTextColor(0xFF9A9AA2);
+        content.addView(note);
+
+        // Item 0 is the system driver; the rest are the installed packages.
+        List<String> labels = new ArrayList<>();
+        labels.add(getString(R.string.picker_driver_system));
+        for (GpuDrivers.InstalledDriver driver : installed) {
+            String label = driver.displayName;
+            if (!driver.version.isEmpty()) {
+                label += "  (" + driver.version + ")";
+            }
+            labels.add(label);
+        }
+        final int[] choice = {0};
+        String current = prefs().getString(PREF_GPU_DRIVER, "");
+        for (int i = 0; i < installed.size(); i++) {
+            if (installed.get(i).folderName.equals(current)) {
+                choice[0] = i + 1;
+                break;
+            }
+        }
+
+        CheckBox turbo = new CheckBox(this);
+        turbo.setText(R.string.picker_driver_turbo);
+        turbo.setChecked(prefs().getBoolean(PREF_GPU_TURBO, false));
+        content.addView(turbo);
+
+        ListView list = new ListView(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_single_choice, labels);
+        list.setAdapter(adapter);
+        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        list.setItemChecked(choice[0], true);
+        content.addView(list,
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1, 1f));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.picker_driver_title)
+                .setView(content)
+                .setPositiveButton(R.string.picker_browse_use_folder, (d, w) -> {
+                    String folder = choice[0] == 0 ? "" : installed.get(choice[0] - 1).folderName;
+                    prefs().edit()
+                            .putString(PREF_GPU_DRIVER, folder)
+                            .putBoolean(PREF_GPU_TURBO, turbo.isChecked())
+                            .apply();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .setNeutralButton(R.string.picker_driver_install, (d, w) -> pickDriverZip())
+                .create();
+        list.setOnItemClickListener((parent, view, position, id) -> choice[0] = position);
+        list.setOnItemLongClickListener((parent, view, position, id) -> {
+            if (position == 0) {
+                return false;
+            }
+            confirmRemoveDriver(dialog, installed.get(position - 1));
+            return true;
+        });
+        dialog.show();
+    }
+
+    private void confirmRemoveDriver(AlertDialog parent, GpuDrivers.InstalledDriver driver) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.picker_driver_title)
+                .setMessage(getString(R.string.picker_driver_remove_confirm, driver.displayName))
+                .setPositiveButton(android.R.string.yes, (d, w) -> {
+                    GpuDrivers.remove(this, driver.folderName);
+                    if (prefs().getString(PREF_GPU_DRIVER, "").equals(driver.folderName)) {
+                        // The active driver is gone: back to the system driver.
+                        prefs().edit().putString(PREF_GPU_DRIVER, "").apply();
+                    }
+                    parent.dismiss();
+                    openDriverDialog();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    private void pickDriverZip() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/zip");
+        try {
+            startActivityForResult(intent, REQUEST_PICK_DRIVER_ZIP);
+        } catch (Exception e) {
+            // Some providers only offer the generic type.
+            intent.setType("*/*");
+            try {
+                startActivityForResult(intent, REQUEST_PICK_DRIVER_ZIP);
+            } catch (Exception ignored) {
+                Toast.makeText(this, R.string.picker_no_saf, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void importDriverZip(Uri zipUri) {
+        Toast.makeText(this, R.string.picker_driver_importing, Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            String message;
+            try {
+                GpuDrivers.InstalledDriver driver = GpuDrivers.importZip(this, zipUri);
+                message = getString(R.string.picker_driver_installed_ok, driver.displayName);
+            } catch (Exception e) {
+                message = e.getMessage() != null
+                        ? e.getMessage()
+                        : getString(R.string.picker_driver_import_failed);
+            }
+            final String shown = message;
+            runOnUiThread(() -> Toast.makeText(this, shown, Toast.LENGTH_LONG).show());
+        }, "driver-import").start();
     }
 
     // ------------------------------------------------------------------ game

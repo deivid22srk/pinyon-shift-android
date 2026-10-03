@@ -53,6 +53,14 @@ public class PinyonActivity extends SDLActivity {
                 getFilesDir() != null ? getFilesDir().getAbsolutePath() : null,
                 external != null ? external.getAbsolutePath() : null,
                 resolveGameRoot());
+        // Custom Vulkan driver (libadrenotools, Turnip), selected on the
+        // picker screen; empty name keeps the system driver.
+        android.content.SharedPreferences prefs =
+                getSharedPreferences(GamePickerActivity.PREFS_NAME, MODE_PRIVATE);
+        nativeSetGpuDriver(
+                GpuDrivers.driversRoot(this).getAbsolutePath(),
+                prefs.getString(GamePickerActivity.PREF_GPU_DRIVER, ""),
+                prefs.getBoolean(GamePickerActivity.PREF_GPU_TURBO, false));
     }
 
     /**
@@ -110,4 +118,6 @@ public class PinyonActivity extends SDLActivity {
 
     static native void nativeSetEnvironment(String internalFilesDir, String externalFilesDir,
             String gameRoot);
+
+    static native void nativeSetGpuDriver(String driversDir, String driverName, boolean turbo);
 }

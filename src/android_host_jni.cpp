@@ -66,3 +66,29 @@ Java_dev_pinyon_shift_PinyonActivity_nativeSetEnvironment(
     setenv("PINYON_SHIFT_GAME_ROOT", (external + "/game/base").c_str(), 1);
   }
 }
+
+// The custom Vulkan driver (Mesa Turnip and friends) picked on the picker
+// screen, loaded by the runtime through libadrenotools:
+// - REX_ANDROID_DRIVERS_DIR: root folder holding one folder per driver
+//   package (meta.json + the .so files).
+// - REX_ANDROID_GPU_DRIVER: the package folder name to load; empty/unset
+//   keeps the system driver.
+// - REX_ANDROID_GPU_TURBO: adrenotools_set_turbo while the game is shown.
+// Must run before SDL_main: the Vulkan instance is created early on.
+extern "C" JNIEXPORT void JNICALL
+Java_dev_pinyon_shift_PinyonActivity_nativeSetGpuDriver(
+    JNIEnv* env, jclass /*clazz*/, jstring drivers_dir, jstring driver_name,
+    jboolean turbo) {
+  const std::string dir = JniToString(env, drivers_dir);
+  const std::string name = JniToString(env, driver_name);
+
+  if (!dir.empty()) {
+    setenv("REX_ANDROID_DRIVERS_DIR", dir.c_str(), 1);
+  }
+  if (!name.empty()) {
+    setenv("REX_ANDROID_GPU_DRIVER", name.c_str(), 1);
+  } else {
+    unsetenv("REX_ANDROID_GPU_DRIVER");
+  }
+  setenv("REX_ANDROID_GPU_TURBO", turbo == JNI_TRUE ? "true" : "false", 1);
+}

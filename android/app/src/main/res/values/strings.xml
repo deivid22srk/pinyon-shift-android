@@ -26,4 +26,16 @@
     <string name="picker_browse_title">Select game folder</string>
     <string name="picker_browse_use_folder">Use this folder</string>
     <string name="picker_browse_empty">(empty or inaccessible)</string>
+
+    <!-- GPU driver manager (AdrenoTools packages through libadrenotools) -->
+    <string name="picker_gpu_driver_button">GPU driver (Turnip / custom)</string>
+    <string name="picker_driver_title">GPU driver</string>
+    <string name="picker_driver_system">System driver (default)</string>
+    <string name="picker_driver_install">Install from ZIP</string>
+    <string name="picker_driver_turbo">GPU turbo (highest clocks while playing)</string>
+    <string name="picker_driver_active_note">Custom drivers (Mesa Turnip) install from the AdrenoTools .zip packages. The change applies on the next game start. Long-press a driver to remove it.</string>
+    <string name="picker_driver_remove_confirm">Remove %s from this device?</string>
+    <string name="picker_driver_importing">Installing driver…</string>
+    <string name="picker_driver_installed_ok">Driver installed: %s</string>
+    <string name="picker_driver_import_failed">Could not install this driver package.</string>
 </resources>

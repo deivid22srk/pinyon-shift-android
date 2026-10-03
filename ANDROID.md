@@ -82,6 +82,18 @@ A freshly selected folder takes effect on the next app start: the game
 process reads the location once at boot, so close a running game (swipe the
 app away from Recents) before switching to another folder.
 
+## GPU driver
+
+The picker screen has a `GPU driver` section: it installs the community
+AdrenoTools driver packages (Mesa Turnip ZIPs, e.g. K11MCH1/AdrenoToolsDrivers)
+and selects which one the game uses. The import validates the package's
+`meta.json`, the minAPI, and the ELF libraries (arm64 shared objects only);
+multi-file packages keep all their `.so` companions. The active driver is
+loaded by the runtime through libadrenotools at startup, with a fallback to
+the system driver (and a logged reason) when it fails. `GPU turbo` runs the
+Adreno at its highest clocks while the game is shown. Everything applies on
+the next game start.
+
 Bluetooth and USB gamepads are supported through SDL3 (the project's
 `config/gamecontrollerdb.txt` ships in the APK and is loaded at startup).
 Touch input falls back to SDL finger events.
