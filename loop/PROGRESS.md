@@ -78,3 +78,23 @@
 - 21:50 UTC — Run 8 (37154598345, fd56120) VERDE ~24 min: **APK candidato pronto** para o
   dono testar no device (FMV corrompido, mosaico em folhagem/LOD, gamepad, diretórios
   MTP). Próxima evidência esperada: novo log/vídeo do dono.
+- 22:05 UTC — **Dono reportou crash "abre e fecha" no APK do run 8** (pastebin hE8ApmK5,
+  Edge 30 Fusion/Turnip, build com nossas fontes Roboto → confirmado run 8). Duas sessões
+  com o MESMO crash: SIGSEGV (SEGV_ACCERR) write na thread "GPU Recorder" (GPU principal),
+  em __memcpy_aarch64_simd, "Unhandled fault (write outside guest memory)". Registradores:
+  cópia exata de 0xE1000 = 921.600 B = 1280×720 R8 (plano de vídeo FMV) com dst selvagem.
+  - Causa raiz (SDK eb22432, fix): TryLoadTextureDataFromCpu (P3, f4df688) usou
+    RequestPartial — API incremental que concede SÓ o que cabe na página atual — e copiou
+    o tamanho cheio para o grant parcial → overflow do staging mapping quando a página
+    estava quase cheia (1º crash: página 0xC0000, grant ~0xBD000, resto x2=0x23FB0; 2º
+    crash: grant 0xF000). A referência D3D12 usa Request (grant total ou falha limpa).
+  - Fix: trocar RequestPartial → Request (garante tamanho cheio contíguo; nullptr →
+    fallback ao load normal) + barreira com size_bytes. eb22432 no fork; pin 66d7d97.
+  - Aprendizado: page size do pool = 2 MiB ≥ 921.600 B, então Request sempre resolve para
+    planos 720p; degradação graciosa para planos > 2 MiB.
+- 22:05 UTC — Run 9 disparado para 66d7d97 (recompila só texture_cache.cpp do SDK via
+  ccache quente; APK candidato para o dono re-testar). Docs de loop retidos localmente
+  para não cancelar o run (concurrency cancel-in-progress por branch).
+- 22:29 UTC — Run 9 (37157374544, 66d7d97) VERDE ~22 min: fix do crash do FMV compilado
+  (SDK eb22432). Push do c407d25 (community gamecontrollerdb + docs ruído benigno) e
+  docs de loop; run 10 disparado — APK combinado (crash fix + mappings Android).

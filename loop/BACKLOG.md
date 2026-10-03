@@ -21,6 +21,13 @@ Estados: `aberto`, `em-andamento`, `aguardando-CI`, `feito <hash>`, `revertido`,
   mensagens de falha Vulkan (ANDROID.md promete "clear log" — validar e melhorar UI se
   a mensagem não chega ao usuário). Impacto médio, risco baixo, esforço S.
 
+- [feito 66d7d97/eb22432] C0 — **CRASH "abre e fecha" no FMV (run 8)**: fast path de vídeo
+  (P3) copiava plano 1280×720 inteiro em grant parcial do upload pool (RequestPartial é
+  incremental) → overflow do staging → SIGSEGV write fora da guest memory na GPU Recorder
+  thread, 12-32 s após o start. Fix: Request (grant total) + fallback ao load normal.
+  Impacto crítico (app inutilizável), risco baixo, esforço S. Evidência: pastebin hE8ApmK5
+  (2 tombstones idênticos), registradores batem byte a byte com o diagnóstico.
+
 ## Média prioridade
 
 - [aberto] M1 — **Cache do codegen no CI**: `.local/generated` + binário do rexglue

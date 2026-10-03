@@ -36,3 +36,12 @@
 - **Lição 3**: `.gitignore` tinha `BACKLOG.md` global → `loop/BACKLOG.md` nunca foi
   versionado (adds silenciosamente pulados). Sempre conferir `git status` depois de
   `git add` de diretórios.
+- **Lição 4 (run 9, crash em produção)**: `GraphicsUploadBufferPool::RequestPartial` é API
+  INCREMENTAL — retorna `size_out` ≤ pedido (clamp page_size_ e espaço restante da página),
+  para ser chamado em loop; copiar o tamanho cheio para o grant parcial é heap overflow
+  (SIGSEGV ACCERR "write outside guest memory", dst ~1 GB fora do mapeamento). Para
+  "quero N bytes contíguos agora", usar `Request` (grant total, abre página nova, nullptr
+  se N > page_size_) — que é o que a referência D3D12 sempre fez. Sintoma no logcat:
+  crash na thread de GPU em __memcpy_aarch64_simd com tamanho EXATO do recurso (0xE1000 =
+  1280×720) e dst selvagem → registrar x0..x5 do tombstone dá o tamanho e o grant real.
+  Correlacionar fault addr vs fronteira de página do pool (2 MiB alinhado) fecha o caso.

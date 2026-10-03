@@ -11,3 +11,5 @@
 | 37152863464 | 346c642 | push | em andamento | pin corrigido + compilação do SDK (P1+P2+P3) |
 | 37152863464 | 346c642 | push | ✅ VERDE ~67min | SDK recompilado (P1+P2+P3 do f4df688); ccache SDK quente a partir de agora |
 | 37154598345 | fd56120 | push | ✅ VERDE ~24min | APK com todos os fixes: FMV race (P3), cópia por nível (P2), máscaras (P1), controllerdb, fontes, MTP dirs, environment.txt |
+| 37157374544 | 66d7d97 | dispatch 22:07Z | em andamento | fix do crash FMV: RequestPartial→Request no fast path; codegen cache HIT; docs de loop retidos |
+| 37157374544 | 66d7d97 | dispatch 22:07Z | ✅ VERDE ~22 min | APK com fix do crash FMV (Request full-page); codegen cache HIT validado |
