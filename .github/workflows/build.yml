@@ -95,8 +95,24 @@ jobs:
           sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-20 200
           clang++ --version | head -1
 
+      - name: Resolve the SDK submodule revision
+        id: sdk
+        run: echo "sha=$(git rev-parse HEAD:thirdparty/shiftglue-sdk)" >> "$GITHUB_OUTPUT"
+
+      # The generated tree depends only on the SDK revision, the codegen
+      # manifest and the pinned executables, so a matching cache skips the
+      # generator build and the translation entirely.
+      - name: Restore the codegen outputs
+        id: codegen
+        uses: actions/cache@v4
+        with:
+          path: |
+            .local/generated
+            thirdparty/shiftglue-sdk/out
+          key: codegen-${{ steps.sdk.outputs.sha }}-${{ hashFiles('config/rexglue/**', 'config/supported-dumps.json', '.github/workflows/build.yml') }}
+
       - name: Verify the three game executables are loadable
-        if: env.XEX_TOKEN != ''
+        if: env.XEX_TOKEN != '' && steps.codegen.outputs.cache-hit != 'true'
         run: |
           API=https://api.github.com/repos/deivid22srk/Forza1files
           mkdir -p .local/game/base .local/logs
@@ -122,6 +138,7 @@ jobs:
           PY
 
       - name: Check the executables against the supported-dumps manifest
+        if: steps.codegen.outputs.cache-hit != 'true'
         run: |
           python3 - <<'PY'
           import hashlib, json, sys
@@ -138,12 +155,14 @@ jobs:
           PY
 
       - name: Build the code generator (x86-64 host tool)
+        if: steps.codegen.outputs.cache-hit != 'true'
         run: |
           cd thirdparty/shiftglue-sdk
           cmake --preset linux-amd64
           cmake --build out/build/linux-amd64 --config Release --target rexglue --parallel 4
 
       - name: Generate the recompiled sources from the executables
+        if: steps.codegen.outputs.cache-hit != 'true'
         run: |
           thirdparty/shiftglue-sdk/out/linux-amd64/Release/rexglue \
             --log-level info --log-file .local/logs/codegen.log \
