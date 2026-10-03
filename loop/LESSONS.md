@@ -14,3 +14,9 @@
 3. **Não assumir que um backlog "aberto" precisa de implementação** — PB-2.13 estava
    documentado como "não adotado" (contexto NVIDIA Windows) mas o código do SDK já o
    ativa no Android. Verificar o código antes de planejar.
+4. **Bump de submodule exige atualizar config/release-toolchain.json (rexglue.revision)** —
+   o teste `test_release_sdk_revision_matches_the_submodule` existe para isso e o release
+   v0.3.2.0-build24 falhou por essa deriva. Agora também roda no CI do APK (fail-fast).
+5. **Evidência antes de otimizar**: o APK de 53 MB não tem gordura de debug — .text de
+   78 MB é o código recompilado do jogo. "Reduzir APK" sem inspecionar o ELF seria perda
+   de tempo.

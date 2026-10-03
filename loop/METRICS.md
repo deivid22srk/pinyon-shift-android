@@ -15,3 +15,5 @@ explícita.
 | Runs verdes / vermelhos | 0 / 1 (base b1f2786) | — | contínuo |
 
 | p_align arm64 (antes do fix) | presumido 4096 (NDK r27 não alinha por padrão) | confirmar no gate | run 37140676682 |
+| p_align arm64 (medido, baseline) | 9/10 libs em 0x1000 | gate garante 0x4000 | ae2b344 |
+| Suíte de tooling | 231 testes, 1 falha (pin SDK) | OK no CI a cada push | 3280b0a |

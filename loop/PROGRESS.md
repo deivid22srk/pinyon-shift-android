@@ -22,3 +22,13 @@
   - Revisor apontou: NDK r27 NÃO alinha 16 KB por padrão (só r28+) → flag é load-bearing;
     APK anterior provavelmente 4 KB-aligned (crash em devices 16 KB).
   - Run 37140676682 disparado na branch (frio). Backlog: L1, L2 aguardando-CI.
+- 17:45 UTC — Ciclo 2:
+  - `5312f52` feat(android): avisos no picker (Vulkan 1.1 ausente, storage interno <512 MB) —
+    revisão adversarial aprovada com ressalvas de estilo, aplicadas.
+  - `3280b0a` fix(release): pin rexglue.revision do release-toolchain.json atualizado para o
+    SHA do submodule (404fa7ee) + suíte de tooling (231 testes, 0,5s) no CI do APK (fail-fast).
+    Origem: workflow de release do tag v0.3.2.0-build24 falhou; 2 das 3 falhas já resolvidas
+    no HEAD; a restante corrigida e agora guardada por CI.
+  - Evidência APK baseline baixada e inspecionada: 9/10 libs com p_align 0x1000 (4 KB) —
+    confirma o bug corrigido por ae2b344; libmain.so 108 MB sem .debug_* (strip já ocorre;
+    tamanho é código real do jogo) → item M5 fechado sem ação.
