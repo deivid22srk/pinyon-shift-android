@@ -566,6 +566,11 @@ public class GamePickerActivity extends Activity {
             String message;
             try {
                 GpuDrivers.InstalledDriver driver = GpuDrivers.importZip(this, zipUri);
+                // The fresh install becomes the active driver right away: the
+                // natural flow is install-and-play, and the dialog stays
+                // available for switching back to another package or the
+                // system driver. Takes effect on the next game start.
+                prefs().edit().putString(PREF_GPU_DRIVER, driver.folderName).apply();
                 message = getString(R.string.picker_driver_installed_ok, driver.displayName);
             } catch (Exception e) {
                 message = e.getMessage() != null
@@ -573,7 +578,10 @@ public class GamePickerActivity extends Activity {
                         : getString(R.string.picker_driver_import_failed);
             }
             final String shown = message;
-            runOnUiThread(() -> Toast.makeText(this, shown, Toast.LENGTH_LONG).show());
+            runOnUiThread(() -> {
+                Toast.makeText(this, shown, Toast.LENGTH_LONG).show();
+                refreshUi();
+            });
         }, "driver-import").start();
     }
 

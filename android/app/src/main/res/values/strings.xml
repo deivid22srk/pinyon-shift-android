@@ -36,6 +36,6 @@
     <string name="picker_driver_active_note">Custom drivers (Mesa Turnip) install from the AdrenoTools .zip packages. The change applies on the next game start. Long-press a driver to remove it.</string>
     <string name="picker_driver_remove_confirm">Remove %s from this device?</string>
     <string name="picker_driver_importing">Installing driver…</string>
-    <string name="picker_driver_installed_ok">Driver installed: %s</string>
+    <string name="picker_driver_installed_ok">Driver installed and selected: %s. It takes effect on the next game start.</string>
     <string name="picker_driver_import_failed">Could not install this driver package.</string>
 </resources>
