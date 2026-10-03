@@ -14,3 +14,6 @@
 | 37157374544 | 66d7d97 | dispatch 22:07Z | em andamento | fix do crash FMV: RequestPartial→Request no fast path; codegen cache HIT; docs de loop retidos |
 | 37157374544 | 66d7d97 | dispatch 22:07Z | ✅ VERDE ~22 min | APK com fix do crash FMV (Request full-page); codegen cache HIT validado |
 | 37159868488 | eaccb23 | dispatch 22:53Z | ✅ VERDE ~25 min | community controllerdb + contrato 8BitDo aceita entradas da comunidade (5 GUIDs) |
+| 37161056602 | e44cb7e | dispatch 23:12Z | ❌ FALHOU 2min | pin digitado à mão com SHA errado (35811dbdda…≠35811db5eb…) — guard pegou; lição: sempre `git rev-parse` |
+
+| 37161583504 | 90bcd2e | dispatch 23:2xZ | ✅ VERDE ~33 min | APK final do ciclo: crash fix + controllerdb + fh1_fmv_debug + docs knobs |

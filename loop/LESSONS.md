@@ -45,3 +45,6 @@
   crash na thread de GPU em __memcpy_aarch64_simd com tamanho EXATO do recurso (0xE1000 =
   1280×720) e dst selvagem → registrar x0..x5 do tombstone dá o tamanho e o grant real.
   Correlacionar fault addr vs fronteira de página do pool (2 MiB alinhado) fecha o caso.
+- **Lição 5 (build #40)**: NUNCA digitar/copiar SHA de commit "de cabeça" no pin
+  `config/release-toolchain.json` — usar `git rev-parse HEAD` no submodule e colar.
+  O guard de contrato pegou (2 min), mas custou um run. Mesma família da Lição 2.
