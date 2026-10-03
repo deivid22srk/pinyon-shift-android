@@ -123,7 +123,11 @@ android {
     }
 
     // The project gamepad mapping database, staged from the host config.
-    def controllerDb = rootProject.file('../../config/gamecontrollerdb.txt')
+    // Relative to the Gradle root project dir (android/): the DB lives in the
+    // repository's config/ directory. The old '../../config' path resolved
+    // outside the repository, so this task was always NO-SOURCE and the APK
+    // shipped without the asset (device logs show the runtime missing it).
+    def controllerDb = rootProject.file('../config/gamecontrollerdb.txt')
     def generatedAssets = layout.buildDirectory.dir('generated/pinyonAssets')
     tasks.register('copyControllerDb', Copy) {
         from(controllerDb)
