@@ -157,7 +157,7 @@ public class GamePickerActivity extends Activity {
         if (isGameContentRoot(dir)) {
             repairMtpDroppedDirectories(dir);
             statusTitle.setText(R.string.picker_status_ready);
-            statusDetail.setText(readyDetail());
+            statusDetail.setText(readyDetail(dir));
             permissionButton.setVisibility(View.GONE);
             playButton.setEnabled(true);
         } else {
@@ -182,7 +182,7 @@ public class GamePickerActivity extends Activity {
      * caches). Warnings, not blockers: the native runtime repeats both checks
      * with the authoritative answer and its own error reporting.
      */
-    private String readyDetail() {
+    private String readyDetail(File dir) {
         StringBuilder detail = new StringBuilder(
                 getString(R.string.picker_status_ready_detail));
         if (!hasVulkan11()) {
@@ -195,7 +195,29 @@ public class GamePickerActivity extends Activity {
             Log.w(TAG, "Internal storage low: " + usable + " bytes usable");
             detail.append('\n').append(getString(R.string.picker_warning_low_storage));
         }
+        if (isColourGradingMapsEmpty(dir)) {
+            Log.w(TAG, "media/dynamicpost/colourgradingmaps has no files; the disc "
+                    + "copy likely lost them over MTP");
+            detail.append('\n').append(getString(R.string.picker_warning_no_grading_maps));
+        }
         return detail.toString();
+    }
+
+    /**
+     * True when the disc's colour grading map folder holds no files. The game
+     * loads its exposure/color-grading look-up tables from
+     * media/dynamicpost/colourgradingmaps (a build 33 device log shows the
+     * folder itself failing STATUS_NO_SUCH_FILE on MTP copies, so a copy that
+     * skipped the files too leaves the folder - recreated empty by
+     * repairMtpDroppedDirectories - without any of them). Warning, not a
+     * blocker: the game boots and renders, but exposure/bloom grading can
+     * look blown out until the folder is re-copied from the disc extraction.
+     */
+    private static boolean isColourGradingMapsEmpty(File root) {
+        File gradingMaps =
+                new File(new File(new File(root, "media"), "dynamicpost"), "colourgradingmaps");
+        String[] entries = gradingMaps.list();
+        return entries != null && entries.length == 0;
     }
 
     /** True when the system reports the Vulkan 1.1 feature level (0x00401000). */

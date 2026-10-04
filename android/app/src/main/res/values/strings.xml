@@ -10,6 +10,7 @@
     <string name="picker_status_ready_detail">The game reads this folder in place — nothing is copied.</string>
     <string name="picker_warning_no_vulkan">Warning: this device does not report Vulkan 1.1, which the game requires. The game may fail to start.</string>
     <string name="picker_warning_low_storage">Warning: internal storage is running low. Saves, shader caches and logs need room on the device.</string>
+    <string name="picker_warning_no_grading_maps">Warning: media/dynamicpost/colourgradingmaps is empty in this folder — the disc copy likely lost those files over MTP. The game runs, but exposure and color grading can look blown out. Re-copy that folder from the disc extraction.</string>
     <string name="picker_status_need_permission">Storage access needed</string>
     <string name="picker_status_missing">Game folder not available</string>
     <string name="picker_status_missing_detail">The selected folder is not there anymore (unplugged drive, renamed or deleted). Select it again.</string>
