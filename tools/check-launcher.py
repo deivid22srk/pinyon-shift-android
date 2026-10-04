@@ -134,7 +134,7 @@ class Check {
         // Direct3D 12 prepares shader packs before the first start.
         Directory.CreateDirectory(Path.Combine(state, "config"));
         File.WriteAllText(Path.Combine(state, "config/pinyon_shift.toml"),
-            "pinyon_shift_config_schema = 27\ngpu_backend = \"d3d12\"\n");
+            "pinyon_shift_config_schema = 28\ngpu_backend = \"d3d12\"\n");
         typeof(MainWindow).GetMethod("DetectExistingBuild", flags)!.Invoke(window, null);
         var primary = (TextBlock)window.FindName("PrimaryButtonText");
         Require(primary.Text == "Prepare and play", "Existing build skips graphics preparation");

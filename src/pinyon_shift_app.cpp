@@ -47,7 +47,7 @@
 extern "C" int __llvm_profile_dump(void);
 #endif
 
-REXCVAR_DEFINE_UINT32(pinyon_shift_config_schema, 27, "Pinyon Shift",
+REXCVAR_DEFINE_UINT32(pinyon_shift_config_schema, 28, "Pinyon Shift",
                       "Pinyon Shift host configuration schema version");
 REXCVAR_DEFINE_STRING(enabled_mods, "", "Mods",
                       "Mods to load from <state>/mods, in order, separated by commas. With any "
@@ -94,9 +94,11 @@ namespace {
 // FMV routes. Schema 27 makes Vulkan the renderer's graphics API, with the
 // GPU commands thread split into a decoder and a recorder: the 1x race runs
 // at 120 fps there against about 55 on Direct3D 12 (docs/PERFORMANCE_BACKLOG.md).
-// Migration moves every earlier configuration to it once; the GRAPHICS page's
-// GRAPHICS API row switches back.
-constexpr uint32_t kConfigSchema = 27;
+// Schema 28 defaults the anisotropic override to 16x (5): 4x left the road
+// and terrain soft on device at oblique angles, which players read as a
+// blurry render. Migration moves every earlier configuration to it once;
+// the GRAPHICS page's ANISOTROPIC FILTERING row switches back.
+constexpr uint32_t kConfigSchema = 28;
 
 bool EnsureSupportedConfig(const std::filesystem::path& path, bool& created,
                            bool& migrated) {
@@ -129,7 +131,7 @@ bool EnsureSupportedConfig(const std::filesystem::path& path, bool& created,
               "pinyon_shift_skip_opening_movies = false\n"
               "pinyon_shift_fh1_render_fps_limit = 0\n"
               "pinyon_shift_fh1_source_presentation = true\n"
-              "anisotropic_override = 3\n"
+              "anisotropic_override = 5\n"
               "swap_post_effect = \"none\"\n"
               "disable_motion_blur = false\n"
               "disable_depth_of_field = false\n"
@@ -297,6 +299,22 @@ bool EnsureSupportedConfig(const std::filesystem::path& path, bool& created,
           std::regex(R"((^|\n)(\s*gpu_record_thread\s*=\s*)false)", std::regex::icase),
           "$1$2true");
     }
+    if (schema < 28) {
+      // Schema 28 defaults the anisotropic override to 16x (5). Files written
+      // by earlier schemas carry the old 4x default (3); players who chose a
+      // different level keep it, and the 4x default is adopted once - the
+      // GRAPHICS page's ANISOTROPIC FILTERING row switches back. The line is
+      // rewritten literally so no std::regex implementation has to parse a
+      // group reference followed by a digit; the indentation and the inline
+      // comment are captured and re-emitted, and the EOL is left to a
+      // lookahead so consecutive occurrences still migrate.
+      migrated_text = std::regex_replace(
+          migrated_text,
+          std::regex(
+              R"re((^|\n)([ \t]*)anisotropic_override[ \t]*=[ \t]*3([ \t]*(?:#.*)?)(?=\r?\n|$))re",
+              std::regex::icase),
+          "$1$2anisotropic_override = 5$3");
+    }
     if (schema == 1) {
       const std::regex stabilization_pattern(
           R"((?:^|\n)\s*pinyon_shift_stabilize_vehicle_presentation\s*=\s*(true|false)\s*(?:#.*)?(?:\r?\n|$))");
@@ -327,7 +345,7 @@ bool EnsureSupportedConfig(const std::filesystem::path& path, bool& created,
     const std::pair<const char*, const char*> graphics_settings[] = {
         {"xma_relaxed_padding_admission",
          "xma_relaxed_padding_admission = false\n"},
-        {"anisotropic_override", "anisotropic_override = 3\n"},
+        {"anisotropic_override", "anisotropic_override = 5\n"},
         {"swap_post_effect", "swap_post_effect = \"none\"\n"},
         {"disable_motion_blur", "disable_motion_blur = false\n"},
         {"disable_depth_of_field", "disable_depth_of_field = false\n"},

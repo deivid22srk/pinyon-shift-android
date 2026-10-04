@@ -45,10 +45,11 @@ $backupDirectory = Join-Path $configDirectory 'backups'
 function Get-DefaultConfigText {
     @'
 # Pinyon Shift host configuration.
-# Schema 27 renders on Vulkan with the split GPU commands thread; schema 26
-# stops re-uploading CPU-written memory every frame; schema 25 keeps one
-# occlusion-query path; schema 24 retired the renderer choice.
-pinyon_shift_config_schema = 27
+# Schema 28 defaults anisotropic filtering to 16x; schema 27 renders on
+# Vulkan with the split GPU commands thread; schema 26 stops re-uploading
+# CPU-written memory every frame; schema 25 keeps one occlusion-query path;
+# schema 24 retired the renderer choice.
+pinyon_shift_config_schema = 28
 input_backend = "sdl"
 hid_mappings_file = "gamecontrollerdb.txt"
 mnk_mode = true
@@ -65,7 +66,7 @@ pinyon_shift_skip_opening_movies = false
 pinyon_shift_fh1_render_fps_limit = 0
 pinyon_shift_fh1_source_presentation = true
 xma_relaxed_padding_admission = false
-anisotropic_override = 3
+anisotropic_override = 5
 swap_post_effect = "none"
 disable_motion_blur = false
 disable_depth_of_field = false
@@ -150,7 +151,7 @@ function Get-SchemaVersion([string]$Text) {
 }
 
 function Get-SettingsResult([string]$Text, [string]$BackupPath, [string]$Operation) {
-    $override = [int](Get-TomlValue $Text 'anisotropic_override' '3')
+    $override = [int](Get-TomlValue $Text 'anisotropic_override' '5')
     $anisotropyValue = switch ($override) { 3 { 4 } 4 { 8 } 5 { 16 } default { 4 } }
     $resolutionScale = [int](Get-TomlValue $Text 'draw_resolution_scale_x' '1')
     $clearPageState = (Get-TomlValue $Text 'clear_memory_page_state' 'false') -eq 'true'
@@ -211,7 +212,7 @@ switch ($Action) {
             Get-Content -LiteralPath $configPath -Raw
         } else { Get-DefaultConfigText }
         $schema = Get-SchemaVersion $text
-        if ($schema -lt 1 -or $schema -gt 27) { throw "Unsupported host configuration schema: $schema" }
+        if ($schema -lt 1 -or $schema -gt 28) { throw "Unsupported host configuration schema: $schema" }
     }
     'Reset' {
         $backup = New-HostConfigBackup $configPath
@@ -228,7 +229,7 @@ switch ($Action) {
         $backup = New-HostConfigBackup $configPath
         $text = Get-Content -LiteralPath $source.FullName -Raw
         $schema = Get-SchemaVersion $text
-        if ($schema -lt 1 -or $schema -gt 27) { throw "Backup uses unsupported schema: $schema" }
+        if ($schema -lt 1 -or $schema -gt 28) { throw "Backup uses unsupported schema: $schema" }
         Write-HostConfig $configPath $text
     }
     'Apply' {
@@ -236,7 +237,7 @@ switch ($Action) {
             Get-Content -LiteralPath $configPath -Raw
         } else { Get-DefaultConfigText }
         $schema = Get-SchemaVersion $text
-        if ($schema -lt 1 -or $schema -gt 27) { throw "Unsupported host configuration schema: $schema" }
+        if ($schema -lt 1 -or $schema -gt 28) { throw "Unsupported host configuration schema: $schema" }
         $backup = New-HostConfigBackup $configPath
         # The retired guest vblank rate became the render limit, which the
         # replacement defaults to following the display.
@@ -254,7 +255,16 @@ switch ($Action) {
             $text = Set-TomlValue $text 'gpu_backend' '"vulkan"'
             $text = Set-TomlValue $text 'gpu_record_thread' 'true'
         }
-        $text = Set-TomlValue $text 'pinyon_shift_config_schema' '27'
+        # Schema 28 defaults the anisotropic override to 16x; a file still
+        # carrying the old 4x default adopts it once (an explicit other
+        # level is kept).
+        if ($schema -lt 28 -and (Get-TomlValue $text 'anisotropic_override' '5') -eq '3') {
+            $text = Set-TomlValue $text 'anisotropic_override' '5'
+        }
+        if (-not [regex]::IsMatch($text, '(?m)^[ \t]*anisotropic_override[ \t]*=')) {
+            $text = Set-TomlValue $text 'anisotropic_override' '5'
+        }
+        $text = Set-TomlValue $text 'pinyon_shift_config_schema' '28'
         $text = Set-TomlValue $text 'pinyon_shift_fh1_source_presentation' 'true'
         if (-not [regex]::IsMatch($text, '(?m)^[ \t]*xma_relaxed_padding_admission[ \t]*=')) {
             $text = Set-TomlValue $text 'xma_relaxed_padding_admission' 'false'

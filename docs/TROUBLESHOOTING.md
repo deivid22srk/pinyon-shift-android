@@ -244,8 +244,9 @@ noted otherwise):
 - `disable_motion_blur = true` — removes the per-frame camera blur.
 - `disable_depth_of_field = true` — removes the focus blur on near/far objects
   (the biggest single contributor to the "out of focus" look).
-- `anisotropic_override = 5` — force 16x anisotropic filtering (the default is
-  3, which is 4x); keeps road and terrain textures sharp at oblique angles.
+- `anisotropic_override = 5` — force 16x anisotropic filtering (the default
+  since config schema 28; earlier files carried 4x and are moved to 16x once
+  by the migration); keeps road and terrain textures sharp at oblique angles.
   This one hot-reloads, so it can be changed while the game is running.
 - `draw_resolution_scale_x = 2` / `draw_resolution_scale_y = 2` — renders the
   3D scene at double resolution (heavy: needs a fast GPU and much more memory).
@@ -253,4 +254,8 @@ noted otherwise):
 For video debugging, `fh1_fmv_debug = true` makes the runtime log the video
 plane fast-path loads (snapshot completeness of the decoded frames) to the
 logcat — attach a capture of the intro video playing when reporting black or
-torn video frames.
+torn video frames. Partially decoded snapshots (the guest decoder still
+writing the plane) are retained automatically: the last complete frame stays
+on screen and a rate-limited `fh1 fmv incomplete plane snapshot retained`
+line marks retained snapshots in the log; `fh1_fmv_retain = false` restores
+always uploading every snapshot.
