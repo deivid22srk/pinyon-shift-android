@@ -18,3 +18,4 @@
 
 | 37161583504 | 90bcd2e | dispatch 23:2xZ | ✅ VERDE ~33 min | APK final do ciclo: crash fix + controllerdb + fh1_fmv_debug + docs knobs |
 | 37171145460 | add7f82 (auto/android-improvements-20261004) | dispatch 02:28Z | ✅ VERDE ~25 min | build 42: SDK d65408b (retenção do último frame FMV parcial) + schema 28 (aniso 16x default); codegen cache MISS (novo SHA do SDK), ccache quente; gate 16KB ok |
+| 37200342318 | 74c1a88 (auto/android-improvements-20261004-fmv-tearing) | dispatch 11:50Z | em andamento | build 43: SDK d2db0a7 (detecção de frame torto por diff contra baseline; fh1_fmv_debug default on); codegen cache MISS esperado (SHA novo) |
