@@ -29,6 +29,7 @@ private/
 !/docs/NATIVE_PORT_BACKLOG.md
 !/docs/PERFORMANCE_BACKLOG.md
 !/docs/MODDING.md
+!/docs/rendering-fixes-20261004.md
 !/docs/releases/
 !/docs/releases/*.md
 !/docs/native-renderer/
