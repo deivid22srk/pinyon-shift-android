@@ -15,19 +15,35 @@
 - [x] (fixed fa5079d) When going back to title screen on native render, the "Single Player" select screen is completely corrupted in texture super pink noisy
   - Same root cause as the green title (movie skip): stale data in the
     PressStart.wmv planes. Identical in compat-only runs; clean with movies on.
-- [ ] The intro video intermittently shows black frames while the audio keeps playing (build 37; retention fix in the SDK pinned by this branch, pending on-device validation)
-  - The FMV YUV planes are snapshotted from guest memory by the video plane
-    fast path while the software decoder is still rewriting them top to
-    bottom under CPU contention; the game composites the partial plane, which
-    presents as a noise strip on top of a black body. The pinned SDK probes
-    every fast-path snapshot and retains the last complete frame on the
-    texture until a complete one arrives, so a starved decoder freezes on the
-    last good frame instead of flashing black (letterboxed videos never
-    freeze: a texture that never held a complete frame still refreshes
-    best-effort). The first seconds of the very first video can still be
-    black while the runtime translates shaders (no on-device shader pack
-    yet); `fh1_fmv_debug = true` logs the snapshot completeness to tell the
-    two cases apart.
+- [ ] The intro/title videos still flicker (build 42 on-device evidence; torn-frame detection pinned by this branch, pending on-device validation)
+  - Build 42's retention never engaged: the owner's build 42 log holds
+    zero "retained last complete frame" lines while the title video still
+    flickered black (screenshot 7 s after the FMV resolve is 88% black).
+    The zero-chunk probe is blind to the steady state: after the first
+    decoded frame, the tail below the decoder cursor holds the PREVIOUS
+    frame's non-zero pixels, so every mid-rewrite snapshot has no zero
+    chunks yet is still torn (new rows above the cursor, stale rows
+    below). Uploading those is the flicker itself.
+  - The pinned SDK keeps the bytes of the last uploaded snapshot on the
+    texture as a baseline and diffs each new snapshot block-wise:
+    identical snapshots skip the upload; changes reaching the last block,
+    or with an all-zero tail (letterbox bars, fades), upload and
+    re-baseline; a changed prefix with an unchanged non-zero tail whose
+    boundary moved since the previous snapshot is a decode in progress and
+    retains the last complete frame. Any plane-sized upload establishes
+    the baseline (the zero-chunk probe can never mark a letterboxed plane
+    complete), and the classification self-corrects from a torn baseline.
+    The first seconds of the very first video can still be black while the
+    runtime translates shaders (no on-device shader pack yet);
+    `fh1_fmv_debug` (now default on) logs the classification to tell the
+    cases apart.
+- [ ] The app died with a GPU fault during the save/scene transition (build 42, single occurrence, pending a reproducing log)
+  - `Vulkan Warning (tu_knl_kgsl.cc): GPU faulted or hung
+    (VK_ERROR_DEVICE_LOST)` on the Turnip driver ~4 s after a profile
+    save, amid heavy PSO compilation; the process restarted to the
+    picker. Not yet known whether a translated shader faults on Turnip or
+    the KGSL watchdog tripped; needs a repeat occurrence or a logcat with
+    the Turnip debug properties reachable to correlate.
 - [ ] Car selection on an event has either pink correupted textures or mangled car textures/models
   - Not a texture decode bug. The cards are the profile's
     `Thumbnails/Thumbnail_N.xdc` files, which the game renders, resolves and

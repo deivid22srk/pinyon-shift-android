@@ -161,3 +161,41 @@
   último frame bom em vez de piscar preto (fh1_fmv_debug + linha "retained last complete
   frame" confirmam no logcat); gameplay deve mostrar pista/terreno mais nítidos. Se o
   "fora de foco" persistir, o toggle DEPTH OF FIELD em GRAPHICS é o próximo knob.
+
+## 2026-10-04 (ciclo 2)
+
+- 11:35 UTC — Evidência do build 42 recebida do dono (build42.zip: logcat + 3 screenshots):
+  - **Piscadeiro PERSISTE no título** (screenshot 7 s após o FMV resolve: 88% preto, tira
+    de conteúdo no topo) e o log NÃO tem NENHUMA linha "retained last complete frame" —
+    a retenção do build 42 nunca engajou.
+  - Diagnóstico fechado: o probe de zero-chunks é cego ao regime permanente. Depois do
+    primeiro frame decodificado, a cauda abaixo do cursor do decodificador guarda os
+    pixels NÃO-ZERO do frame ANTERIOR; todo snapshot mid-rewrite tem zero chunks zero e
+    passa como "completo" → upload torto (linhas novas em cima, linhas velhas embaixo)
+    → o próprio piscar. O probe só via o caso dos primeiros frames (memória zerada).
+  - Achado adicional: GPU fault `VK_ERROR_DEVICE_LOST` (tu_knl_kgsl) ~4 s após o save,
+    sob compilação pesada de PSOs; processo reiniciou. Ocorrência única; registrada no
+    BUGS.md como item aberto (precisa reproduzir). XMA "cannot resolve logical packet 1"
+    1 s antes — áudio, sem correlação confirmada.
+- Correção no fork do SDK (bea41bd, branch auto/android-improvements-20261004-fmv-tearing):
+  detecção de frame torto por diff contra o baseline. A textura guarda os bytes do
+  último snapshot enviado; cada novo snapshot é diferido bloco a bloco (~128 blocos):
+  idêntico → pula o upload (economiza banda em frame re-publicado); mudanças até o fim,
+  ou cauda toda zero (letterbox/fade) → upload + novo baseline; prefixo mudado com cauda
+  não-zero inalterada e fronteira que ANDOU desde o snapshot anterior → decodificação em
+  curso → retém o último frame completo. Fronteira parada por 4 snapshots seguidos =
+  fundo estático (não é cursor) → upload para o conteúdo continuar fluindo. Qualquer
+  upload plane-sized estabelece o baseline (probe de zero-chunks nunca marca letterbox
+  completo) e a classificação se auto-corrige de um baseline torto. Bail-outs limpam o
+  estado (o fallback sobrescreve a textura).
+- d2db0a7 feat(vulkan): fh1_fmv_debug default ON (rate-limited) — o log do dono veio sem
+  nenhuma evidência de classificação; sem isso não distinguimos decoder congelado de
+  upload torto no próximo teste. Desligar quando o FMV estiver estável.
+- Harness comportamental standalone reescrito (12 casos: completo/tortos/all-zero/
+  letterbox-completo/tortado-na-barra/estático/fronteira-parada-3x--upload/fade/
+  recuperação-starvation/kill-switch/máscara) — todos passam; clang -fsyntax-only limpo
+  na região alterada (warnings restantes são pré-existentes do SDK).
+- Pin rexglue.revision = d2db0a7 + gitlink; BUGS.md atualizado (mecanismo novo + GPU fault
+  como item aberto). Branch nova auto/android-improvements-20261004-fmv-tearing (repo +
+  fork SDK); build 43 disparado no workflow (SDK primeiro — o checkout do CI resolve o
+  gitlink, que precisa existir no remote).
