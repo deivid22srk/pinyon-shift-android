@@ -155,3 +155,9 @@
 - Branch nova auto/android-improvements-20261004 (repo + fork SDK), pin
   rexglue.revision = d65408b, build 42 disparado no workflow (SDK primeiro —
   o checkout do CI resolve o gitlink, que precisa existir no remote).
+- 02:52 UTC — Run 42 (37171145460, add7f82) ✅ VERDE ~25 min: APK com retenção parcial do
+  FMV (SDK d65408b) + aniso 16x default (schema 28). Codegen cache MISS esperado (SHA novo
+  do SDK); ccache quente; gate 16KB ok. Candidato a teste do dono: intro deve congelar no
+  último frame bom em vez de piscar preto (fh1_fmv_debug + linha "retained last complete
+  frame" confirmam no logcat); gameplay deve mostrar pista/terreno mais nítidos. Se o
+  "fora de foco" persistir, o toggle DEPTH OF FIELD em GRAPHICS é o próximo knob.
