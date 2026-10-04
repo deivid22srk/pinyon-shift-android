@@ -107,3 +107,51 @@
   hot-reload). build #38 falhou no contrato do 8BitDo (5≠2 — DB da comunidade trouxe
   entradas do mesmo GUID) → teste atualizado; #39 verde; #40 = pin 35811db (instrumentação
   fh1_fmv_debug) + docs.
+
+## 2026-10-04
+
+- 00:30 UTC — Evidência do build #37 re-analisada por quadro (build37.zip: 2 vídeos + log):
+  - vídeo 1 (3,5 s): tela preta quase total (brilho médio 1,8/255; conteúdo só no último
+    frame) — o FMV da intro;
+  - vídeo 2 (82 s): gameplay com sharpness Laplaciana 40–150 na abertura vs 200–430
+    depois, e um segmento escuro/embaçado em t=15,5–18,2 s (sharpness 10–13) — confirma
+    o pisca-preto no meio do vídeo e o "embaçado" na abertura.
+  - Log sem fatal; FMV presentation resolve 320x184 fmt 7 normal; sem refusals de
+    CopyCpuRange registrados.
+- Diagnóstico fechado em dois mecanismos independentes:
+  (1) pisca-preto no MEIO do vídeo: snapshot parcial dos planos YUV (decodificador
+      em starvation reescreve o plano de cima para baixo; o jogo compõe o plano
+      parcial = tira de ruído + corpo preto). Corrigível no load.
+  (2) preto no INÍCIO do vídeo: warm-up de PSOs (371 pipelines sem pack .pnsp,
+      P2-LOG) — presenta suprimida até compilar. Permanece; mitigação é o pack
+      (médio prazo) — fh1_fmv_debug distingue os dois no próximo log.
+- fix no fork do SDK (13a5cfa + 8443bcf + d65408b docs, branch auto/android-improvements-20261004):
+  probe always-on de completude (5 chunks de 64 B por snapshot) + retenção do
+  último frame COMPLETO quando o snapshot é parcial — decodificador starvation
+  congela no último frame bom em vez de piscar preto. Gate para superfícies
+  tamanho-plano (máscaras pequenas continuam subindo); textura sem frame completo
+  continua best-effort (letterbox nunca congela); watch permanece armado → próximo
+  write re-outdata e re-tenta. Máquina de estados validada em harness standalone
+  (8 casos: completo/parcial/all-zero/primeiro-parcial/letterbox/máscara/recuperação).
+- Blur da gameplay: schema 28 adota aniso 16x como default (migração once-only
+  3→5 no app e no set-graphics-experiment; testes de contrato e settings
+  atualizados; novo teste de adoção). Regex da migração validada em libstdc++
+  (13 casos): `${1}` NÃO é portável (libstdc++ emite literal) e `$15` é ambíguo —
+  a linha é reescrita literal com grupos para indentação/comentário. DoF/motion
+  blur permanecem nativos (toggles em GRAPHICS; maior causa do "fora de foco",
+  decisão artística do dono via menu).
+- Revisão adversarial (3 subagentes críticos independentes: semântica Vulkan,
+  regressões de guest/produto, build/CI) — 3 achados major corrigidos ANTES do push:
+  (1) retenção falsa-positiva em snapshots ALL-ZERO (fade-to-black congelaria o
+      frame stale para sempre) → reter apenas snapshots PARCIAIS (1-4 chunks zero;
+      all-zero sobe best-effort como antes) + kill-switch hot-reload
+      fh1_fmv_retain (default on);
+  (2) flag "frame completo" ficava stale quando a textura caía no load pela
+      shared-memory (fallback sobrescreve o conteúdo) → flag limpa nos bail-outs;
+  (3) tool Apply emitia config schema-28 SEM a chave aniso (runtime cvar default
+      4x enquanto o tool reporta 16x) → append-when-absent como o xma.
+  Nits aplicados: subject >72 chars, log debug <320 B enganoso, wording do
+  TROUBLESHOOTING. Harness comportamental re-validado (11 casos).
+- Branch nova auto/android-improvements-20261004 (repo + fork SDK), pin
+  rexglue.revision = d65408b, build 42 disparado no workflow (SDK primeiro —
+  o checkout do CI resolve o gitlink, que precisa existir no remote).

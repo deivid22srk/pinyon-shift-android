@@ -48,3 +48,11 @@
 - **Lição 5 (build #40)**: NUNCA digitar/copiar SHA de commit "de cabeça" no pin
   `config/release-toolchain.json` — usar `git rev-parse HEAD` no submodule e colar.
   O guard de contrato pegou (2 min), mas custou um run. Mesma família da Lição 2.
+- **Lição 6 (schema 28)**: `std::regex_replace` NÃO é portável para group refs com
+  dígitos colados: libstdc++ emite `${1}` LITERAL (não suporta sintaxe de chave), e
+  `$15` vira "grupo 15" ou "grupo 1 + literal" conforme a stdlib (MSVC vs libstdc++/
+  libc++ divergem na regra $nn do ECMA-262). Para migração de valor numérico
+  (`x = 3` → `x = 5`), reescrever a LINHA INTEIRA literal (`"$1$2chave = 5$3"` com
+  grupos para indentação/comentário) e deixar o EOL num lookahead — válido nas três
+  stdlibs e preserva comentários/indentação/duplicatas consecutivas. Validar toda
+  regex de migração num harness standalone nas stdlibs alvo ANTES de commitar.

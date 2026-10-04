@@ -17,3 +17,4 @@
 | 37161056602 | e44cb7e | dispatch 23:12Z | ❌ FALHOU 2min | pin digitado à mão com SHA errado (35811dbdda…≠35811db5eb…) — guard pegou; lição: sempre `git rev-parse` |
 
 | 37161583504 | 90bcd2e | dispatch 23:2xZ | ✅ VERDE ~33 min | APK final do ciclo: crash fix + controllerdb + fh1_fmv_debug + docs knobs |
+| (a disparar) | auto/android-improvements-20261004 | dispatch | em andamento | build 42: SDK d65408b (retenção do último frame FMV completo) + schema 28 (aniso 16x default) |

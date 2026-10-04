@@ -15,6 +15,19 @@
 - [x] (fixed fa5079d) When going back to title screen on native render, the "Single Player" select screen is completely corrupted in texture super pink noisy
   - Same root cause as the green title (movie skip): stale data in the
     PressStart.wmv planes. Identical in compat-only runs; clean with movies on.
+- [ ] The intro video intermittently shows black frames while the audio keeps playing (build 37; retention fix in the SDK pinned by this branch, pending on-device validation)
+  - The FMV YUV planes are snapshotted from guest memory by the video plane
+    fast path while the software decoder is still rewriting them top to
+    bottom under CPU contention; the game composites the partial plane, which
+    presents as a noise strip on top of a black body. The pinned SDK probes
+    every fast-path snapshot and retains the last complete frame on the
+    texture until a complete one arrives, so a starved decoder freezes on the
+    last good frame instead of flashing black (letterboxed videos never
+    freeze: a texture that never held a complete frame still refreshes
+    best-effort). The first seconds of the very first video can still be
+    black while the runtime translates shaders (no on-device shader pack
+    yet); `fh1_fmv_debug = true` logs the snapshot completeness to tell the
+    two cases apart.
 - [ ] Car selection on an event has either pink correupted textures or mangled car textures/models
   - Not a texture decode bug. The cards are the profile's
     `Thumbnails/Thumbnail_N.xdc` files, which the game renders, resolves and

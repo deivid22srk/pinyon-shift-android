@@ -87,6 +87,16 @@ Estados: `aberto`, `em-andamento`, `aguardando-CI`, `feito <hash>`, `revertido`,
 - [aberto] P1-LOG-SDK — **Shared memory 512 MB buffer cheio** (sparseResidencyBuffer:false
   no Turnip) → fallback chunked VMA economiza ~⅓ do device-local pico 1430/2087 MB.
   SDK-side (fork shiftglue-sdk), prioridade alta para devices de 8 GB.
+- [feito d65408b/SDK — aguardando device] P4-LOG — **FMV pisca preto no meio do vídeo
+  (build #37)**: snapshot parcial dos planos YUV (decodificador reescreve o plano de
+  cima para baixo; jogo compõe tira de ruído + corpo preto). Fix no fork: probe always-on
+  de completude + retenção do último frame PARCIAL (gate tamanho-plano; all-zero e letterbox
+  nunca retêm; kill-switch fh1_fmv_retain). Residual: preto no INÍCIO do primeiro vídeo = warm-up de PSOs (P2-LOG),
+  distinguível no próximo log com fh1_fmv_debug. Impacto alto, risco baixo, esforço S.
+- [feito schema 28] P5-LOG — **"Embaçado" na gameplay (build #37)**: aniso 4x default
+  deixava pista/terreno moles em ângulos oblíquos. Default migrado para 16x
+  (once-only 3→5, app + tool). DoF/motion blur permanecem nativos por decisão artística
+  (toggles em GRAPHICS; TROUBLESHOOTING documenta). Impacto médio, risco baixo, esforço S.
 - [re-escopado] NP-4.10 — auditoria 7-d: device Android roda a 1x (sem texturas escaladas) → o mosaico no Adreno 660 NÃO é o NP-4.10 (que é 2x/3x no D3D12 desktop). Mosaico mobile atacado pelo P2 (cópia por nível, f4df688). Re-escopar NP-4.10 para desktop.
 - [aberto] L6 — **Mensagem de falha de boot no Android**: quando o runtime falha na
   inicialização (Vulkan, conteúdo, XEX), o processo SDL sai silenciosamente; o motivo
