@@ -8,7 +8,7 @@ root causes below were established by reading the pinned SDK's Vulkan paths
 (`thirdparty/shiftglue-sdk`); every fix states how to validate it on device.
 
 Branch: `fix/android-rendering-fmv-textures-20261004` (from
-`auto/android-improvements-20261004-fmv-tearing`, SDK `d2db0a7` → `8d49a07`).
+`auto/android-improvements-20261004-fmv-tearing`, SDK `d2db0a7` → `74a1de0`).
 
 ## 1. Colored band on the top edge of the Press Start / menu screens
 
@@ -146,8 +146,10 @@ bug — `BUGS.md` documents the repair plan.
 | shiftglue-sdk | `05bab12` | fix(vulkan): retain fmv frames over zero-tailed partial snapshots |
 | shiftglue-sdk | `c7c490d` | feat(vulkan): log failed texture image allocations |
 | shiftglue-sdk | `8d49a07` | fix(ui): avoid the immediate present mode by default on android |
+| shiftglue-sdk | `74a1de0` | fix(vulkan): escape the zero-tail fmv retain when the band stops moving |
 | pinyon-shift-android | `5e5c254` | fix(release): pin the sdk revision to the fmv zero-tail retention |
 | pinyon-shift-android | `10636d1` | fix(android): warn when the colour grading maps folder is empty |
+| pinyon-shift-android | `1ab1b9c` | fix(release): pin the sdk revision to the fmv zero-tail escape |
 
 CI: `build.yml` dispatched on `fix/android-rendering-fmv-textures-20261004`
 (workflow_dispatch; the APK artifact `pinyon-shift-apk` carries all of the
