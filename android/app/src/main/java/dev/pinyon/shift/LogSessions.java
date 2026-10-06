@@ -34,7 +34,9 @@ import java.util.zip.ZipOutputStream;
  * Log root: /storage/emulated/0/forza with All Files Access granted, else the
  * app's own external files dir (Android/data/<pkg>/files/forza_logs) which
  * needs no permission - the picker always shows which one is in effect. Old
- * sessions beyond the newest five are removed so logging cannot fill storage.
+ * sessions beyond the newest three are removed, each stream rotates at
+ * 200 MB (one .old generation) and the native side closes the streams at a
+ * whole-session budget, so logging cannot grow unbounded.
  */
 public final class LogSessions {
     private static final String TAG = "PinyonShiftLogs";
@@ -48,8 +50,11 @@ public final class LogSessions {
     public static final String LEVEL_FULL = "full";
 
     private static final String SESSION_PREFIX = "session_";
-    /** Sessions kept on device; older ones are deleted when a new one starts. */
-    private static final int KEEP_SESSIONS = 5;
+    /** Sessions kept on device; older ones are deleted when a new one starts.
+     *  Three, not five: each session can reach the multi-GB range before the
+     *  native session budget closes the streams, and storage on a phone is
+     *  shared with the game itself. */
+    private static final int KEEP_SESSIONS = 3;
 
     private LogSessions() {
     }
@@ -142,7 +147,9 @@ public final class LogSessions {
             }
             try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip))) {
                 for (File file : files) {
-                    if (!file.isFile()) {
+                    if (!file.isFile() || file.getName().endsWith(".old")) {
+                        // Rotated generations double the size without adding
+                        // evidence; the live file carries the session.
                         continue;
                     }
                     try (FileInputStream in = new FileInputStream(file)) {

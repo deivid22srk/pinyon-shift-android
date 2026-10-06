@@ -133,9 +133,39 @@ android {
         from(controllerDb)
         into(generatedAssets)
     }
+
+    // The build identity manifest the realtime log sessions report (commit of
+    // this repository and of the pinned ShiftGlue submodule). Without it the
+    // session headers on device could not say which build produced them; the
+    // activity stages it next to the gamepad DB and the runtime reads it from
+    // the internal files dir.
+    tasks.register('writeBuildManifest') {
+        def manifest = new File(generatedAssets.get().asFile, 'pinyon_shift_build.json')
+        outputs.file manifest
+        doLast {
+            def repoDir = rootProject.file('..')
+            def repoCommit = 'git rev-parse HEAD'.execute(null, repoDir).text.trim()
+            def sdkCommit =
+                'git rev-parse HEAD'.execute(null, new File(repoDir, 'thirdparty/shiftglue-sdk')).text.trim()
+            def dirtyProcess = 'git diff --quiet'.execute(null, repoDir)
+            dirtyProcess.waitFor()
+            manifest.parentFile.mkdirs()
+            manifest.text = """{
+  "schema_version": 2,
+  "pinyon_shift_commit": "${repoCommit}",
+  "pinyon_shift_dirty": "${dirtyProcess.exitValue() != 0 ? '1' : '0'}",
+  "rexglue_commit": "${sdkCommit}",
+  "rexglue_dirty": "0"
+}
+"""
+        }
+    }
     android.sourceSets.main.assets.srcDir(generatedAssets)
     tasks.matching { it.name.contains('Asset') || it.name.startsWith('preBuild') }
-         .configureEach { dependsOn tasks.named('copyControllerDb') }
+         .configureEach {
+             dependsOn tasks.named('copyControllerDb')
+             dependsOn tasks.named('writeBuildManifest')
+         }
 }
 
 dependencies {

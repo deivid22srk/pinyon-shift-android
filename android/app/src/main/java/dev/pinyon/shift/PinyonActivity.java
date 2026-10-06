@@ -43,6 +43,7 @@ public class PinyonActivity extends SDLActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         copyAssetToFiles("gamecontrollerdb.txt");
+        copyAssetToFiles("pinyon_shift_build.json");
         notifyIfGameDataMissing();
     }
 

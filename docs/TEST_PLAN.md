@@ -57,18 +57,20 @@ fallback mostrado no diálogo). Arquivos e o que cada um decide:
 | Arquivo | Decide o quê |
 |---|---|
 | `all.log` | visão geral; linha `Realtime log session installed` confirma que a sessão pegou |
-| `fmv.log` | **flicker do FMV**: contagem de retains/escapes/skips por plano; se os frames pretos coincidem com `reaches_bottom` uploads (H1) ou com `clear-only frame` (H3) |
-| `vulkan.log` | **DEVICE_LOST** (se ocorrer): dump de breadcrumbs com o último trabalho confirmado pela GPU e os suspeitos; mensagens do driver Turnip |
-| `crash.log` | relatório de sinal fatal + breadcrumbs (se o app morrer) |
-| `gpu.log` | stats por frame (`vulkan frame N closed`), draws pulados por pipeline aquecendo (com hash dos shaders) |
+| `fmv.log` | **flicker do FMV**: contagem de retains/escapes/skips por plano e o detector `presenting a clear-only frame` (frame preto apresentado) |
+| `vulkan.log` | **DEVICE_LOST** (se ocorrer): dump de breadcrumbs — `breadcrumb pending (suspect)` lista os draws suspeitos com hash de shader VS/PS, chave de render pass e handle de pipeline; mensagens do driver Turnip |
+| `crash.log` | relatório de sinal fatal + o mesmo rastro de breadcrumbs (o backtrace completo do tombstone do Android fica em `logcat.txt` — o crash.log traz sinal, endereço e PC) |
+| `gpu.log` | stats por frame (`vulkan frame N closed`, incluindo texturas criadas/falhas), draws pulados por pipeline aquecendo (com hash dos shaders) |
 | `files.log` | **AMB_Redstone.fsb** e qualquer outro arquivo faltando, com caminho guest e host |
 | `audio.log` | XMA (dropout conhecido, só confirma) |
-| `config_dump.txt` | todas as cvars ativas (reproduzir a config) |
+| `config_dump.txt` | todas as cvars ativas no início E no fim da sessão (reproduzir a config) |
 | `device_info.txt` | modelo/Android/memória/driver |
-| `logcat.txt` | ruído do sistema (AdrenoUtils, GraphicBufferAllocator) + tudo que precedeu a instalação do sink |
+| `logcat.txt` | ruído do sistema (AdrenoUtils, GraphicBufferAllocator), tombstones com backtrace e tudo que precedeu a instalação do sink |
 
-**Sessões antigas são apagadas automaticamente além das 5 mais recentes** — se quiser
-guardar uma comparação, compartilhe antes de rodar 5 vezes.
+**Sessões antigas são apagadas automaticamente além das 3 mais recentes** (cada
+arquivo gira em 200 MB com uma geração `.old`, e a sessão inteira fecha ao passar
+de 1,5 GB — só `crash.log` continua). Se quiser guardar uma comparação,
+compartilhe antes de rodar 3 vezes.
 
 ## 4. Experimentos de contra-prova (só se o tempo sobrar)
 
