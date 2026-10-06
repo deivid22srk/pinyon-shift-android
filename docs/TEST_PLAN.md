@@ -68,8 +68,8 @@ fallback mostrado no diálogo). Arquivos e o que cada um decide:
 | `logcat.txt` | ruído do sistema (AdrenoUtils, GraphicBufferAllocator), tombstones com backtrace e tudo que precedeu a instalação do sink |
 
 **Sessões antigas são apagadas automaticamente além das 3 mais recentes** (cada
-arquivo gira em 200 MB com uma geração `.old`, e a sessão inteira fecha ao passar
-de 1,5 GB — só `crash.log` continua). Se quiser guardar uma comparação,
+arquivo gira em 200 MB com uma geração `.old`, e a sessão inteira fecha ao acumular
+1 GB escritos — só `crash.log` continua). Se quiser guardar uma comparação,
 compartilhe antes de rodar 3 vezes.
 
 ## 4. Experimentos de contra-prova (só se o tempo sobrar)

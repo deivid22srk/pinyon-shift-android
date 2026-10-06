@@ -86,6 +86,11 @@ class LogStream {
 
   uint64_t written() const { return written_; }
 
+  // Everything this stream has written since the session began, across
+  // rotations - the whole-session budget must survive a rotation resetting
+  // the per-file counter.
+  uint64_t session_total() const { return session_total_; }
+
   // Stops the stream permanently with a final marker line (the session budget
   // gate). The crash stream is never closed this way.
   void CloseWithNote(const std::string& note) {
@@ -113,6 +118,7 @@ class LogStream {
     std::fputc('\n', file_);
     std::fflush(file_);
     written_ += line.size() + 1;
+    session_total_ += line.size() + 1;
     if (written_ > kMaxFileBytes) {
       Rotate();
     }
@@ -152,6 +158,7 @@ class LogStream {
   std::string name_;
   std::FILE* file_ = nullptr;
   uint64_t written_ = 0;
+  uint64_t session_total_ = 0;
   std::string pending_key_;
   uint64_t pending_repeats_ = 0;
 };
@@ -271,14 +278,15 @@ class RealtimeLogSink : public spdlog::sinks::base_sink<std::mutex> {
  private:
   // Past the session budget only crash.log keeps writing, so a runaway loop
   // the dedup cannot collapse (many distinct messages) still cannot fill the
-  // device, while the loss/crash evidence survives.
+  // device, while the loss/crash evidence survives. The budget counts every
+  // byte written since the session began, across rotations.
   void EnforceBudget() {
     if (budget_reached_) {
       return;
     }
     uint64_t total = 0;
     for (const auto& stream : streams_) {
-      total += stream->written();
+      total += stream->session_total();
     }
     if (total <= kSessionBudgetBytes) {
       return;
@@ -296,7 +304,7 @@ class RealtimeLogSink : public spdlog::sinks::base_sink<std::mutex> {
     }
   }
 
-  static constexpr uint64_t kSessionBudgetBytes = 1536ull * 1024 * 1024;
+  static constexpr uint64_t kSessionBudgetBytes = 1024ull * 1024 * 1024;
 
   std::vector<std::unique_ptr<LogStream>> streams_;
   LogStream* all_ = nullptr;

@@ -603,26 +603,6 @@ public class GamePickerActivity extends Activity {
         share.setOnClickListener(v -> shareLatestLogs());
         content.addView(share);
 
-        if (LogSessions.usingSharedStorage(this)) {
-            Button open = new Button(this);
-            open.setText(R.string.logs_open_button);
-            open.setAllCaps(false);
-            open.setOnClickListener(v -> {
-                try {
-                    startActivity(new Intent(android.content.Intent.ACTION_VIEW)
-                            .setDataAndType(Uri.fromFile(LogSessions.logRoot(this)),
-                                    "resource/folder"));
-                } catch (Exception e) {
-                    // No file manager accepts folder views on this device; the
-                    // path above is still shown in the dialog.
-                    Log.w(TAG, "No folder viewer available", e);
-                    Toast.makeText(this, R.string.logs_no_folder_viewer,
-                            Toast.LENGTH_LONG).show();
-                }
-            });
-            content.addView(open);
-        }
-
         new AlertDialog.Builder(this)
                 .setTitle(R.string.logs_title)
                 .setView(content)
@@ -644,13 +624,24 @@ public class GamePickerActivity extends Activity {
                 .show();
     }
 
-    /** Zips the newest session and hands it to the system share sheet. */
+    /** Zips the newest session on a worker thread and hands it to the system
+     *  share sheet - a "full" level session can be hundreds of megabytes, and
+     *  compressing that on the UI thread would freeze the picker. */
     private void shareLatestLogs() {
-        File zip = LogSessions.zipLatestSession(this);
-        if (zip == null) {
-            Toast.makeText(this, R.string.logs_no_session, Toast.LENGTH_LONG).show();
-            return;
-        }
+        Toast.makeText(this, R.string.logs_zipping, Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            File zip = LogSessions.zipLatestSession(this);
+            runOnUiThread(() -> {
+                if (zip == null) {
+                    Toast.makeText(this, R.string.logs_no_session, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                shareZip(zip);
+            });
+        }, "pinyon-log-zip").start();
+    }
+
+    private void shareZip(File zip) {
         Uri uri = androidx.core.content.FileProvider.getUriForFile(this,
                 getPackageName() + ".logfiles", zip);
         Intent share = new Intent(Intent.ACTION_SEND);

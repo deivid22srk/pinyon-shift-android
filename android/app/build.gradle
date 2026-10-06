@@ -138,24 +138,30 @@ android {
     // this repository and of the pinned ShiftGlue submodule). Without it the
     // session headers on device could not say which build produced them; the
     // activity stages it next to the gamepad DB and the runtime reads it from
-    // the internal files dir.
+    // the internal files dir. Paths are resolved at configuration time so the
+    // doLast closure never touches Gradle script objects (configuration-cache
+    // compatible), and the task always runs: a stale UP-TO-DATE manifest
+    // would silently report the wrong commit.
+    def repoDir = rootProject.file('..')
+    def sdkDir = new File(repoDir, 'thirdparty/shiftglue-sdk')
     tasks.register('writeBuildManifest') {
         def manifest = new File(generatedAssets.get().asFile, 'pinyon_shift_build.json')
         outputs.file manifest
+        outputs.upToDateWhen { false }
         doLast {
-            def repoDir = rootProject.file('..')
             def repoCommit = 'git rev-parse HEAD'.execute(null, repoDir).text.trim()
-            def sdkCommit =
-                'git rev-parse HEAD'.execute(null, new File(repoDir, 'thirdparty/shiftglue-sdk')).text.trim()
-            def dirtyProcess = 'git diff --quiet'.execute(null, repoDir)
-            dirtyProcess.waitFor()
+            def sdkCommit = 'git rev-parse HEAD'.execute(null, sdkDir).text.trim()
+            def repoDirtyProcess = 'git diff --quiet'.execute(null, repoDir)
+            repoDirtyProcess.waitFor()
+            def sdkDirtyProcess = 'git diff --quiet'.execute(null, sdkDir)
+            sdkDirtyProcess.waitFor()
             manifest.parentFile.mkdirs()
             manifest.text = """{
   "schema_version": 2,
   "pinyon_shift_commit": "${repoCommit}",
-  "pinyon_shift_dirty": "${dirtyProcess.exitValue() != 0 ? '1' : '0'}",
+  "pinyon_shift_dirty": "${repoDirtyProcess.exitValue() != 0 ? '1' : '0'}",
   "rexglue_commit": "${sdkCommit}",
-  "rexglue_dirty": "0"
+  "rexglue_dirty": "${sdkDirtyProcess.exitValue() != 0 ? '1' : '0'}"
 }
 """
         }
