@@ -93,6 +93,34 @@ iteração 3 com o escopo cumulativo.
 
 ## Iteração 3 (2026-10-06)
 
-**Entrada**: SDK `b51e37e..1c809cf`, repo `9a2474e..f6c4fd5`. C2 re-executado
-cumulativamente (iterações 2+3). Build: ver seção de veredito abaixo.
+**Entrada**: SDK `b51e37e..1c809cf`, repo `9a2474e..4fcfa11`. Build 37467621505
+(f6c4fd5): **verde**.
+
+**Veredictos**: C1 **não impressionado** (0 bloqueadoras, 0 altas, 2 médias + 4
+baixas); C2 **IMPRESSIONADO** (A-F ≥ 9; 2 médias classificadas como limites
+razoáveis/documentáveis); C3 **IMPRESSIONADO** (0/0/0, A-F ≥ 9; benchmark próprio:
+~43 ns/draw pós-fix binário, 10-17× menor que a it. 2; 232 testes OK).
+
+**Médias do C1 → correções (iteração 4):**
+
+| # | Objeção | Correção | Onde |
+|---|---|---|---|
+| C1-M1 | `Checkpoint()` não zerava os campos binários → identidade fantasma de slot reciclado em draw end/copy/texture load | todos os 4 writers zeram TODOS os campos de identidade | SDK cp.cpp |
+| C1-M2 | Janela "pending (suspect)" abria na cabeça e omitia (gpu_reached, serial_now-64] — os suspeitos primários | dump começa em gpu_reached+1 (primeiros 64), nota o trecho omitido, fecha com os últimos 64 | SDK cp.cpp |
+| C1-B1 | Formato sem espaço antes do detail | sufixo montado com espaçamento condicional | SDK cp.cpp (describe ×2) |
+| C1-B2 | prim/indices perdidos na reescrita binária | campos primitive_type/index_count no record + impressão no dump | SDK cp.{h,cpp} |
+| C1-B3/C3-B-N1 | Zip re-entrante corrompia o arquivo | AtomicBoolean + nome único por millis + prune dos 2 mais novos | repo GamePicker/LogSessions |
+| C1-B4 | Serial gravado antes do conteúdo (janela de escrita) | serial gravado POR ÚLTIMO em todos os writers | SDK cp.cpp |
+| C2-B1 | Linhas "VulkanPresenter" fora do vulkan.log | predicado do sink inclui VulkanPresenter (vulkan.log agora = categoria gpu + presenter + Vulkan/VkResult/breadcrumb) | repo realtime_log.cpp |
+| C2-B4 | "colour grading map open" só no all.log | predicado files inclui "colour grading map" | repo realtime_log.cpp |
+| C2-B5 | Comentário "newest five" (real: 3) | corrigido + budget 1 GB documentado no header | repo realtime_log.h |
+| C2-M2 | Backtrace do tombstone dependente do filtro --pid capturar o crash_dump | segunda captura `logcat -b crash` (logcat_crash.txt, 1 MB rotacionado) | repo PinyonActivity |
+| C3-B-N2 | Budget subcontava notas de dedup/rotação | FlushRepeats/rotated/closure notes somam em session_total_ | repo realtime_log.cpp |
+
+**Saída**: SDK `6cf50bb`, repo `43a41ab`, pin atualizado; build 4 despachado.
+
+## Iteração 4 (2026-10-06) — verificação final
+
+**Entrada**: SDK `1c809cf..6cf50bb`, repo `4fcfa11..43a41ab`.
+
 
