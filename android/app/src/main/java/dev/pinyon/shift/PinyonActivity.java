@@ -30,6 +30,11 @@ public class PinyonActivity extends SDLActivity {
     /** The logcat PID capture of the current session, stopped on destroy. */
     private Process logcatCapture;
 
+    /** The logcat crash-buffer capture: tombstone backtraces are written by
+     *  the system's crash_dump process (a different PID), so the PID capture
+     *  alone cannot be relied on to hold them. */
+    private Process crashLogcatCapture;
+
     @Override
     protected String[] getLibraries() {
         // SDL3 is linked statically into libmain.so; only the host library
@@ -139,6 +144,22 @@ public class PinyonActivity extends SDLActivity {
             Log.w(TAG, "Could not start the logcat capture", e);
             logcatCapture = null;
         }
+        try {
+            // The crash buffer only receives lines when something dies, so
+            // this stays empty and tiny in a healthy session while guaranteeing
+            // the tombstone backtrace is in the session even when the PID
+            // filter misses it.
+            crashLogcatCapture = Runtime.getRuntime().exec(new String[]{
+                    "logcat",
+                    "-b", "crash",
+                    "-v", "time",
+                    "-f", new java.io.File(session, "logcat_crash.txt").getAbsolutePath(),
+                    "-r", "1024", "-n", "2"
+            });
+        } catch (Exception e) {
+            Log.w(TAG, "Could not start the crash-buffer logcat capture", e);
+            crashLogcatCapture = null;
+        }
     }
 
     @Override
@@ -146,6 +167,10 @@ public class PinyonActivity extends SDLActivity {
         if (logcatCapture != null) {
             logcatCapture.destroy();
             logcatCapture = null;
+        }
+        if (crashLogcatCapture != null) {
+            crashLogcatCapture.destroy();
+            crashLogcatCapture = null;
         }
         super.onDestroy();
     }

@@ -65,7 +65,8 @@ fallback mostrado no diálogo). Arquivos e o que cada um decide:
 | `audio.log` | XMA (dropout conhecido, só confirma) |
 | `config_dump.txt` | todas as cvars ativas no início E no fim da sessão (reproduzir a config) |
 | `device_info.txt` | modelo/Android/memória/driver |
-| `logcat.txt` | ruído do sistema (AdrenoUtils, GraphicBufferAllocator), tombstones com backtrace e tudo que precedeu a instalação do sink |
+| `logcat.txt` | ruído do sistema (AdrenoUtils, GraphicBufferAllocator) e tudo que precedeu a instalação do sink |
+| `logcat_crash.txt` | buffer de crash do Android: tombstones com o backtrace completo (garantido mesmo quando o filtro de PID perde as linhas do crash_dump) |
 
 **Sessões antigas são apagadas automaticamente além das 3 mais recentes** (cada
 arquivo gira em 200 MB com uma geração `.old`, e a sessão inteira fecha ao acumular

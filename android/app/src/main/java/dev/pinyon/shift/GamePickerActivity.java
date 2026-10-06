@@ -624,14 +624,26 @@ public class GamePickerActivity extends Activity {
                 .show();
     }
 
-    /** Zips the newest session on a worker thread and hands it to the system
+    /**
+     * Zips the newest session on a worker thread and hands it to the system
      *  share sheet - a "full" level session can be hundreds of megabytes, and
-     *  compressing that on the UI thread would freeze the picker. */
+     *  compressing that on the UI thread would freeze the picker. Re-entrant
+     *  taps are ignored while a zip is in flight (two threads writing the same
+     *  file would corrupt it), and each zip gets a unique name so a leftover
+     *  share from an earlier attempt never collides.
+     */
+    private final java.util.concurrent.atomic.AtomicBoolean zipInFlight =
+            new java.util.concurrent.atomic.AtomicBoolean(false);
+
     private void shareLatestLogs() {
+        if (!zipInFlight.compareAndSet(false, true)) {
+            return;
+        }
         Toast.makeText(this, R.string.logs_zipping, Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             File zip = LogSessions.zipLatestSession(this);
             runOnUiThread(() -> {
+                zipInFlight.set(false);
                 if (zip == null) {
                     Toast.makeText(this, R.string.logs_no_session, Toast.LENGTH_LONG).show();
                     return;

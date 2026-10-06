@@ -14,7 +14,8 @@ namespace pinyon_shift::diagnostics {
 // flushed as it is written, so a crash, a killed process or a hung GPU leaves
 // the log complete up to the last event. Repeated identical messages are
 // collapsed into a counter line, files rotate at 200 MB (keeping one .old
-// generation) and the activity keeps only the newest five sessions.
+// generation), the whole session closes at a 1 GB budget (crash.log
+// excepted) and the activity keeps only the newest three sessions.
 //
 // Returns true when the session sink is installed. When it returns false the
 // runtime logging is untouched (logcat / runtime.log as before). Call

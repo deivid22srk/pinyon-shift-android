@@ -125,8 +125,11 @@ public final class LogSessions {
 
     /**
      * Zips the newest session into the app cache and returns the zip, ready to
-     * share through the FileProvider. Returns null when there is nothing to
-     * share or the zip cannot be written.
+     * share through the FileProvider. Each zip gets a unique name (millisecond
+     * suffix) so concurrent or repeated shares never write the same file, and
+     * only the two newest zips are kept - the system evicts the cache dir when
+     * storage runs low anyway. Returns null when there is nothing to share or
+     * the zip cannot be written.
      */
     public static File zipLatestSession(Context context) {
         File session = latestSessionDir(context);
@@ -137,7 +140,9 @@ public final class LogSessions {
         if (!cache.exists() && !cache.mkdirs()) {
             return null;
         }
-        File zip = new File(cache, session.getName() + ".zip");
+        pruneShareZips(cache);
+        File zip = new File(cache, session.getName() + "_"
+                + System.currentTimeMillis() + ".zip");
         try {
             List<File> files = new ArrayList<>();
             File[] children = session.listFiles();
@@ -167,6 +172,20 @@ public final class LogSessions {
         } catch (IOException e) {
             Log.w(TAG, "Could not zip the log session " + session, e);
             return null;
+        }
+    }
+
+    /** Keeps only the two newest share zips around. */
+    private static void pruneShareZips(File cache) {
+        File[] zips = cache.listFiles((dir, name) -> name.endsWith(".zip"));
+        if (zips == null || zips.length <= 2) {
+            return;
+        }
+        List<File> ordered = new ArrayList<>(Arrays.asList(zips));
+        Collections.sort(ordered, (a, b) -> Long.compare(a.lastModified(), b.lastModified()));
+        for (int i = 0; i + 2 < ordered.size(); ++i) {
+            //noinspection ResultOfMethodCallIgnored
+            ordered.get(i).delete();
         }
     }
 

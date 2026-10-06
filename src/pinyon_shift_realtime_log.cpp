@@ -73,6 +73,7 @@ class LogStream {
       std::fputc('\n', file_);
       std::fflush(file_);
       written_ += note.size() + 1;
+      session_total_ += note.size() + 1;
       pending_repeats_ = 0;
     }
   }
@@ -99,6 +100,7 @@ class LogStream {
       std::fputs(note.c_str(), file_);
       std::fputc('\n', file_);
       std::fflush(file_);
+      session_total_ += note.size() + 1;
       std::fclose(file_);
       file_ = nullptr;
     }
@@ -150,6 +152,7 @@ class LogStream {
     std::fputs(note.c_str(), file_);
     std::fputc('\n', file_);
     std::fflush(file_);
+    session_total_ += note.size() + 1;
   }
 
   static constexpr uint64_t kMaxFileBytes = 200ull * 1024 * 1024;
@@ -231,14 +234,17 @@ class RealtimeLogSink : public spdlog::sinks::base_sink<std::mutex> {
 
     const bool is_gpu = category == "gpu";
     const bool fmv = is_gpu && Contains(text, "fh1 fmv");
-    const bool vulkan = is_gpu && (Contains(text, "Vulkan") || Contains(text, "VkResult") ||
-                                   Contains(text, "vkQueue") || Contains(text, "vkCmd") ||
-                                   Contains(text, "device lost") || Contains(text, "breadcrumb"));
+    const bool vulkan =
+        is_gpu || Contains(text, "VulkanPresenter") || Contains(text, "Vulkan") ||
+        Contains(text, "VkResult") || Contains(text, "vkQueue") ||
+        Contains(text, "vkCmd") || Contains(text, "device lost") ||
+        Contains(text, "breadcrumb");
     // The presenter's black-frame detector logs from the core category but
     // belongs with the FMV/GPU evidence.
     const bool clear_only_frame = Contains(text, "clear-only frame");
     const bool files = category == "fs" || Contains(text, "NtCreateFile") ||
                        Contains(text, "vfs open failed") ||
+                       Contains(text, "colour grading map") ||
                        (category == "krnl" && Contains(text, "NtCreateFile"));
     const bool audio =
         category == "apu" || Contains(text, "XmaContext") || Contains(text, "XMA");
