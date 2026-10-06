@@ -204,6 +204,14 @@ public class GamePickerActivity extends Activity {
             Log.w(TAG, "media/dynamicpost/colourgradingmaps has no files; the disc "
                     + "copy likely lost them over MTP");
             detail.append('\n').append(getString(R.string.picker_warning_no_grading_maps));
+        } else {
+            // Integrity summary beyond existence: the file count and size, so
+            // "all files present" vs "a partial copy" are distinguishable in
+            // the logcat the owner sends back with a bug report.
+            int gradingFiles = colourGradingFiles(dir);
+            long gradingBytes = colourGradingMapsBytes(dir);
+            Log.i(TAG, "media/dynamicpost/colourgradingmaps: " + gradingFiles
+                    + " file(s), " + gradingBytes + " bytes");
         }
         return detail.toString();
     }
@@ -219,10 +227,34 @@ public class GamePickerActivity extends Activity {
      * look blown out until the folder is re-copied from the disc extraction.
      */
     private static boolean isColourGradingMapsEmpty(File root) {
+        return colourGradingFiles(root) == 0;
+    }
+
+    /** The number of files in the disc's colour grading map folder (0 also
+     *  when the folder is missing, which repairMtpDroppedDirectories then
+     *  recreates empty). */
+    private static int colourGradingFiles(File root) {
         File gradingMaps =
                 new File(new File(new File(root, "media"), "dynamicpost"), "colourgradingmaps");
         String[] entries = gradingMaps.list();
-        return entries != null && entries.length == 0;
+        return entries == null ? 0 : entries.length;
+    }
+
+    /** Total bytes of the colour grading map files, for the integrity log. */
+    private static long colourGradingMapsBytes(File root) {
+        File gradingMaps =
+                new File(new File(new File(root, "media"), "dynamicpost"), "colourgradingmaps");
+        File[] files = gradingMaps.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        long total = 0;
+        for (File file : files) {
+            if (file.isFile()) {
+                total += file.length();
+            }
+        }
+        return total;
     }
 
     /** True when the system reports the Vulkan 1.1 feature level (0x00401000). */

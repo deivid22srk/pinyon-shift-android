@@ -15,11 +15,13 @@
 #include <set>
 #include <string>
 #include <string_view>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
 #include <fmt/format.h>
 #include <rex/cvar.h>
+#include <rex/logging.h>
 #include <rex/memory.h>
 #include <rex/ppc/context.h>
 #include <rex/perf/counter.h>
@@ -596,6 +598,29 @@ void PinyonShiftObserveGuestFileOpen(std::string_view guest_path) {
     event.hook = PINYON_HOOK_FILE_OPEN;
     event.text = path.c_str();
     pinyon_shift::mod::Dispatch(event);
+  }
+  // The color grading look-up tables: every open under this folder is
+  // recorded once per distinct path, so a session log shows exactly which
+  // LUT files the title asks for (names and count - the input a synthetic
+  // neutral-LUT fallback would need). The picker warns when the folder holds
+  // no files at all; this catches the runtime side and keeps the evidence
+  // even when the folder changed after the picker screen.
+  if (path.find("dynamicpost/colourgradingmaps") != std::string::npos) {
+    static std::mutex grading_log_mutex;
+    static std::unordered_set<std::string> grading_logged;
+    bool first_open_of_path = false;
+    {
+      std::lock_guard<std::mutex> lock(grading_log_mutex);
+      first_open_of_path = grading_logged.insert(path).second;
+    }
+    if (first_open_of_path) {
+      pinyon_shift::diagnostics::RecordEvent("colourgrading.opened", {{"path", path}});
+      REXLOG_WARN(
+          "colour grading map open: {} (if this fails, exposure/bloom grading "
+          "renders broken; re-copy media/dynamicpost/colourgradingmaps from the "
+          "disc extraction)",
+          path);
+    }
   }
   if (!path.ends_with(".wmv")) {
     return;
