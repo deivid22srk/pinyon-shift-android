@@ -123,4 +123,29 @@ razoáveis/documentáveis); C3 **IMPRESSIONADO** (0/0/0, A-F ≥ 9; benchmark pr
 
 **Entrada**: SDK `1c809cf..6cf50bb`, repo `4fcfa11..43a41ab`.
 
+**Veredictos**: C1 **IMPRESSIONADO** (0 bloqueadoras, 0 altas, 0 médias, 0 baixas
+novas; A-H ≥ 9; aritmética da janela pending provada caso a caso; commit de
+correções sem regressões). C2 e C3 permanecem **IMPRESSIONADOS** da iteração 3
+(sem mudanças que afetem seus veredictos — C1 re-verificou os pontos repo-side).
+
+**Build**: 37471447826 (43a41ab): **verde**. Histórico do loop: 37458970888
+(1b9489b) verde, 37463780424 (9a2474e) verde, 37467621505 (f6c4fd5) verde,
+37471447826 (43a41ab) verde — quatro builds, todos verdes, o último cobrindo o
+estado final (SDK 6cf50bb pinado no repo 7fd83c1; o commit final é somente docs).
+
+## Fechamento do loop (critério de saída atingido)
+
+- 4 iterações (mínimo 3, máximo 10).
+- C1, C2 e C3 declaram **"impressionado"**, sem objeções críticas ou altas abertas,
+  notas ≥ 9 em todos os itens.
+- Build do APK verde no estado final.
+- Objeções resolvidas no total do loop: 3 bloqueadoras, 7 altas, ~12 médias e ~15
+  baixas — todas corrigidas ou aceitas com evidência e documentadas acima.
+- Resíduos aceitos (documentados, sem ação): custo residual do trail por draw
+  (~43 ns, default-on deliberado durante a caça ao DEVICE_LOST com cvar de
+  desligar), permissão/ruído do `logcat -b crash` por ROM (degradação benigna),
+  janela teórica de leitura rasgada no anel mitigada pelo re-check duplo,
+  FMV por-frame exato dependente de evidência de device, sem CI para o alvo
+  Windows (contrato de CI do repo é APK + tooling).
+
 
