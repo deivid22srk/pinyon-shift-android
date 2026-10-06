@@ -7,7 +7,9 @@
 #include <regex>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <system_error>
+#include <cstdlib>
 
 #include <rex/cvar.h>
 #include <rex/kernel/xboxkrnl/io.h>
@@ -26,6 +28,7 @@
 #include "native_renderer/guest_output_renderer.h"
 #include "native_renderer/shader_capture.h"
 #include "pinyon_shift_diagnostics.h"
+#include "pinyon_shift_realtime_log.h"
 #include "platform/host_platform.h"
 #include "pinyon_shift_runtime_hooks.h"
 #include "config/host_config.h"
@@ -471,6 +474,13 @@ void PinyonShiftApp::OnConfigurePaths(rex::PathConfig& paths) {
   if (REXCVAR_GET(log_file).empty()) {
     REXCVAR_SET(log_file, (state_root / "logs" / "runtime.log").string());
   }
+  // The realtime session's "full" level lowers the global level too; this
+  // runs before the SDK's InitLogging builds the loggers from the cvar.
+  if (const char* log_level_env = std::getenv("PINYON_SHIFT_LOG_LEVEL");
+      log_level_env && std::string_view(log_level_env) == "full" &&
+      REXCVAR_GET(log_level) == "info") {
+    REXCVAR_SET(log_level, std::string("debug"));
+  }
 
   diagnostics::RecordEvent(
       "paths.configured",
@@ -512,6 +522,12 @@ void PinyonShiftApp::OnConfigureStyle(ImGuiStyle& imgui_style, rex::ui::Style& u
 }
 
 void PinyonShiftApp::OnPostInitLogging() {
+  // The realtime session sink (activity-created session directory, picker
+  // toggle): all/gpu/vulkan/fmv/files/audio/crash.log + config_dump.txt,
+  // flushed per line. Installs after InitLogging so it catches every logger;
+  // messages emitted before this land in logcat.txt (the PID capture).
+  pinyon_shift::diagnostics::InstallRealtimeLogSession();
+
   std::string perf_csv = rex::cvar::GetFlagByName("perf_log_csv");
   if (perf_csv.empty() && REXCVAR_GET(pinyon_shift_capture_performance)) {
     perf_csv = (pinyon_shift::diagnostics::StateRoot() / "logs" /
@@ -917,6 +933,7 @@ bool PinyonShiftApp::OnWindowCloseRequested() {
 
 void PinyonShiftApp::OnShutdown() {
   pinyon_shift::mod::NotifyShutdown();
+  pinyon_shift::diagnostics::FlushRealtimeLogSession();
   rex::ui::UnregisterBind("bind_game_menu");
   rex::cvar::UnregisterChangeCallbacks("pinyon_shift_hor_plus");
   if (resize_listener_added_ && window()) {

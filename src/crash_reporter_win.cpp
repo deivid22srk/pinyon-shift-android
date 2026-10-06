@@ -257,6 +257,11 @@ void Install(const std::filesystem::path& crash_root, const std::string& session
 
 void Refresh() { SetUnhandledExceptionFilter(UnhandledExceptionReporter); }
 
+void RefreshRealtimeCrashPath() {
+  // The Windows reporter writes minidumps through its own path; the realtime
+  // session's crash.log is POSIX-only.
+}
+
 void RaiseAccessViolation() { RaiseException(EXCEPTION_ACCESS_VIOLATION, 0, 0, nullptr); }
 
 void ExecuteNull() {

@@ -13,6 +13,11 @@ namespace pinyon_shift::diagnostics::crash {
 // Installs the handlers; later crashes in any thread are reported.
 void Install(const std::filesystem::path& crash_root, const std::string& session_id);
 
+// Re-reads the realtime session's crash.log path (empty until the realtime
+// log session is installed, which happens after the handlers). POSIX only;
+// the Windows reporter is a no-op here.
+void RefreshRealtimeCrashPath();
+
 // Installs the unhandled-crash handler again, for runtime components that
 // replace it after startup.
 void Refresh();

@@ -131,6 +131,27 @@ Java_dev_pinyon_shift_PinyonActivity_nativeSetEnvironment(
   ApplyUserEnvironmentFile(external);
 }
 
+// Realtime log session, created by the activity before SDL_main starts
+// (LogSessions.java on the Java side). The native runtime creates its log
+// files inside this directory when PINYON_SHIFT_LOG_SESSION is set:
+// - PINYON_SHIFT_LOG_SESSION: the session_<timestamp> directory, already
+//   holding device_info.txt and logcat.txt (the activity's PID capture).
+// - PINYON_SHIFT_LOG_LEVEL: normal | gpu | full, picked on the picker
+//   screen; the runtime maps it onto the log level and the diagnostic
+//   cvars (per-frame stats, per-texture lines).
+extern "C" JNIEXPORT void JNICALL
+Java_dev_pinyon_shift_PinyonActivity_nativeSetLogSession(
+    JNIEnv* env, jclass /*clazz*/, jstring session_dir, jstring level) {
+  const std::string dir = JniToString(env, session_dir);
+  const std::string log_level = JniToString(env, level);
+  if (!dir.empty()) {
+    setenv("PINYON_SHIFT_LOG_SESSION", dir.c_str(), 1);
+  }
+  if (!log_level.empty()) {
+    setenv("PINYON_SHIFT_LOG_LEVEL", log_level.c_str(), 1);
+  }
+}
+
 // The custom Vulkan driver (Mesa Turnip and friends) picked on the picker
 // screen, loaded by the runtime through libadrenotools:
 // - REX_ANDROID_DRIVERS_DIR: root folder holding one folder per driver

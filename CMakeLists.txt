@@ -24,6 +24,7 @@ set(PINYON_SHIFT_HOST_SOURCES
     src/fh1_render_test.cpp
     src/pinyon_shift_app.cpp
     src/pinyon_shift_diagnostics.cpp
+    src/pinyon_shift_realtime_log.cpp
     src/pinyon_shift_runtime_hooks.cpp
     src/save_backups.cpp
     src/cheats.cpp

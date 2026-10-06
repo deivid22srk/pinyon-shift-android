@@ -1,4 +1,5 @@
 #include "crash_reporter.h"
+#include "pinyon_shift_realtime_log.h"
 
 // The POSIX crash reporter: a handler for the fatal signals, on its own stack,
 // writes <crash_root>/<session>-<signal>.txt with the signal, the faulting
@@ -49,9 +50,11 @@ constexpr int kSignals[] = {SIGABRT};
 constexpr int kSignals[] = {SIGSEGV, SIGBUS, SIGILL, SIGFPE, SIGABRT};
 #endif
 // "<crash_root>/<session>-" prepared at install; the handler appends the
-// signal name, so it never allocates.
+// signal name, so it never allocates. The realtime session's crash.log
+// (append mode, opened lazily in the handler) receives the same bytes.
 std::array<char, 4096> g_report_prefix{};
 size_t g_report_prefix_length = 0;
+std::array<char, 4096> g_realtime_crash_path{};
 std::atomic_flag g_reported = ATOMIC_FLAG_INIT;
 std::array<std::byte, 64 * 1024> g_signal_stack{};
 
@@ -112,17 +115,34 @@ void Handler(int signal, siginfo_t* info, void* context) {
     for (const char* c = ".txt"; *c; ++c) path[length++] = *c;
     path[length] = '\0';
     const int file = open(path, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
-    if (file >= 0) {
-      Write(file, "Pinyon Shift fatal signal\nsignal=");
-      Write(file, SignalName(signal));
-      Write(file, "\n");
-      WriteHex(file, "fault_address=", uint64_t(uintptr_t(info ? info->si_addr : nullptr)));
-      WriteHex(file, "pc=", ProgramCounter(context));
+    // The realtime session's crash.log: append (the log sink holds its own
+    // descriptor on the same file; both append so the streams interleave
+    // instead of overwriting). O_CLOEXEC keeps the fd out of child processes.
+    const int realtime_file =
+        g_realtime_crash_path[0] != '\0'
+            ? open(g_realtime_crash_path.data(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC,
+                   0644)
+            : -1;
+    const int files[2] = {file, realtime_file};
+    for (const int out : files) {
+      if (out < 0) {
+        continue;
+      }
+      Write(out, "Pinyon Shift fatal signal\nsignal=");
+      Write(out, SignalName(signal));
+      Write(out, "\n");
+      WriteHex(out, "fault_address=", uint64_t(uintptr_t(info ? info->si_addr : nullptr)));
+      WriteHex(out, "pc=", ProgramCounter(context));
 #if defined(PINYON_SHIFT_HAVE_BACKTRACE)
       void* frames[64];
       const int count = backtrace(frames, 64);
-      backtrace_symbols_fd(frames, count, file);
+      backtrace_symbols_fd(frames, count, out);
 #endif
+      if (out != file) {
+        close(out);
+      }
+    }
+    if (file >= 0) {
       close(file);
     }
   }
@@ -176,6 +196,10 @@ void Install(const std::filesystem::path& crash_root, const std::string& session
   const std::string prefix = (crash_root / session_id).string() + "-";
   g_report_prefix_length = std::min(prefix.size(), g_report_prefix.size() - 1);
   std::memcpy(g_report_prefix.data(), prefix.data(), g_report_prefix_length);
+  // The realtime session (when the picker toggle is on) also wants the
+  // report in its crash.log next to the breadcrumb dump; the path itself is
+  // picked up by RefreshRealtimeCrashPath once the session exists.
+  RefreshRealtimeCrashPath();
 #if defined(PINYON_SHIFT_HAVE_BACKTRACE)
   // The first backtrace() loads the unwinder; do it now, not in the handler.
   void* frame;
@@ -187,6 +211,18 @@ void Install(const std::filesystem::path& crash_root, const std::string& session
   sigaltstack(&stack, nullptr);
   ReplayExistingReports(crash_root);
   Refresh();
+}
+
+void RefreshRealtimeCrashPath() {
+  // The realtime session installs after the handlers (it needs the logging
+  // system up); copy its crash.log path once it exists. Allocation-free
+  // copy: the signal handler only reads the buffer.
+  g_realtime_crash_path.fill('\0');
+  if (const char* realtime = pinyon_shift::diagnostics::RealtimeCrashLogPath()) {
+    const size_t realtime_length =
+        std::min(std::strlen(realtime), g_realtime_crash_path.size() - 1);
+    std::memcpy(g_realtime_crash_path.data(), realtime, realtime_length);
+  }
 }
 
 void Refresh() {
