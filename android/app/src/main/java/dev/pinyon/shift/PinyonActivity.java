@@ -27,6 +27,9 @@ import org.libsdl.app.SDLActivity;
 public class PinyonActivity extends SDLActivity {
     private static final String TAG = "PinyonShift";
 
+    /** The logcat PID capture of the current session, stopped on destroy. */
+    private Process logcatCapture;
+
     @Override
     protected String[] getLibraries() {
         // SDL3 is linked statically into libmain.so; only the host library
@@ -61,6 +64,10 @@ public class PinyonActivity extends SDLActivity {
                 GpuDrivers.driversRoot(this).getAbsolutePath(),
                 prefs.getString(GamePickerActivity.PREF_GPU_DRIVER, ""),
                 prefs.getBoolean(GamePickerActivity.PREF_GPU_TURBO, false));
+        // Realtime logging, configured on the picker screen. The session
+        // directory, device_info.txt and the logcat capture must exist before
+        // SDL_main starts writing.
+        setupRealtimeLogging(prefs);
     }
 
     /**
@@ -99,6 +106,49 @@ public class PinyonActivity extends SDLActivity {
         }
     }
 
+    /**
+     * Creates the realtime log session and points the native runtime at it
+     * before SDL_main starts: the session directory (with device_info.txt)
+     * via LogSessions, the environment through the JNI call below, and the
+     * logcat PID capture (native logs, the Turnip driver's messages, Android
+     * system noise such as AdrenoUtils/GraphicBufferAllocator) into
+     * logcat.txt. Rotated by logcat itself so it cannot fill storage.
+     */
+    private void setupRealtimeLogging(android.content.SharedPreferences prefs) {
+        if (!prefs.getBoolean(LogSessions.PREF_REALTIME, false)) {
+            return;
+        }
+        java.io.File session = LogSessions.createSessionDir(this);
+        if (session == null) {
+            Log.w(TAG, "Realtime logging is on but the session directory could not be created; "
+                    + "logs stay in logcat only");
+            return;
+        }
+        String level = prefs.getString(LogSessions.PREF_LEVEL, LogSessions.LEVEL_NORMAL);
+        nativeSetLogSession(session.getAbsolutePath(), level);
+        try {
+            logcatCapture = Runtime.getRuntime().exec(new String[]{
+                    "logcat",
+                    "--pid=" + android.os.Process.myPid(),
+                    "-v", "time",
+                    "-f", new java.io.File(session, "logcat.txt").getAbsolutePath(),
+                    "-r", "2048", "-n", "4"
+            });
+        } catch (Exception e) {
+            Log.w(TAG, "Could not start the logcat capture", e);
+            logcatCapture = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (logcatCapture != null) {
+            logcatCapture.destroy();
+            logcatCapture = null;
+        }
+        super.onDestroy();
+    }
+
     private boolean copyAssetToFiles(String name) {
         try (java.io.InputStream in = getAssets().open(name)) {
             java.io.File target = new java.io.File(getFilesDir(), name);
@@ -120,4 +170,6 @@ public class PinyonActivity extends SDLActivity {
             String gameRoot);
 
     static native void nativeSetGpuDriver(String driversDir, String driverName, boolean turbo);
+
+    static native void nativeSetLogSession(String sessionDir, String level);
 }

@@ -107,6 +107,16 @@
             android:textColor="@color/picker_text_dim" />
 
         <Button
+            android:id="@+id/picker_logs_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@android:color/transparent"
+            android:text="@string/picker_logs_button"
+            android:textAllCaps="false"
+            android:textColor="@color/picker_text_dim" />
+
+        <Button
             android:id="@+id/picker_play_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

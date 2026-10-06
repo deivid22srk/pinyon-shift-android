@@ -32,6 +32,23 @@
 
     <!-- GPU driver manager (AdrenoTools packages through libadrenotools) -->
     <string name="picker_gpu_driver_button">GPU driver (Turnip / custom)</string>
+
+    <!-- Realtime logging (session files under the log root) -->
+    <string name="picker_logs_button">Realtime logs</string>
+    <string name="logs_title">Realtime logs</string>
+    <string name="logs_realtime_toggle">Save realtime logs (one session per game start)</string>
+    <string name="logs_destination_shared">Saving to: %1$s (shared storage — grant All Files Access if the folder is missing)</string>
+    <string name="logs_destination_fallback">All Files Access is off. Saving to the app folder instead: %1$s (removed if the app is uninstalled)</string>
+    <string name="logs_level_label">Log level</string>
+    <string name="logs_level_normal">Normal (errors, warnings, FMV diagnostics)</string>
+    <string name="logs_level_gpu">Verbose GPU (adds per-frame stats, per-texture lines, skipped draws)</string>
+    <string name="logs_level_full">Debug total (everything, largest files)</string>
+    <string name="logs_share_button">Share latest session (ZIP)</string>
+    <string name="logs_open_button">Open logs folder</string>
+    <string name="logs_saved_next_start">Saved. The setting applies to the next game start.</string>
+    <string name="logs_no_session">No log session yet — enable realtime logs and start the game once.</string>
+    <string name="logs_share_failed">Could not share the log ZIP.</string>
+    <string name="logs_no_folder_viewer">No file manager opened the folder — the path is shown above.</string>
     <string name="picker_driver_title">GPU driver</string>
     <string name="picker_driver_system">System driver (default)</string>
     <string name="picker_driver_install">Install from ZIP</string>

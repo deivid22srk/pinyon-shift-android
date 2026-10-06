@@ -42,6 +42,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +80,7 @@ public class GamePickerActivity extends Activity {
     private Button permissionButton;
     private Button browseButton;
     private Button driverButton;
+    private Button logsButton;
     private Button playButton;
 
     private boolean autoOpenedPicker = false;
@@ -94,12 +97,14 @@ public class GamePickerActivity extends Activity {
         permissionButton = findViewById(R.id.picker_permission_button);
         browseButton = findViewById(R.id.picker_browse_button);
         driverButton = findViewById(R.id.picker_driver_button);
+        logsButton = findViewById(R.id.picker_logs_button);
         playButton = findViewById(R.id.picker_play_button);
 
         selectButton.setOnClickListener(v -> openDocumentPicker());
         permissionButton.setOnClickListener(v -> requestStorageAccess());
         browseButton.setOnClickListener(v -> openFolderBrowser(Environment.getExternalStorageDirectory()));
         driverButton.setOnClickListener(v -> openDriverDialog());
+        logsButton.setOnClickListener(v -> openLogsDialog());
         playButton.setOnClickListener(v -> startGame());
 
         refreshUi();
@@ -504,6 +509,129 @@ public class GamePickerActivity extends Activity {
             });
         };
         updater[0].run();
+    }
+
+    // --------------------------------------------------------- realtime logs
+
+    /**
+     * The "Salvar logs em tempo real" settings: a persistent toggle, a level
+     * (Normal / Verbose GPU / Debug total) and the share/open actions. Changes
+     * apply to the next game start: the session directory and the logcat
+     * capture are created before the game process starts its main.
+     */
+    private void openLogsDialog() {
+        final SharedPreferences prefs = prefs();
+
+        LinearLayout content = new LinearLayout(this);
+        content.setOrientation(LinearLayout.VERTICAL);
+        int padding = (int) (20 * getResources().getDisplayMetrics().density);
+        content.setPadding(padding, padding / 2, padding, 0);
+
+        final CheckBox realtime = new CheckBox(this);
+        realtime.setText(R.string.logs_realtime_toggle);
+        realtime.setChecked(prefs.getBoolean(LogSessions.PREF_REALTIME, false));
+        content.addView(realtime);
+
+        TextView destination = new TextView(this);
+        destination.setText(getString(
+                LogSessions.usingSharedStorage(this) ? R.string.logs_destination_shared
+                                                      : R.string.logs_destination_fallback,
+                LogSessions.logRoot(this).getAbsolutePath()));
+        destination.setTextSize(12f);
+        content.addView(destination);
+
+        TextView levelLabel = new TextView(this);
+        levelLabel.setText(R.string.logs_level_label);
+        levelLabel.setPadding(0, padding / 2, 0, 0);
+        content.addView(levelLabel);
+
+        final RadioGroup level = new RadioGroup(this);
+        String current = prefs.getString(LogSessions.PREF_LEVEL, LogSessions.LEVEL_NORMAL);
+        RadioButton normal = new RadioButton(this);
+        normal.setId(R.id.logs_level_normal);
+        normal.setText(R.string.logs_level_normal);
+        normal.setChecked(!LogSessions.LEVEL_GPU.equals(current)
+                && !LogSessions.LEVEL_FULL.equals(current));
+        level.addView(normal);
+        RadioButton gpu = new RadioButton(this);
+        gpu.setId(R.id.logs_level_gpu);
+        gpu.setText(R.string.logs_level_gpu);
+        gpu.setChecked(LogSessions.LEVEL_GPU.equals(current));
+        level.addView(gpu);
+        RadioButton full = new RadioButton(this);
+        full.setId(R.id.logs_level_full);
+        full.setText(R.string.logs_level_full);
+        full.setChecked(LogSessions.LEVEL_FULL.equals(current));
+        level.addView(full);
+        content.addView(level);
+
+        final Button share = new Button(this);
+        share.setText(R.string.logs_share_button);
+        share.setAllCaps(false);
+        share.setOnClickListener(v -> shareLatestLogs());
+        content.addView(share);
+
+        if (LogSessions.usingSharedStorage(this)) {
+            Button open = new Button(this);
+            open.setText(R.string.logs_open_button);
+            open.setAllCaps(false);
+            open.setOnClickListener(v -> {
+                try {
+                    startActivity(new Intent(android.content.Intent.ACTION_VIEW)
+                            .setDataAndType(Uri.fromFile(LogSessions.logRoot(this)),
+                                    "resource/folder"));
+                } catch (Exception e) {
+                    // No file manager accepts folder views on this device; the
+                    // path above is still shown in the dialog.
+                    Log.w(TAG, "No folder viewer available", e);
+                    Toast.makeText(this, R.string.logs_no_folder_viewer,
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+            content.addView(open);
+        }
+
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.logs_title)
+                .setView(content)
+                .setPositiveButton(android.R.string.ok, (d, w) -> {
+                    String chosen = LogSessions.LEVEL_NORMAL;
+                    if (level.getCheckedRadioButtonId() == R.id.logs_level_gpu) {
+                        chosen = LogSessions.LEVEL_GPU;
+                    } else if (level.getCheckedRadioButtonId() == R.id.logs_level_full) {
+                        chosen = LogSessions.LEVEL_FULL;
+                    }
+                    prefs.edit()
+                            .putBoolean(LogSessions.PREF_REALTIME, realtime.isChecked())
+                            .putString(LogSessions.PREF_LEVEL, chosen)
+                            .apply();
+                    Toast.makeText(this, R.string.logs_saved_next_start, Toast.LENGTH_LONG)
+                            .show();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .show();
+    }
+
+    /** Zips the newest session and hands it to the system share sheet. */
+    private void shareLatestLogs() {
+        File zip = LogSessions.zipLatestSession(this);
+        if (zip == null) {
+            Toast.makeText(this, R.string.logs_no_session, Toast.LENGTH_LONG).show();
+            return;
+        }
+        Uri uri = androidx.core.content.FileProvider.getUriForFile(this,
+                getPackageName() + ".logfiles", zip);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setType("application/zip");
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+        share.putExtra(Intent.EXTRA_SUBJECT, zip.getName());
+        share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        try {
+            startActivity(Intent.createChooser(share, getString(R.string.logs_share_button)));
+        } catch (Exception e) {
+            Log.w(TAG, "Could not share the log zip", e);
+            Toast.makeText(this, R.string.logs_share_failed, Toast.LENGTH_LONG).show();
+        }
     }
 
     // ---------------------------------------------------------- gpu drivers

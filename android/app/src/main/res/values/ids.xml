@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- View ids created in code (log level radio buttons of the realtime logs
+     dialog); declaring them here keeps R.id references stable. -->
+<resources>
+    <item name="logs_level_normal" type="id" />
+    <item name="logs_level_gpu" type="id" />
+    <item name="logs_level_full" type="id" />
+</resources>

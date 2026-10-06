@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Files shareable through the .logfiles FileProvider: the zipped log
+     sessions staged in the app cache by LogSessions.zipLatestSession. -->
+<paths>
+    <cache-path name="log_share" path="log_share/" />
+</paths>

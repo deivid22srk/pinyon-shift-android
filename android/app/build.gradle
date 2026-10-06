@@ -139,4 +139,8 @@ android {
 }
 
 dependencies {
+    // FileProvider only: shares zipped realtime log sessions through
+    // content URIs (file:// cannot leave the app since API 24). The app
+    // otherwise has no AndroidX code.
+    implementation 'androidx.core:core:1.13.1'
 }
