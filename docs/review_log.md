@@ -57,4 +57,42 @@ gates corretos, ~5-30 ns/kDrawEnd).
 
 ## Iteração 2 (2026-10-06)
 
-**Entrada**: SDK `ba0106a..b51e37e`, repo `ecaed7b..70507a5`. Build: ver abaixo.
+**Entrada**: SDK `ba0106a..b51e37e` (correções da it. 1), repo `ecaed7b..9a2474e`.
+Build 37463780424 (9a2474e): **verde** — a task gradle `writeBuildManifest` foi
+exercida pela primeira vez no CI e passou.
+
+**Veredictos**: C1 **não impressionado** (0 bloqueadoras, 0 altas; 2 médias + 3
+baixas); C3 **não impressionado** (0 bloqueadoras, 0 altas; 2 médias + 3 baixas;
+testes de tooling 232 OK; benchmarks reais: custo por draw ~23× a it. 1, dominado
+por fmt::format); C2: **falha do agente** (retorno vazio) — re-executado na
+iteração 3 com o escopo cumulativo.
+
+**Objeções → correções:**
+
+| # | Objeção (gravidade) | Correção | Onde |
+|---|---|---|---|
+| C1-N1/C3 | Budget de 1,5 GB matematicamente inalcançável (7×200 MB correntes = 1,4 GB; contador zerava na rotação) (média) | `session_total_` cumulativo por stream (não zera na rotação); budget 1 GB cumulativo | repo realtime_log.cpp |
+| C1-N2 | ANR: zip de centenas de MB na main thread (média) | zip em worker thread + toast + share via runOnUiThread | repo GamePickerActivity |
+| C1-N3 | Ordem serial→conteúdo no anel podia reportar identidade errada (baixa) | dump copia o record POD e re-verifica o serial (leitura rasgada vira "no longer recorded") | SDK cp.cpp (describe) |
+| C1-N4/C3-M2/L1/L2 | Manifest: UP-TO-DATE com commit velho; rootProject dentro de doLast (config-cache); rexglue_dirty hardcoded (média+baixas) | `outputs.upToDateWhen { false }`; paths resolvidos na configuração; dirty do SDK computado | repo build.gradle |
+| C1-N5 | Botão "Open logs folder" morto em API 24+ (baixa) | removido (o diálogo já mostra o caminho) | repo GamePickerActivity/strings |
+| C3-M1 | Custo por draw ~23× a it. 1 (fmt×3 por draw; 0,45-0,75 µs/draw; até ~2,2 ms/frame @3000 draws) (média) | identidade binária no record (CheckpointDraw/NoteDrawBind, zero fmt no hot path); note "pixel textures" limitado a 8 views + contagem | SDK cp.{h,cpp} |
+| C3-L3 | Anel ~10 MB RSS (baixa) | aceito e documentado (device 12 GB; ring de 64 K records é o que dá ±0,7 s de histórico) | review_log |
+
+**Objeções aceitas com documentação (sem mudança):**
+- Custo residual do trail por draw (3 escritas POD + fill inter-pass, dezenas de
+  ns): default-on deliberado no Android durante a caça ao DEVICE_LOST; cvar
+  `vulkan_breadcrumbs` documentado; re-gate planejado quando a causa for fechada.
+- `git diff --quiet` não vê mudanças staged; falta de `git` derruba build local —
+  CI imune (runner tem git; árvore limpa).
+- Wrap do marcador uint32 após ~2³² draws (sessões multihoras): degrada para
+  "no longer recorded", sem crash.
+- Dump do caminho NV sem prefixo "breadcrumb": alvo declarado é o Turnip.
+
+**Saída**: SDK `1c809cf`, repo `f6c4fd5`, pin atualizado; build 3 despachado.
+
+## Iteração 3 (2026-10-06)
+
+**Entrada**: SDK `b51e37e..1c809cf`, repo `9a2474e..f6c4fd5`. C2 re-executado
+cumulativamente (iterações 2+3). Build: ver seção de veredito abaixo.
+
