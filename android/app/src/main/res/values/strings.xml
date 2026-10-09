@@ -108,6 +108,11 @@
     <string name="logs_filter_errors">Errors</string>
     <string name="logs_filter_empty">No lines at this level.</string>
 
+    <!-- Exit reason (BUG-12: the game died and returned to the launcher) -->
+    <string name="exit_reason_title">The game stopped</string>
+    <string name="exit_reason_message">Forza Horizon stopped unexpectedly (%1$s). The technical report was saved to the logs — share them from the LOGS screen when reporting.</string>
+    <string name="exit_reason_signal_format">error %1$s</string>
+
     <string-array name="logs_session_actions">
         <item>@string/logs_action_view</item>
         <item>@string/logs_action_share</item>

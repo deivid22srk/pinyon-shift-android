@@ -55,6 +55,11 @@ constexpr int kSignals[] = {SIGSEGV, SIGBUS, SIGILL, SIGFPE, SIGABRT};
 std::array<char, 4096> g_report_prefix{};
 size_t g_report_prefix_length = 0;
 std::array<char, 4096> g_realtime_crash_path{};
+// Fixed exit-reason file the launcher reads after the process dies
+// (BUG-12 F3: the game used to return to the launcher with no context).
+// Prepared at install, written from the handler without allocating.
+std::array<char, 4096> g_exit_reason_path{};
+std::array<char, 128> g_session_id{};
 std::atomic_flag g_reported = ATOMIC_FLAG_INIT;
 std::array<std::byte, 64 * 1024> g_signal_stack{};
 
@@ -76,6 +81,18 @@ const char* SignalName(int signal) {
 }
 
 void Write(int file, const char* text) { (void)!write(file, text, std::strlen(text)); }
+
+// Appends "key=value\n" with a lowercase alphanumeric value (signal names,
+// hex): byte-by-byte, allocation-free (async-signal-safe).
+void WriteKeyValue(int file, const char* key, const char* value) {
+  Write(file, key);
+  Write(file, "=");
+  for (const char* c = value; *c; ++c) {
+    char buffer[2] = {*c, '\0'};
+    Write(file, buffer);
+  }
+  Write(file, "\n");
+}
 
 void WriteHex(int file, const char* label, uint64_t value) {
   char buffer[40];
@@ -145,6 +162,31 @@ void Handler(int signal, siginfo_t* info, void* context) {
     if (file >= 0) {
       close(file);
     }
+    // The exit-reason state file (BUG-12 F3): the launcher reads it on the
+    // next start, so the player gets "the game stopped" context instead of a
+    // silent return. Same content as the report header, one fixed file.
+    if (g_exit_reason_path[0] != '\0') {
+      const int reason_file =
+          open(g_exit_reason_path.data(), O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0644);
+      if (reason_file >= 0) {
+        Write(reason_file, "Pinyon Shift exit reason\n");
+        WriteKeyValue(reason_file, "kind", "fatal_signal");
+        WriteKeyValue(reason_file, "signal", SignalName(signal));
+        char address[32];
+        address[0] = '0';
+        address[1] = 'x';
+        for (int shift = 60, index = 2; shift >= 0; shift -= 4, ++index) {
+          address[index] = "0123456789ABCDEF"[(uint64_t(uintptr_t(
+                                  info ? info->si_addr : nullptr)) >>
+                              shift) &
+                             0xF];
+        }
+        address[18] = '\0';
+        WriteKeyValue(reason_file, "fault_address", address);
+        WriteKeyValue(reason_file, "session", g_session_id.data());
+        close(reason_file);
+      }
+    }
   }
   // The default action ends the process as the signal would have.
   struct sigaction default_action {};
@@ -196,6 +238,16 @@ void Install(const std::filesystem::path& crash_root, const std::string& session
   const std::string prefix = (crash_root / session_id).string() + "-";
   g_report_prefix_length = std::min(prefix.size(), g_report_prefix.size() - 1);
   std::memcpy(g_report_prefix.data(), prefix.data(), g_report_prefix_length);
+  // The launcher's fixed exit-reason file (read + deleted on the next start).
+  {
+    const std::string reason_path = (crash_root / "exit_reason.txt").string();
+    const size_t reason_length = std::min(reason_path.size(), g_exit_reason_path.size() - 1);
+    std::memcpy(g_exit_reason_path.data(), reason_path.data(), reason_length);
+    g_exit_reason_path[reason_length] = '\0';
+    const size_t session_length = std::min(session_id.size(), g_session_id.size() - 1);
+    std::memcpy(g_session_id.data(), session_id.data(), session_length);
+    g_session_id[session_length] = '\0';
+  }
   // The realtime session (when the picker toggle is on) also wants the
   // report in its crash.log next to the breadcrumb dump; the path itself is
   // picked up by RefreshRealtimeCrashPath once the session exists.

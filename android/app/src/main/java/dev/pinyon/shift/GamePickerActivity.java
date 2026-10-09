@@ -165,6 +165,7 @@ public class GamePickerActivity extends Activity {
     protected void onResume() {
         super.onResume();
         refreshUi();
+        showExitReasonIfAny();
 
         // First run: jump straight into the picker, like XenDroid's empty
         // library. Only once — after a cancel the buttons stay visible.
@@ -172,6 +173,48 @@ public class GamePickerActivity extends Activity {
             autoOpenedPicker = true;
             openDocumentPicker();
         }
+    }
+
+    /**
+     * The native crash handler writes state/crashes/exit_reason.txt when the
+     * game dies on a fatal signal (BUG-12: the game used to return here
+     * silently — SIGABRT from the GPU device loss had no visible message).
+     * Reads and deletes the file, then tells the player what happened; the
+     * full report stays next to it in the crashes folder and in the realtime
+     * session's crash.log.
+     */
+    private void showExitReasonIfAny() {
+        java.io.File reasonFile =
+                new java.io.File(new java.io.File(getFilesDir(), "state/crashes"),
+                        "exit_reason.txt");
+        if (!reasonFile.isFile()) {
+            return;
+        }
+        String signal = null;
+        try (java.io.BufferedReader reader = new java.io.BufferedReader(
+                new java.io.InputStreamReader(new java.io.FileInputStream(reasonFile),
+                        java.nio.charset.StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("signal=")) {
+                    signal = line.substring("signal=".length()).trim();
+                    break;
+                }
+            }
+        } catch (java.io.IOException ignored) {
+        }
+        // Deleted whether parsed or not: a stale file must not resurface.
+        //noinspection ResultOfMethodCallIgnored
+        reasonFile.delete();
+        if (signal == null) {
+            return;
+        }
+        String detail = getString(R.string.exit_reason_signal_format, signal);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.exit_reason_title)
+                .setMessage(getString(R.string.exit_reason_message, detail))
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 
     // ------------------------------------------------------------------ UI

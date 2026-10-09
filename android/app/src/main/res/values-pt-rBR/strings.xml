@@ -108,6 +108,11 @@
     <string name="logs_filter_errors">Erros</string>
     <string name="logs_filter_empty">Nenhuma linha neste nível.</string>
 
+    <!-- Motivo de saída (BUG-12: o jogo parou e voltou ao launcher) -->
+    <string name="exit_reason_title">O jogo parou</string>
+    <string name="exit_reason_message">O Forza Horizon parou inesperadamente (%1$s). O relatório técnico foi salvo nos logs — compartilhe-os pela tela LOGS ao reportar.</string>
+    <string name="exit_reason_signal_format">erro %1$s</string>
+
     <string-array name="logs_session_actions">
         <item>@string/logs_action_view</item>
         <item>@string/logs_action_share</item>
