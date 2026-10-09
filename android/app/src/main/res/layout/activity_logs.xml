@@ -104,7 +104,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="18dp"
                 android:layout_weight="1"
-                android:fadeScrollBars="true"
                 android:scrollbars="vertical">
 
                 <LinearLayout
