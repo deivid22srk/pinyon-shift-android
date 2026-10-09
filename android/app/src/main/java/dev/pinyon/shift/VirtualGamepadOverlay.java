@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,11 +26,11 @@ import org.json.JSONObject;
  * a Canvas and translates multi-touch input into SDL3 gamepad events through
  * the JNI bridge on PinyonActivity (nativeVirtualGamepad*).
  *
- * Touch handling: each pointer is bound to at most one control (by pointer
- * id) for the whole gesture. A gesture that starts on empty overlay space
- * returns false from onTouchEvent, so the event falls through to the SDL
- * surface underneath and the game receives it untouched. A gesture that
- * starts on a control owns that control until every finger lifts.
+ * Touch handling: PinyonActivity.dispatchTouchEvent offers every touch to
+ * this overlay FIRST (dispatchOverlayTouch), so the SDL surface can never
+ * swallow input meant for the pad. Each pointer is bound to at most one
+ * control (by pointer id) for the whole gesture. A gesture that starts on
+ * empty overlay space returns false, so the event falls through to the game.
  *
  * Mapping conventions (see android_virtual_gamepad.cpp): buttons use the
  * SDL_GamepadButton indices 0..15; sticks send -32768..32767 with 0 center;
@@ -42,8 +43,15 @@ import org.json.JSONObject;
  * positions are stored as fractions of the safe (notch-free) area, so a
  * layout saved on one device still lands sanely on another. All settings
  * live in VirtualGamepadPrefs and survive process death.
+ *
+ * Diagnostics: every step of the input chain is logged under the
+ * "PinyonVGP" tag (touch -> hit-test -> value -> JNI call), throttled so a
+ * moving stick produces at most a few lines per second. With realtime log
+ * recording on, these lines land in the session's logcat.txt.
  */
 final class VirtualGamepadOverlay extends View {
+
+    private static final String TAG = "PinyonVGP";
 
     /** Control ids; also the index into the saved-layout JSON. */
     static final int STICK_L = 0;
@@ -216,10 +224,11 @@ final class VirtualGamepadOverlay extends View {
                 VirtualGamepadPrefs.saveLayout(getContext(), collectLayout());
             }
         } else {
-            // The game is already running when the overlay shows: attach the
-            // SDL virtual device right away (the first input event and the
-            // activity retry timer cover the not-initialized-yet case).
+            // The game is already running when the overlay shows: signal the
+            // native attach watchdog (it waits for the game's input driver
+            // before registering the SDL device).
             PinyonActivity.nativeVirtualGamepadAttach();
+            bringToFront();
         }
         animate().cancel();
         if (animate) {
@@ -325,6 +334,19 @@ final class VirtualGamepadOverlay extends View {
 
     // --------------------------------------------------------------- input
 
+    /**
+     * Entry point used by PinyonActivity.dispatchTouchEvent: the overlay is
+     * offered every touch before the view hierarchy. Returns false when the
+     * touch is not for the pad (hidden, or the gesture starts on empty
+     * space) so the activity forwards it to the game.
+     */
+    boolean dispatchOverlayTouch(MotionEvent event) {
+        if (!overlayVisible) {
+            return false;
+        }
+        return dispatchTouchEvent(event);
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!overlayVisible) {
@@ -344,12 +366,22 @@ final class VirtualGamepadOverlay extends View {
                     if (isPointerBound(pointerId)) {
                         continue;
                     }
-                    int control = hitControl(event.getX(i), event.getY(i));
+                    float x = event.getX(i);
+                    float y = event.getY(i);
+                    int control = hitControl(x, y);
+                    Log.d(TAG, "touch down pointer=" + pointerId
+                            + " x=" + Math.round(x) + " y=" + Math.round(y)
+                            + " -> " + (control >= 0 ? controlName(control) : "pass-through"));
                     if (control >= 0 && controlPointer[control] == -1) {
                         controlPointer[control] = pointerId;
-                        pressControl(control, event.getX(i), event.getY(i));
+                        pressControl(control, x, y);
                         consumedAny = true;
                     }
+                }
+                if (consumedAny) {
+                    // Deliver subsequent moves without batching: a driving
+                    // stick wants every sample, not a merged packet.
+                    requestUnbufferedDispatch(event);
                 }
                 // Returning false (the initial down hit nothing) lets the
                 // whole gesture fall through to the game.
@@ -478,15 +510,39 @@ final class VirtualGamepadOverlay extends View {
 
     // ------------------------------------------------------------ controls
 
+    /** Human-readable control name for the diagnostic logs. */
+    private static String controlName(int control) {
+        switch (control) {
+            case STICK_L: return "LeftStick";
+            case STICK_R: return "RightStick";
+            case BTN_A: return "Button A";
+            case BTN_B: return "Button B";
+            case BTN_X: return "Button X";
+            case BTN_Y: return "Button Y";
+            case DPAD: return "D-pad";
+            case LB: return "LB";
+            case RB: return "RB";
+            case LT: return "Trigger LT";
+            case RT: return "Trigger RT";
+            case BACK: return "Back (View)";
+            case START: return "Start (Menu)";
+            case L3: return "L3";
+            case R3: return "R3";
+            default: return "control " + control;
+        }
+    }
+
     private void pressControl(int control, float x, float y) {
         switch (control) {
             case STICK_L:
             case STICK_R:
+                Log.i(TAG, controlName(control) + " grabbed (pointer bound)");
                 cancelStickSpring(control == STICK_L ? 0 : 1);
                 moveControl(control, x, y);
                 break;
             case DPAD:
                 touchDpadArm = hitDpadArm(x, y);
+                Log.i(TAG, controlName(control) + " arm=" + touchDpadArm + " DOWN");
                 if (touchDpadArm >= 0) {
                     PinyonActivity.nativeVirtualGamepadButton(touchDpadArm, true);
                 }
@@ -501,10 +557,12 @@ final class VirtualGamepadOverlay extends View {
             case START:
             case L3:
             case R3:
+                Log.i(TAG, controlName(control) + " DOWN (sdl=" + sdlButtonOf(control) + ")");
                 PinyonActivity.nativeVirtualGamepadButton(sdlButtonOf(control), true);
                 break;
             case LT:
             case RT:
+                Log.i(TAG, controlName(control) + " pressed (analog ramp)");
                 animateTrigger(control == LT ? 0 : 1, 1f, 140L);
                 break;
             default:
@@ -541,9 +599,11 @@ final class VirtualGamepadOverlay extends View {
         switch (control) {
             case STICK_L:
             case STICK_R:
+                Log.i(TAG, controlName(control) + " released -> spring to center");
                 animateStickSpring(control == STICK_L ? 0 : 1);
                 break;
             case DPAD:
+                Log.i(TAG, controlName(control) + " arm=" + touchDpadArm + " UP");
                 if (touchDpadArm >= 0) {
                     PinyonActivity.nativeVirtualGamepadButton(touchDpadArm, false);
                     touchDpadArm = -1;
@@ -559,10 +619,12 @@ final class VirtualGamepadOverlay extends View {
             case START:
             case L3:
             case R3:
+                Log.i(TAG, controlName(control) + " UP");
                 PinyonActivity.nativeVirtualGamepadButton(sdlButtonOf(control), false);
                 break;
             case LT:
             case RT:
+                Log.i(TAG, controlName(control) + " released");
                 animateTrigger(control == LT ? 0 : 1, 0f, 110L);
                 break;
             default:
@@ -646,6 +708,21 @@ final class VirtualGamepadOverlay extends View {
         int base = stick == 0 ? AXIS_LEFT_X : AXIS_RIGHT_X;
         sendAxis(base, outX);
         sendAxis(base + 1, outY);
+        logStick(stick, outX, outY);
+    }
+
+    /** Stick state log, throttled to ~6/s so a drag stays readable in the
+     *  logcat capture without flooding it. */
+    private long lastStickLogTime = 0L;
+
+    private void logStick(int stick, float outX, float outY) {
+        long now = System.currentTimeMillis();
+        if (now - lastStickLogTime < 160L) {
+            return;
+        }
+        lastStickLogTime = now;
+        Log.d(TAG, controlName(stick == 0 ? STICK_L : STICK_R)
+                + String.format(" x=%.2f y=%.2f", outX, outY));
     }
 
     private void sendAxis(int axis, float value) {

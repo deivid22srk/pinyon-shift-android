@@ -56,9 +56,6 @@ public class PinyonActivity extends SDLActivity {
     private InputManager inputManager;
     private InputManager.InputDeviceListener inputDeviceListener;
     private boolean autoHiddenByPhysicalGamepad = false;
-    /** Retries the native attach while the runtime is still booting SDL. */
-    private int attachAttempts = 0;
-    private boolean attachRetryScheduled = false;
 
     @Override
     protected String[] getLibraries() {
@@ -216,12 +213,15 @@ public class PinyonActivity extends SDLActivity {
             gamepadOverlay.setListener(visible -> {
                 Log.i(TAG, "Virtual gamepad overlay " + (visible ? "shown" : "hidden"));
                 if (visible) {
-                    retryAttach();
+                    signalVirtualGamepadAttach();
                 }
             });
             content.addView(gamepadOverlay, new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
+            // Draw (and dispatch) above the SDL surface even if SDL re-adds
+            // content views later.
+            gamepadOverlay.bringToFront();
 
             ImageView toggleView = new ImageView(this);
             toggleView.setImageResource(R.drawable.ic_vgp_toggle);
@@ -256,12 +256,28 @@ public class PinyonActivity extends SDLActivity {
             content.addView(gamepadToggle, toggleParams);
 
             // Restore the last session's visible state through the same path
-            // the toggle uses, so the internal flag and the attach retry stay
-            // in sync (a shown overlay also schedules the attach retries for
-            // the SDL boot window).
+            // the toggle uses. Showing the overlay also signals the native
+            // attach watchdog (the pad is registered with the game as soon as
+            // its input driver is up).
             gamepadOverlay.setOverlayVisible(
                     VirtualGamepadPrefs.isVisibleByDefault(this), false);
         });
+    }
+
+    /**
+     * Touch preemption for the virtual gamepad: the overlay sees every touch
+     * BEFORE the view hierarchy (the SDL surface consumes whatever reaches
+     * it, so z-order alone is not a reliable guarantee). A touch that starts
+     * on empty overlay space returns false here and continues into the game
+     * untouched; a touch on a control is handled entirely by the overlay.
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        VirtualGamepadOverlay overlay = gamepadOverlay;
+        if (overlay != null && overlay.dispatchOverlayTouch(event)) {
+            return true;
+        }
+        return super.dispatchTouchEvent(event);
     }
 
     /** Called from the settings dialog when the gamepad is enabled/disabled
@@ -291,30 +307,18 @@ public class PinyonActivity extends SDLActivity {
     }
 
     /**
-     * The native virtual device can only exist after the game initialized
-     * SDL. The overlay's first input also retries lazily; this timer covers
-     * the case where the user shows the overlay before touching anything.
+     * Signals the native watchdog that the pad is wanted. The watchdog
+     * attaches the moment the game's input driver has initialized the gamepad
+     * subsystem (before that the SDL_EVENT_GAMEPAD_ADDED would be lost - the
+     * game consumes SDL events through an event watch and never polls the
+     * queue), and re-asserts if the game never opened the pad.
      */
-    private void retryAttach() {
-        if (attachRetryScheduled || gamepadOverlay == null
-                || !gamepadOverlay.isOverlayVisible()) {
-            return;
-        }
-        attachRetryScheduled = true;
-        gamepadOverlay.postDelayed(() -> {
-            attachRetryScheduled = false;
-            if (gamepadOverlay == null || !gamepadOverlay.isOverlayVisible()) {
-                return;
-            }
-            if (!nativeVirtualGamepadAttach() && attachAttempts < 30) {
-                attachAttempts++;
-                retryAttach();
-            }
-        }, 500L);
+    private void signalVirtualGamepadAttach() {
+        nativeVirtualGamepadAttach();
     }
 
-    /** A physical gamepad took over: tuck the overlay away (manual re-show
-     *  through the floating button stays possible). */
+    /** A physical gamepad took over: tuck the overlay away AND detach the
+     *  virtual pad so it does not occupy a player slot in the game. */
     private void onPhysicalGamepadConnected(InputDevice device) {
         Log.i(TAG, "Physical gamepad connected: " + device.getName());
         if (gamepadOverlay != null && gamepadOverlay.isOverlayVisible()
@@ -322,6 +326,11 @@ public class PinyonActivity extends SDLActivity {
             autoHiddenByPhysicalGamepad = true;
             gamepadOverlay.setOverlayVisible(false, true);
             Log.i(TAG, "Virtual gamepad auto-hidden for the physical controller");
+        }
+        if (gamepadOverlay != null) {
+            // Keep the overlay object (state, layout) but release the SDL
+            // device while a real controller is in charge.
+            nativeVirtualGamepadDetach();
         }
     }
 
@@ -333,7 +342,9 @@ public class PinyonActivity extends SDLActivity {
                 && VirtualGamepadPrefs.isEnabled(this)) {
             autoHiddenByPhysicalGamepad = false;
             gamepadOverlay.setOverlayVisible(true, true);
-            retryAttach();
+        }
+        if (gamepadOverlay != null) {
+            signalVirtualGamepadAttach();
         }
     }
 
