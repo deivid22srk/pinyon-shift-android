@@ -76,11 +76,20 @@ elseif(ANDROID)
     # The virtual gamepad bridge talks to SDL3 directly. No host source
     # includes SDL headers today, so the include path cannot be assumed to
     # arrive transitively: locate the pinned SDK's SDL3 headers explicitly
-    # (same tree the Java sourceSets reference: thirdparty/sdl3).
-    find_path(PINYON_SDL3_INCLUDE_DIR SDL3/SDL_joystick.h
-        HINTS "${REXSDK_DIR}/thirdparty/sdl3/include"
-              "${REXSDK_DIR}/thirdparty/sdl3/SDL/include"
-        NO_DEFAULT_PATH)
+    # (same tree the Java sourceSets reference: thirdparty/sdl3). A plain
+    # EXISTS probe, not find_path: the NDK toolchain sets
+    # CMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY, which rebases find_* HINTS
+    # onto the NDK sysroot and makes every absolute hint miss.
+    set(PINYON_SDL3_INCLUDE_DIR "")
+    foreach(_sdl3_candidate
+            "${REXSDK_DIR}/thirdparty/sdl3/include"
+            "${REXSDK_DIR}/thirdparty/sdl3/SDL/include")
+        if(EXISTS "${_sdl3_candidate}/SDL3/SDL_joystick.h")
+            set(PINYON_SDL3_INCLUDE_DIR "${_sdl3_candidate}")
+            break()
+        endif()
+    endforeach()
+    unset(_sdl3_candidate)
     if(PINYON_SDL3_INCLUDE_DIR)
         message(STATUS "Pinyon Shift: SDL3 headers at ${PINYON_SDL3_INCLUDE_DIR}")
         target_include_directories(pinyon_shift PRIVATE "${PINYON_SDL3_INCLUDE_DIR}")
