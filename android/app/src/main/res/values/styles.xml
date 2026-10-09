@@ -112,4 +112,17 @@
         <item name="android:textColor">@color/forza_text_secondary</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <!-- Check boxes / radio buttons on the Forza screens (logs settings). -->
+    <style name="ForzaCheckable" parent="@android:style/Widget.Material.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/rajdhani_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/forza_text_primary</item>
+    </style>
+
+    <style name="ForzaCheckable.Radio" parent="@android:style/Widget.Material.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/rajdhani_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/forza_text_primary</item>
+    </style>
 </resources>

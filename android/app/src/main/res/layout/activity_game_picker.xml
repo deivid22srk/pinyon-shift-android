@@ -73,7 +73,26 @@
                     android:text="@string/picker_subtitle" />
             </LinearLayout>
 
-            <!-- Active graphics driver chip -->
+            <!-- Active graphics driver chip + REC indicator -->
+            <TextView
+                android:id="@+id/picker_rec_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/forza_rec_badge"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/rajdhani_bold"
+                android:letterSpacing="0.18"
+                android:paddingStart="10dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="7dp"
+                android:text="@string/logs_rec_badge"
+                android:textColor="@color/forza_rec_red"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
             <TextView
                 android:id="@+id/picker_driver_chip"
                 android:layout_width="wrap_content"
@@ -227,18 +246,42 @@
                         android:text="@string/picker_logs_button" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/picker_permission_button"
-                    style="@style/ForzaButtonSecondary"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/forza_btn_height"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@drawable/forza_btn_secondary_ripple"
-                    android:ellipsize="end"
-                    android:focusable="true"
-                    android:maxLines="1"
-                    android:text="@string/picker_permission_button"
-                    android:visibility="gone" />
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/picker_gamepad_button"
+                        style="@style/ForzaButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/forza_btn_height"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/forza_btn_secondary_ripple"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:nextFocusUp="@id/picker_driver_button"
+                        android:nextFocusRight="@+id/picker_play_button"
+                        android:text="@string/picker_gamepad_button" />
+
+                    <Button
+                        android:id="@+id/picker_permission_button"
+                        style="@style/ForzaButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/forza_btn_height"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/forza_btn_secondary_ripple"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:text="@string/picker_permission_button"
+                        android:visibility="gone" />
+                </LinearLayout>
             </LinearLayout>
 
             <!-- Right column: the big start slab -->

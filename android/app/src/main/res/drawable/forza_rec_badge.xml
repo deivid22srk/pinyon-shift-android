@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The in-game "REC" badge background: dark angular chip with a red stroke,
+     matching the Forza chip language. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/forza_chip_bg" />
+    <stroke
+        android:width="1dp"
+        android:color="@color/forza_rec_red" />
+    <corners android:radius="2dp" />
+</shape>

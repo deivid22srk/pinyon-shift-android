@@ -48,4 +48,7 @@
     <!-- List highlight inside Forza dialogs -->
     <color name="forza_list_checked">#26FFD400</color>
     <color name="forza_list_pressed">#33FFFFFF</color>
+
+    <!-- Realtime log recording indicator -->
+    <color name="forza_rec_red">#FFFF4530</color>
 </resources>

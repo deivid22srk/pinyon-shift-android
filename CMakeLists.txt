@@ -68,9 +68,27 @@ elseif(ANDROID)
     # calls SDL_RunApp -> SDL_main (see windowed_app_main_sdl.cpp in the SDK).
     list(APPEND PINYON_SHIFT_HOST_SOURCES
         src/crash_reporter_posix.cpp
-        src/android_host_jni.cpp)
+        src/android_host_jni.cpp
+        src/android_virtual_gamepad.cpp)
     add_library(pinyon_shift SHARED ${PINYON_SHIFT_HOST_SOURCES})
     set_target_properties(pinyon_shift PROPERTIES OUTPUT_NAME main)
+
+    # The virtual gamepad bridge talks to SDL3 directly. No host source
+    # includes SDL headers today, so the include path cannot be assumed to
+    # arrive transitively: locate the pinned SDK's SDL3 headers explicitly
+    # (same tree the Java sourceSets reference: thirdparty/sdl3).
+    find_path(PINYON_SDL3_INCLUDE_DIR SDL3/SDL_joystick.h
+        HINTS "${REXSDK_DIR}/thirdparty/sdl3/include"
+              "${REXSDK_DIR}/thirdparty/sdl3/SDL/include"
+        NO_DEFAULT_PATH)
+    if(PINYON_SDL3_INCLUDE_DIR)
+        message(STATUS "Pinyon Shift: SDL3 headers at ${PINYON_SDL3_INCLUDE_DIR}")
+        target_include_directories(pinyon_shift PRIVATE "${PINYON_SDL3_INCLUDE_DIR}")
+    else()
+        message(FATAL_ERROR
+            "Pinyon Shift: SDL3 headers not found under ${REXSDK_DIR}/thirdparty/sdl3; "
+            "the virtual gamepad bridge cannot build")
+    endif()
 else()
     list(APPEND PINYON_SHIFT_HOST_SOURCES src/crash_reporter_posix.cpp)
     add_executable(pinyon_shift ${PINYON_SHIFT_HOST_SOURCES})

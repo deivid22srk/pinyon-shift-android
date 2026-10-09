@@ -111,6 +111,14 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".LogsActivity"
+            android:exported="false"
+            android:label="@string/logs_screen_title"
+            android:theme="@style/PinyonPickerTheme"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="layoutDirection|locale|fontScale|fontWeightAdjustment|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation|density|colorMode" />
+
         <!-- Shares zipped realtime log sessions (cache/log_share) through
              content URIs; file:// URIs cannot leave the app on API 24+. -->
         <provider

@@ -50,6 +50,11 @@ public final class LogSessions {
     public static final String LEVEL_FULL = "full";
 
     private static final String SESSION_PREFIX = "session_";
+
+    /** Length of the "session_" prefix (session name -> timestamp substring). */
+    public static int sessionPrefixLength() {
+        return SESSION_PREFIX.length();
+    }
     /** Sessions kept on device; older ones are deleted when a new one starts.
      *  Three, not five: each session can reach the multi-GB range before the
      *  native session budget closes the streams, and storage on a phone is
@@ -124,6 +129,58 @@ public final class LogSessions {
     }
 
     /**
+     * All recorded sessions under the log root, newest first. Directories
+     * only; stray files in the root are ignored.
+     */
+    public static List<File> listSessions(Context context) {
+        File root = logRoot(context);
+        File[] sessions = root.listFiles((dir, name) -> name.startsWith(SESSION_PREFIX));
+        List<File> ordered = new ArrayList<>();
+        if (sessions != null) {
+            ordered.addAll(Arrays.asList(sessions));
+            Collections.sort(ordered, (a, b) -> b.getName().compareToIgnoreCase(a.getName()));
+        }
+        return ordered;
+    }
+
+    /** Total bytes of every file in the directory tree (0 when missing). */
+    public static long directoryBytes(File dir) {
+        File[] children = dir.listFiles();
+        if (children == null) {
+            return 0;
+        }
+        long total = 0;
+        for (File child : children) {
+            if (child.isDirectory()) {
+                total += directoryBytes(child);
+            } else if (child.isFile()) {
+                total += child.length();
+            }
+        }
+        return total;
+    }
+
+    /** The number of live (non-rotated) files in a session directory. */
+    public static int sessionFileCount(File session) {
+        File[] children = session.listFiles();
+        if (children == null) {
+            return 0;
+        }
+        int count = 0;
+        for (File child : children) {
+            if (child.isFile() && !child.getName().endsWith(".old")) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /** Deletes one session directory (with confirmation handled by the UI). */
+    public static void deleteSession(File session) {
+        deleteTree(session);
+    }
+
+    /**
      * Zips the newest session into the app cache and returns the zip, ready to
      * share through the FileProvider. Each zip gets a unique name (millisecond
      * suffix) so concurrent or repeated shares never write the same file, and
@@ -136,42 +193,82 @@ public final class LogSessions {
         if (session == null) {
             return null;
         }
+        return zipSessions(context, Collections.singletonList(session), null, true);
+    }
+
+    /**
+     * Zips the given session directories into destZip (or a uniquely named
+     * file in the app cache when destZip is null). Each session lands under
+     * its own "session_.../" folder; when includeDeviceInfo is set, the
+     * newest session's device_info.txt is also copied to the zip root so a
+     * bundle of several sessions still says which device produced them.
+     * Rotated (.old) generations are skipped: the live file carries the
+     * session. Returns null when nothing could be written.
+     */
+    public static File zipSessions(Context context, List<File> sessions, File destZip,
+            boolean includeDeviceInfo) {
+        if (sessions == null || sessions.isEmpty()) {
+            return null;
+        }
         File cache = new File(context.getCacheDir(), "log_share");
         if (!cache.exists() && !cache.mkdirs()) {
             return null;
         }
-        pruneShareZips(cache);
-        File zip = new File(cache, session.getName() + "_"
-                + System.currentTimeMillis() + ".zip");
+        File zip = destZip != null ? destZip
+                : new File(cache, sessions.get(0).getName() + "_"
+                        + System.currentTimeMillis() + ".zip");
+        if (destZip == null) {
+            pruneShareZips(cache);
+        }
         try {
-            List<File> files = new ArrayList<>();
-            File[] children = session.listFiles();
-            if (children != null) {
-                files.addAll(Arrays.asList(children));
-                Collections.sort(files, (a, b) -> a.getName().compareToIgnoreCase(b.getName()));
-            }
+            boolean wrote = false;
             try (ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip))) {
-                for (File file : files) {
-                    if (!file.isFile() || file.getName().endsWith(".old")) {
-                        // Rotated generations double the size without adding
-                        // evidence; the live file carries the session.
+                for (File session : sessions) {
+                    File[] children = session.listFiles();
+                    if (children == null) {
                         continue;
                     }
-                    try (FileInputStream in = new FileInputStream(file)) {
-                        out.putNextEntry(new ZipEntry(file.getName()));
-                        byte[] buffer = new byte[64 * 1024];
-                        int read;
-                        while ((read = in.read(buffer)) > 0) {
-                            out.write(buffer, 0, read);
+                    List<File> files = new ArrayList<>(Arrays.asList(children));
+                    Collections.sort(files, (a, b) ->
+                            a.getName().compareToIgnoreCase(b.getName()));
+                    for (File file : files) {
+                        if (!file.isFile() || file.getName().endsWith(".old")) {
+                            continue;
                         }
+                        out.putNextEntry(new ZipEntry(session.getName() + "/" + file.getName()));
+                        copyInto(out, file);
                         out.closeEntry();
+                        wrote = true;
+                    }
+                }
+                if (includeDeviceInfo) {
+                    for (File session : sessions) {
+                        File info = new File(session, "device_info.txt");
+                        if (info.isFile()) {
+                            out.putNextEntry(new ZipEntry("device_info.txt"));
+                            copyInto(out, info);
+                            out.closeEntry();
+                            break; // the newest session's header is enough
+                        }
                     }
                 }
             }
-            return zip;
+            return wrote || zip.length() > 0 ? zip : null;
         } catch (IOException e) {
-            Log.w(TAG, "Could not zip the log session " + session, e);
+            Log.w(TAG, "Could not zip the log sessions", e);
+            //noinspection ResultOfMethodCallIgnored
+            zip.delete();
             return null;
+        }
+    }
+
+    private static void copyInto(ZipOutputStream out, File file) throws IOException {
+        try (FileInputStream in = new FileInputStream(file)) {
+            byte[] buffer = new byte[64 * 1024];
+            int read;
+            while ((read = in.read(buffer)) > 0) {
+                out.write(buffer, 0, read);
+            }
         }
     }
 

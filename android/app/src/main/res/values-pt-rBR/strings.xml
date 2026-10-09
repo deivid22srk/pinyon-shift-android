@@ -64,4 +64,54 @@
     <string name="picker_driver_importing">Instalando driver…</string>
     <string name="picker_driver_installed_ok">Driver instalado e selecionado: %s. Vale a partir do próximo início do jogo.</string>
     <string name="picker_driver_import_failed">Não foi possível instalar este pacote de driver.</string>
+
+    <!-- Gamepad virtual (overlay no jogo, ajustes nas duas telas) -->
+    <string name="picker_gamepad_button">Gamepad virtual</string>
+    <string name="vgp_title">Gamepad virtual</string>
+    <string name="vgp_enable_switch">Mostrar o gamepad virtual enquanto joga</string>
+    <string name="vgp_note">Na tela do jogo, o botão flutuante de controle exibe e oculta o gamepad; segure-o para abrir estes ajustes. Toques em áreas vazias vão direto para o jogo.</string>
+    <string name="vgp_opacity">Opacidade</string>
+    <string name="vgp_size">Tamanho dos controles</string>
+    <string name="vgp_deadzone">Zona morta dos analógicos</string>
+    <string name="vgp_haptics">Vibrar ao pressionar botões</string>
+    <string name="vgp_edit_layout">Editar layout dos botões</string>
+    <string name="vgp_done_layout">Concluir edição do layout</string>
+    <string name="vgp_reset_layout">Restaurar layout padrão</string>
+    <string name="vgp_layout_reset">Layout restaurado ao padrão.</string>
+    <string name="vgp_edit_hint">Arraste os controles para reposicioná-los</string>
+    <string name="vgp_percent_format">%1$d%%</string>
+    <string name="vgp_toggle_desc">Mostrar ou ocultar o gamepad virtual</string>
+
+    <!-- Tela de logs -->
+    <string name="logs_screen_title">Logs</string>
+    <string name="logs_kicker">Gravação de sessão em tempo real</string>
+    <string name="logs_rec_badge">REC</string>
+    <string name="logs_settings_label">Gravação</string>
+    <string name="logs_sessions_label">Sessões gravadas</string>
+    <string name="logs_sessions_empty">Nenhuma sessão gravada ainda. Ative a gravação acima e inicie o jogo uma vez — cada início do jogo cria uma sessão aqui.</string>
+    <string name="logs_export_all_button">Exportar tudo (ZIP)</string>
+    <string name="logs_session_row">%1$s • %2$s • %3$d arquivos</string>
+    <string name="logs_action_view">Visualizar</string>
+    <string name="logs_action_share">Compartilhar ZIP</string>
+    <string name="logs_action_save">Salvar no dispositivo…</string>
+    <string name="logs_action_delete">Apagar</string>
+    <string name="logs_delete_title">Apagar sessão</string>
+    <string name="logs_delete_confirm">Apagar %s definitivamente?</string>
+    <string name="logs_turned_off">Gravação desativada. Vale a partir do próximo início do jogo.</string>
+    <string name="logs_saved">Log salvo.</string>
+    <string name="logs_save_failed">Não foi possível salvar o arquivo de log.</string>
+    <string name="logs_viewer_header">%1$s • %2$s (final do arquivo)</string>
+    <string name="logs_viewer_empty">Esta sessão não tem um arquivo de log legível.</string>
+    <string name="logs_filter_all">Tudo</string>
+    <string name="logs_filter_info">Info+</string>
+    <string name="logs_filter_warnings">Avisos</string>
+    <string name="logs_filter_errors">Erros</string>
+    <string name="logs_filter_empty">Nenhuma linha neste nível.</string>
+
+    <string-array name="logs_session_actions">
+        <item>@string/logs_action_view</item>
+        <item>@string/logs_action_share</item>
+        <item>@string/logs_action_save</item>
+        <item>@string/logs_action_delete</item>
+    </string-array>
 </resources>

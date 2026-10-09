@@ -64,4 +64,54 @@
     <string name="picker_driver_importing">Installing driver…</string>
     <string name="picker_driver_installed_ok">Driver installed and selected: %s. It takes effect on the next game start.</string>
     <string name="picker_driver_import_failed">Could not install this driver package.</string>
+
+    <!-- Virtual gamepad (overlay inside the game, settings on both screens) -->
+    <string name="picker_gamepad_button">Virtual gamepad</string>
+    <string name="vgp_title">Virtual gamepad</string>
+    <string name="vgp_enable_switch">Show the virtual gamepad while playing</string>
+    <string name="vgp_note">On the game screen the floating controller button shows and hides the pad; hold it to reach these settings. Touches on empty areas go straight to the game.</string>
+    <string name="vgp_opacity">Opacity</string>
+    <string name="vgp_size">Control size</string>
+    <string name="vgp_deadzone">Stick dead zone</string>
+    <string name="vgp_haptics">Vibrate on button press</string>
+    <string name="vgp_edit_layout">Edit button layout</string>
+    <string name="vgp_done_layout">Done editing layout</string>
+    <string name="vgp_reset_layout">Reset to default layout</string>
+    <string name="vgp_layout_reset">Layout restored to the default.</string>
+    <string name="vgp_edit_hint">Drag the controls to reposition them</string>
+    <string name="vgp_percent_format">%1$d%%</string>
+    <string name="vgp_toggle_desc">Show or hide the virtual gamepad</string>
+
+    <!-- Logs screen -->
+    <string name="logs_screen_title">Logs</string>
+    <string name="logs_kicker">Realtime session recording</string>
+    <string name="logs_rec_badge">REC</string>
+    <string name="logs_settings_label">Recording</string>
+    <string name="logs_sessions_label">Recorded sessions</string>
+    <string name="logs_sessions_empty">No sessions recorded yet. Turn recording on above and start the game once — every game start then creates one session here.</string>
+    <string name="logs_export_all_button">Export all (ZIP)</string>
+    <string name="logs_session_row">%1$s • %2$s • %3$d files</string>
+    <string name="logs_action_view">View</string>
+    <string name="logs_action_share">Share ZIP</string>
+    <string name="logs_action_save">Save to device…</string>
+    <string name="logs_action_delete">Delete</string>
+    <string name="logs_delete_title">Delete session</string>
+    <string name="logs_delete_confirm">Delete %s permanently?</string>
+    <string name="logs_turned_off">Recording off. Applies to the next game start.</string>
+    <string name="logs_saved">Log saved.</string>
+    <string name="logs_save_failed">Could not save the log file.</string>
+    <string name="logs_viewer_header">%1$s • %2$s (end of file)</string>
+    <string name="logs_viewer_empty">This session has no readable log file.</string>
+    <string name="logs_filter_all">All</string>
+    <string name="logs_filter_info">Info+</string>
+    <string name="logs_filter_warnings">Warnings</string>
+    <string name="logs_filter_errors">Errors</string>
+    <string name="logs_filter_empty">No lines at this level.</string>
+
+    <string-array name="logs_session_actions">
+        <item>@string/logs_action_view</item>
+        <item>@string/logs_action_share</item>
+        <item>@string/logs_action_save</item>
+        <item>@string/logs_action_delete</item>
+    </string-array>
 </resources>

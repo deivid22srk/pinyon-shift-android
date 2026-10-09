@@ -48,8 +48,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,6 +91,7 @@ public class GamePickerActivity extends Activity {
     private Button browseButton;
     private Button driverButton;
     private Button logsButton;
+    private Button gamepadButton;
     private Button playButton;
 
     private boolean autoOpenedPicker = false;
@@ -104,6 +103,7 @@ public class GamePickerActivity extends Activity {
     private View rightColumn;
     private TextView driverChip;
     private TextView driverIndicator;
+    private TextView recChip;
     private TextView versionText;
 
     /** Shared easing for the focus glow and the entrance transitions. */
@@ -131,14 +131,19 @@ public class GamePickerActivity extends Activity {
         browseButton = findViewById(R.id.picker_browse_button);
         driverButton = findViewById(R.id.picker_driver_button);
         logsButton = findViewById(R.id.picker_logs_button);
+        gamepadButton = findViewById(R.id.picker_gamepad_button);
         playButton = findViewById(R.id.picker_play_button);
+        recChip = findViewById(R.id.picker_rec_chip);
 
         selectButton.setOnClickListener(v -> openDocumentPicker());
         permissionButton.setOnClickListener(v -> requestStorageAccess());
         browseButton.setOnClickListener(v -> openFolderBrowser(Environment.getExternalStorageDirectory()));
         driverButton.setOnClickListener(v -> openDriverDialog());
-        logsButton.setOnClickListener(v -> openLogsDialog());
+        logsButton.setOnClickListener(v -> openLogsScreen());
+        gamepadButton.setOnClickListener(v ->
+                VirtualGamepadDialogs.openSettings(this, null));
         playButton.setOnClickListener(v -> startGame());
+        recChip.setOnClickListener(v -> openLogsScreen());
 
         setupImmersiveMode();
         applyDisplayCutoutPadding();
@@ -173,7 +178,19 @@ public class GamePickerActivity extends Activity {
 
     private void refreshUi() {
         updateDriverStatus();
+        refreshRecChip();
         refreshGameStatus();
+    }
+
+    /** The discreet REC chip: visible only while realtime log recording is
+     *  on (the switch lives on the logs screen); tapping it opens the logs. */
+    private void refreshRecChip() {
+        boolean recording = prefs().getBoolean(LogSessions.PREF_REALTIME, false);
+        recChip.setVisibility(recording ? View.VISIBLE : View.GONE);
+    }
+
+    private void openLogsScreen() {
+        startActivity(new Intent(this, LogsActivity.class));
     }
 
     private void refreshGameStatus() {
@@ -594,148 +611,10 @@ public class GamePickerActivity extends Activity {
         updater[0].run();
     }
 
-    // --------------------------------------------------------- realtime logs
+    // -------------------------------------------------------- realtime logs
 
-    /**
-     * The "Salvar logs em tempo real" settings: a persistent toggle, a level
-     * (Normal / Verbose GPU / Debug total) and the share/open actions. Changes
-     * apply to the next game start: the session directory and the logcat
-     * capture are created before the game process starts its main.
-     */
-    private void openLogsDialog() {
-        final SharedPreferences prefs = prefs();
-
-        LinearLayout content = new LinearLayout(this);
-        content.setOrientation(LinearLayout.VERTICAL);
-        int padding = (int) (20 * getResources().getDisplayMetrics().density);
-        content.setPadding(padding, padding / 2, padding, 0);
-
-        final CheckBox realtime = new CheckBox(this);
-        realtime.setText(R.string.logs_realtime_toggle);
-        realtime.setChecked(prefs.getBoolean(LogSessions.PREF_REALTIME, false));
-        realtime.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                getResources(), R.color.forza_yellow, getTheme())));
-        setForzaTypeface(realtime, R.font.rajdhani_medium, false);
-        content.addView(realtime);
-
-        TextView destination = new TextView(this);
-        destination.setText(getString(
-                LogSessions.usingSharedStorage(this) ? R.string.logs_destination_shared
-                                                      : R.string.logs_destination_fallback,
-                LogSessions.logRoot(this).getAbsolutePath()));
-        destination.setTextSize(12f);
-        setForzaTypeface(destination, R.font.rajdhani_regular, false);
-        content.addView(destination);
-
-        TextView levelLabel = new TextView(this);
-        levelLabel.setText(R.string.logs_level_label);
-        levelLabel.setTextColor(ResourcesCompat.getColor(getResources(),
-                R.color.forza_yellow, getTheme()));
-        levelLabel.setPadding(0, padding / 2, 0, 0);
-        setForzaTypeface(levelLabel, R.font.rajdhani_bold, true);
-        content.addView(levelLabel);
-
-        final RadioGroup level = new RadioGroup(this);
-        String current = prefs.getString(LogSessions.PREF_LEVEL, LogSessions.LEVEL_NORMAL);
-        RadioButton normal = new RadioButton(this);
-        normal.setId(R.id.logs_level_normal);
-        normal.setText(R.string.logs_level_normal);
-        normal.setChecked(!LogSessions.LEVEL_GPU.equals(current)
-                && !LogSessions.LEVEL_FULL.equals(current));
-        normal.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                getResources(), R.color.forza_yellow, getTheme())));
-        setForzaTypeface(normal, R.font.rajdhani_medium, false);
-        level.addView(normal);
-        RadioButton gpu = new RadioButton(this);
-        gpu.setId(R.id.logs_level_gpu);
-        gpu.setText(R.string.logs_level_gpu);
-        gpu.setChecked(LogSessions.LEVEL_GPU.equals(current));
-        gpu.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                getResources(), R.color.forza_yellow, getTheme())));
-        setForzaTypeface(gpu, R.font.rajdhani_medium, false);
-        level.addView(gpu);
-        RadioButton full = new RadioButton(this);
-        full.setId(R.id.logs_level_full);
-        full.setText(R.string.logs_level_full);
-        full.setChecked(LogSessions.LEVEL_FULL.equals(current));
-        full.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
-                getResources(), R.color.forza_yellow, getTheme())));
-        setForzaTypeface(full, R.font.rajdhani_medium, false);
-        level.addView(full);
-        content.addView(level);
-
-        final Button share = new Button(this);
-        share.setText(R.string.logs_share_button);
-        share.setAllCaps(false);
-        setForzaTypeface(share, R.font.rajdhani_bold, true);
-        share.setOnClickListener(v -> shareLatestLogs());
-        content.addView(share);
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.logs_title)
-                .setView(content)
-                .setPositiveButton(android.R.string.ok, (d, w) -> {
-                    String chosen = LogSessions.LEVEL_NORMAL;
-                    if (level.getCheckedRadioButtonId() == R.id.logs_level_gpu) {
-                        chosen = LogSessions.LEVEL_GPU;
-                    } else if (level.getCheckedRadioButtonId() == R.id.logs_level_full) {
-                        chosen = LogSessions.LEVEL_FULL;
-                    }
-                    prefs.edit()
-                            .putBoolean(LogSessions.PREF_REALTIME, realtime.isChecked())
-                            .putString(LogSessions.PREF_LEVEL, chosen)
-                            .apply();
-                    Toast.makeText(this, R.string.logs_saved_next_start, Toast.LENGTH_LONG)
-                            .show();
-                })
-                .setNegativeButton(android.R.string.cancel, null)
-                .show();
-    }
-
-    /**
-     * Zips the newest session on a worker thread and hands it to the system
-     *  share sheet - a "full" level session can be hundreds of megabytes, and
-     *  compressing that on the UI thread would freeze the picker. Re-entrant
-     *  taps are ignored while a zip is in flight (two threads writing the same
-     *  file would corrupt it), and each zip gets a unique name so a leftover
-     *  share from an earlier attempt never collides.
-     */
-    private final java.util.concurrent.atomic.AtomicBoolean zipInFlight =
-            new java.util.concurrent.atomic.AtomicBoolean(false);
-
-    private void shareLatestLogs() {
-        if (!zipInFlight.compareAndSet(false, true)) {
-            return;
-        }
-        Toast.makeText(this, R.string.logs_zipping, Toast.LENGTH_SHORT).show();
-        new Thread(() -> {
-            File zip = LogSessions.zipLatestSession(this);
-            runOnUiThread(() -> {
-                zipInFlight.set(false);
-                if (zip == null) {
-                    Toast.makeText(this, R.string.logs_no_session, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                shareZip(zip);
-            });
-        }, "pinyon-log-zip").start();
-    }
-
-    private void shareZip(File zip) {
-        Uri uri = androidx.core.content.FileProvider.getUriForFile(this,
-                getPackageName() + ".logfiles", zip);
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("application/zip");
-        share.putExtra(Intent.EXTRA_STREAM, uri);
-        share.putExtra(Intent.EXTRA_SUBJECT, zip.getName());
-        share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        try {
-            startActivity(Intent.createChooser(share, getString(R.string.logs_share_button)));
-        } catch (Exception e) {
-            Log.w(TAG, "Could not share the log zip", e);
-            Toast.makeText(this, R.string.logs_share_failed, Toast.LENGTH_LONG).show();
-        }
-    }
+    // The old realtime-logs dialog moved to LogsActivity (sessions list,
+    // viewer, export-all); the LOGS button and the REC chip both open it.
 
     // ---------------------------------------------------------- gpu drivers
 
@@ -911,7 +790,7 @@ public class GamePickerActivity extends Activity {
         final int basePadding =
                 getResources().getDimensionPixelSize(R.dimen.forza_screen_padding);
         rootView.setOnApplyWindowInsetsListener((view, insets) -> {
-            Insets safe = WindowInsetsCompat.toCompatInsets(insets).getInsets(
+            Insets safe = WindowInsetsCompat.toWindowInsetsCompat(insets).getInsets(
                     WindowInsetsCompat.Type.displayCutout()
                             | WindowInsetsCompat.Type.systemBars());
             view.setPadding(basePadding + safe.left, safe.top,
@@ -939,7 +818,7 @@ public class GamePickerActivity extends Activity {
      */
     private void attachForzaFeedback() {
         Button[] actions = {selectButton, permissionButton, browseButton,
-                driverButton, logsButton, playButton};
+                driverButton, logsButton, gamepadButton, playButton};
         for (Button button : actions) {
             button.setOnFocusChangeListener((view, hasFocus) -> view.animate()
                     .scaleX(hasFocus ? 1.04f : 1f)
