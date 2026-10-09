@@ -419,6 +419,18 @@ bool InstallRealtimeLogSession() {
 
   WriteConfigDump(session_dir, "cvars at startup");
   ApplyLogLevel(level);
+  // Opt-in resolve dumps for the open bug hypotheses (BUG-02 presentation
+  // resolve sub-rect, BUG-08 shadow depth resolve, BUG-10.3 reflection cube -
+  // session 20261009 investigation): set PINYON_SHIFT_LOG_RESOLVE_DUMP=<frame>
+  // (swap count; 0 = every frame, very slow - it syncs with the GPU after each
+  // resolve) to write every resolve's output bytes into the session's
+  // resolves/ folder, which lands in the exported ZIP.
+  if (const char* resolve_frame = std::getenv("PINYON_SHIFT_LOG_RESOLVE_DUMP")) {
+    rex::cvar::SetFlagByName("fh1_resolve_dump_dir", (session_dir / "resolves").string());
+    rex::cvar::SetFlagByName("fh1_resolve_dump_frame", resolve_frame);
+    REXLOG_INFO("Realtime log: resolve dumps enabled in {} (frame filter {})",
+                (session_dir / "resolves").string(), resolve_frame);
+  }
   // The crash handlers are installed before the session exists; hand them
   // the crash.log path now (allocation-free copy; the handler only reads).
   crash::RefreshRealtimeCrashPath();
