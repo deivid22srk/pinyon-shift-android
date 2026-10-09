@@ -701,6 +701,31 @@ void PinyonShiftApp::OpenSettingsMenu() {
 }
 
 void PinyonShiftApp::UpdateHorPlus() {
+  // Auto ultrawide (BUG-11, session 20261009): on a display wider than 16:9
+  // (a 20:9 phone), the compiled-in letterbox pillars the 16:9 image with
+  // permanent side bars. When the player has chosen nothing themselves (both
+  // settings still on their compiled defaults), turn HOR+ on, which widens
+  // the camera's field of view into the extra width instead of distorting
+  // (stretching) or bar-ing the image. A config or SETTINGS choice (ASPECT
+  // RATIO, ULTRAWIDE) always wins - only untouched defaults are replaced.
+  if (window() &&
+      rex::cvar::GetFlagSource("pinyon_shift_hor_plus") == rex::cvar::Source::kDefault &&
+      rex::cvar::GetFlagSource("present_letterbox") == rex::cvar::Source::kDefault) {
+    const uint32_t width = window()->GetActualPhysicalWidth();
+    const uint32_t height = window()->GetActualPhysicalHeight();
+    if (width && height && uint64_t(width) * 9 > uint64_t(height) * 16) {
+      rex::cvar::SetFlagByName("pinyon_shift_hor_plus", "true");
+      rex::cvar::SetFlagByName("present_letterbox", "false");
+      pinyon_shift::diagnostics::RecordEvent(
+          "display.hor_plus_auto_on",
+          {{"width", std::to_string(width)}, {"height", std::to_string(height)}});
+      REXLOG_INFO("Display is wider than 16:9 ({}x{}): enabling HOR+ and "
+                  "disabling the default letterbox so the view fills the "
+                  "width without bars (ULTRAWIDE: OFF in SETTINGS restores "
+                  "the letterboxed 16:9 image)",
+                  width, height);
+    }
+  }
   float scale = 1.0f;
   if (REXCVAR_GET(pinyon_shift_hor_plus) && window()) {
     const uint32_t width = window()->GetActualPhysicalWidth();
