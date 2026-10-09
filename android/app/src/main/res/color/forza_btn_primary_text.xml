@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Text color of the primary START GAME button: dark graphite on the
+     yellow accent while enabled, dimmed when the button is disabled. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/forza_text_on_accent_disabled" android:state_enabled="false" />
+    <item android:color="@color/forza_text_on_accent" />
+</selector>

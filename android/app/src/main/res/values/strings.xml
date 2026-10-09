@@ -2,8 +2,15 @@
 <resources>
     <string name="app_name">Pinyon Shift</string>
 
+    <!-- Forza-style launcher -->
+    <string name="picker_subtitle">Forza Horizon • Android Port</string>
+    <string name="picker_version_format">Pinyon Shift • v%1$s</string>
+    <string name="picker_driver_chip_default">GPU • System driver</string>
+    <string name="picker_driver_chip_format">GPU • %1$s</string>
+    <string name="picker_driver_indicator_default">DRIVER: SYSTEM</string>
+    <string name="picker_driver_indicator_format">DRIVER: %1$s</string>
+
     <!-- Game location picker -->
-    <string name="picker_subtitle">Xbox 360 game port — select your game to play</string>
     <string name="picker_status_none">No game selected</string>
     <string name="picker_status_none_hint">Choose the folder with the game content.</string>
     <string name="picker_status_ready">Ready to play</string>
@@ -21,8 +28,8 @@
     <string name="picker_help_read_storage">Grant storage access so the app can read the game content where it is, without copying it.</string>
     <string name="picker_select_button">Select game folder</string>
     <string name="picker_permission_button">Grant storage access</string>
-    <string name="picker_browse_button">Browse folders instead</string>
-    <string name="picker_play_button">PLAY</string>
+    <string name="picker_browse_button">Browse folders</string>
+    <string name="picker_play_button">START GAME</string>
     <string name="picker_no_saf">No folder picker is available on this device — use Browse folders instead.</string>
     <string name="picker_no_all_files_screen">Could not open the All Files Access settings — enable it for this app from Android Settings.</string>
     <string name="picker_unresolvable_location">That location has no device folder path — pick a folder from device storage (or use Browse folders).</string>
@@ -31,7 +38,7 @@
     <string name="picker_browse_empty">(empty or inaccessible)</string>
 
     <!-- GPU driver manager (AdrenoTools packages through libadrenotools) -->
-    <string name="picker_gpu_driver_button">GPU driver (Turnip / custom)</string>
+    <string name="picker_gpu_driver_button">Graphics driver</string>
 
     <!-- Realtime logging (session files under the log root) -->
     <string name="picker_logs_button">Realtime logs</string>
@@ -48,7 +55,7 @@
     <string name="logs_saved_next_start">Saved. The setting applies to the next game start.</string>
     <string name="logs_no_session">No log session yet — enable realtime logs and start the game once.</string>
     <string name="logs_share_failed">Could not share the log ZIP.</string>
-    <string name="picker_driver_title">GPU driver</string>
+    <string name="picker_driver_title">Graphics driver</string>
     <string name="picker_driver_system">System driver (default)</string>
     <string name="picker_driver_install">Install from ZIP</string>
     <string name="picker_driver_turbo">GPU turbo (highest clocks while playing)</string>

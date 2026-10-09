@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pinyon Shift</string>
+
+    <!-- Tela inicial estilo Forza -->
+    <string name="picker_subtitle">Forza Horizon • Port para Android</string>
+    <string name="picker_version_format">Pinyon Shift • v%1$s</string>
+    <string name="picker_driver_chip_default">GPU • Driver do sistema</string>
+    <string name="picker_driver_chip_format">GPU • %1$s</string>
+    <string name="picker_driver_indicator_default">DRIVER: SISTEMA</string>
+    <string name="picker_driver_indicator_format">DRIVER: %1$s</string>
+
+    <!-- Seletor de local do jogo -->
+    <string name="picker_status_none">Nenhum jogo selecionado</string>
+    <string name="picker_status_none_hint">Escolha a pasta com o conteúdo do jogo.</string>
+    <string name="picker_status_ready">Pronto para jogar</string>
+    <string name="picker_status_ready_detail">O jogo lê esta pasta no lugar — nada é copiado.</string>
+    <string name="picker_warning_no_vulkan">Atenção: este dispositivo não informa Vulkan 1.1, exigido pelo jogo. O jogo pode falhar ao iniciar.</string>
+    <string name="picker_warning_low_storage">Atenção: o armazenamento interno está quase cheio. Saves, caches de shaders e logs precisam de espaço no dispositivo.</string>
+    <string name="picker_warning_no_grading_maps">Atenção: media/dynamicpost/colourgradingmaps está vazia nesta pasta — a cópia do disco provavelmente perdeu esses arquivos via MTP. O jogo roda, mas a exposição e o color grading podem ficar estourados. Copie novamente essa pasta da extração do disco.</string>
+    <string name="picker_status_need_permission">Acesso ao armazenamento necessário</string>
+    <string name="picker_status_missing">Pasta do jogo indisponível</string>
+    <string name="picker_status_missing_detail">A pasta selecionada não está mais lá (unidade desconectada, renomeada ou apagada). Selecione-a novamente.</string>
+    <string name="picker_status_invalid">Este não é o conteúdo do jogo</string>
+    <string name="picker_status_iso_hint">Imagens de disco (.iso/.xex) não podem ser jogadas diretamente. Selecione a pasta extraída do disco (a que contém uma pasta media) — a mesma que o launcher do Windows usa.</string>
+    <string name="picker_help_location">Selecione a pasta extraída do seu disco do jogo (a que contém media/ui). Ela fica onde está e é lida no lugar. O armazenamento interno oferece a melhor velocidade de streaming.</string>
+    <string name="picker_help_all_files_access">Conceda Acesso a todos os arquivos para que o app leia o conteúdo do jogo onde ele está, sem copiar.</string>
+    <string name="picker_help_read_storage">Conceda acesso ao armazenamento para que o app leia o conteúdo do jogo onde ele está, sem copiar.</string>
+    <string name="picker_select_button">Selecionar pasta do jogo</string>
+    <string name="picker_permission_button">Conceder acesso ao armazenamento</string>
+    <string name="picker_browse_button">Explorar pastas</string>
+    <string name="picker_play_button">INICIAR JOGO</string>
+    <string name="picker_no_saf">Nenhum seletor de pastas disponível neste dispositivo — use Explorar pastas.</string>
+    <string name="picker_no_all_files_screen">Não foi possível abrir as configurações de Acesso a todos os arquivos — ative para este app nas Configurações do Android.</string>
+    <string name="picker_unresolvable_location">Esse local não tem caminho de pasta no dispositivo — escolha uma pasta do armazenamento (ou use Explorar pastas).</string>
+    <string name="picker_browse_title">Selecionar pasta do jogo</string>
+    <string name="picker_browse_use_folder">Usar esta pasta</string>
+    <string name="picker_browse_empty">(vazia ou inacessível)</string>
+
+    <!-- Gerenciador de driver de GPU (pacotes AdrenoTools via libadrenotools) -->
+    <string name="picker_gpu_driver_button">Driver gráfico</string>
+
+    <!-- Logs em tempo real (arquivos de sessão sob a raiz de logs) -->
+    <string name="picker_logs_button">Logs em tempo real</string>
+    <string name="logs_title">Logs em tempo real</string>
+    <string name="logs_realtime_toggle">Salvar logs em tempo real (uma sessão por início de jogo)</string>
+    <string name="logs_destination_shared">Salvando em: %1$s (armazenamento compartilhado — conceda Acesso a todos os arquivos se a pasta estiver faltando)</string>
+    <string name="logs_destination_fallback">O Acesso a todos os arquivos está desativado. Salvando na pasta do app: %1$s (removida se o app for desinstalado)</string>
+    <string name="logs_level_label">Nível de log</string>
+    <string name="logs_level_normal">Normal (erros, avisos, diagnósticos de FMV)</string>
+    <string name="logs_level_gpu">GPU detalhado (adiciona estatísticas por frame, linhas por textura, draws ignorados)</string>
+    <string name="logs_level_full">Debug total (tudo, arquivos maiores)</string>
+    <string name="logs_share_button">Compartilhar última sessão (ZIP)</string>
+    <string name="logs_zipping">Preparando o ZIP de logs…</string>
+    <string name="logs_saved_next_start">Salvo. A configuração vale para o próximo início do jogo.</string>
+    <string name="logs_no_session">Nenhuma sessão de log ainda — ative os logs em tempo real e inicie o jogo uma vez.</string>
+    <string name="logs_share_failed">Não foi possível compartilhar o ZIP de logs.</string>
+    <string name="picker_driver_title">Driver gráfico</string>
+    <string name="picker_driver_system">Driver do sistema (padrão)</string>
+    <string name="picker_driver_install">Instalar de um ZIP</string>
+    <string name="picker_driver_turbo">GPU turbo (clocks máximos enquanto joga)</string>
+    <string name="picker_driver_active_note">Drivers customizados (Mesa Turnip) são instalados a partir dos pacotes .zip do AdrenoTools. A mudança vale no próximo início do jogo. Toque e segure um driver para removê-lo.</string>
+    <string name="picker_driver_remove_confirm">Remover %s deste dispositivo?</string>
+    <string name="picker_driver_importing">Instalando driver…</string>
+    <string name="picker_driver_installed_ok">Driver instalado e selecionado: %s. Vale a partir do próximo início do jogo.</string>
+    <string name="picker_driver_import_failed">Não foi possível instalar este pacote de driver.</string>
+</resources>

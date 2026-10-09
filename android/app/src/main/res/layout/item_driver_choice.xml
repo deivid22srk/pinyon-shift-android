@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Single-choice row of the graphics driver dialog: angular radio
+     square on the right, Rajdhani label, Forza highlight background. -->
+<CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="44dp"
+    android:background="@color/forza_list_item_bg"
+    android:checkMark="@drawable/forza_checkmark"
+    android:ellipsize="end"
+    android:fontFamily="@font/rajdhani_semibold"
+    android:gravity="center_vertical"
+    android:letterSpacing="0.02"
+    android:maxLines="1"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp"
+    android:textColor="@color/forza_text_primary"
+    android:textSize="15sp" />

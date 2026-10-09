@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Primary button background: Forza states plus a dark touch ripple. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/forza_ripple_light">
+    <item android:drawable="@drawable/forza_btn_primary_states" />
+</ripple>

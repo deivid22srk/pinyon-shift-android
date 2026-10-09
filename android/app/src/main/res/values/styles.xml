@@ -1,24 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Dark fullscreen base theme (also used by the SDL game activity).
+         The alert dialog theme gives every picker dialog the Forza look. -->
     <style name="PinyonTheme" parent="@android:style/Theme.Material.NoActionBar.Fullscreen">
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
-    </style>
-
-    <!-- Game picker: dark Material with an amber accent, dialogs match. -->
-    <style name="PinyonPickerTheme" parent="@android:style/Theme.Material.NoActionBar">
-        <item name="android:windowBackground">@color/picker_background</item>
-        <item name="android:colorAccent">@color/picker_accent</item>
-        <item name="android:colorPrimary">@color/picker_background</item>
-        <item name="android:colorPrimaryDark">@color/picker_background</item>
         <item name="android:alertDialogTheme">@style/PinyonPickerDialogTheme</item>
     </style>
 
+    <!-- Game picker: Forza dark theme with the yellow accent. The activity
+         hides the system bars itself for the immersive look. -->
+    <style name="PinyonPickerTheme" parent="@android:style/Theme.Material.NoActionBar.Fullscreen">
+        <item name="android:windowBackground">@color/forza_background</item>
+        <item name="android:colorAccent">@color/forza_yellow</item>
+        <item name="android:colorPrimary">@color/forza_background</item>
+        <item name="android:colorPrimaryDark">@color/forza_background_deep</item>
+        <item name="android:colorControlActivated">@color/forza_yellow</item>
+        <item name="android:colorControlNormal">@color/forza_stroke</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:alertDialogTheme">@style/PinyonPickerDialogTheme</item>
+    </style>
+
+    <!-- Forza-styled dialogs: dark card, yellow accent, angular controls. -->
     <style name="PinyonPickerDialogTheme" parent="@android:style/Theme.Material.Dialog.Alert">
-        <item name="android:colorAccent">@color/picker_accent</item>
-        <item name="android:windowBackground">@color/picker_card</item>
+        <item name="android:colorAccent">@color/forza_yellow</item>
+        <item name="android:colorPrimary">@color/forza_background</item>
+        <item name="android:colorPrimaryDark">@color/forza_background_deep</item>
+        <item name="android:colorControlActivated">@color/forza_yellow</item>
+        <item name="android:colorControlNormal">@color/forza_stroke</item>
+        <item name="android:windowBackground">@color/forza_surface_raised</item>
+        <item name="android:textColorPrimary">@color/forza_text_primary</item>
+        <item name="android:textColorSecondary">@color/forza_text_dim</item>
+        <item name="android:windowTitleStyle">@style/ForzaDialogTitle</item>
+        <item name="android:buttonBarButtonStyle">@style/ForzaDialogButton</item>
+    </style>
+
+    <style name="ForzaDialogTitle" parent="@android:style/TextAppearance.Material.WindowTitle">
+        <item name="android:fontFamily">@font/exo2_bold_italic</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/forza_yellow</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="ForzaDialogButton" parent="@android:style/Widget.Material.Button.Borderless.Colored">
+        <item name="android:fontFamily">@font/rajdhani_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textColor">@color/forza_yellow</item>
+    </style>
+
+    <!-- Screen title "PINYON SHIFT". -->
+    <style name="ForzaTitle" parent="@android:style/TextAppearance.Material.Widget.TextView">
+        <item name="android:fontFamily">@font/exo2_extrabold_italic</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/forza_yellow</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:letterSpacing">0.03</item>
+    </style>
+
+    <!-- Small all-caps label under the title / above sections. -->
+    <style name="ForzaKicker" parent="@android:style/TextAppearance.Material.Widget.TextView">
+        <item name="android:fontFamily">@font/rajdhani_semibold</item>
+        <item name="android:textColor">@color/forza_text_dim</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.22</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <!-- Secondary action buttons (select, browse, driver, logs). -->
+    <style name="ForzaButtonSecondary" parent="@android:style/Widget.Material.Button">
+        <item name="android:fontFamily">@font/rajdhani_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/forza_text_primary</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:minHeight">@dimen/forza_btn_height</item>
+    </style>
+
+    <!-- Primary call to action (START GAME). -->
+    <style name="ForzaButtonPrimary" parent="@android:style/Widget.Material.Button">
+        <item name="android:fontFamily">@font/exo2_bold_italic</item>
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textColor">@color/forza_btn_primary_text</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:stateListAnimator">@null</item>
+    </style>
+
+    <!-- Status text inside the game location card. -->
+    <style name="ForzaStatusTitle" parent="@android:style/TextAppearance.Material.Widget.TextView">
+        <item name="android:fontFamily">@font/rajdhani_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/forza_text_primary</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:letterSpacing">0.04</item>
+    </style>
+
+    <style name="ForzaBodyDim" parent="@android:style/TextAppearance.Material.Widget.TextView">
+        <item name="android:fontFamily">@font/rajdhani_regular</item>
+        <item name="android:textColor">@color/forza_text_secondary</item>
+        <item name="android:textSize">12sp</item>
     </style>
 </resources>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Thin underline below the launcher title: yellow fading into cyan. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:gravity="start|fill_vertical" android:width="84dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:startColor="@color/forza_yellow"
+                android:endColor="@color/forza_cyan"
+                android:type="linear" />
+        </shape>
+    </item>
+</layer-list>

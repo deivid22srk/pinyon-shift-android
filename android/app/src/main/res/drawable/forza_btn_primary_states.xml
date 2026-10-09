@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Focus/press states of the primary button. -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_enabled="false" android:drawable="@drawable/forza_btn_primary_disabled" />
+    <item android:state_pressed="true" android:drawable="@drawable/forza_btn_primary_pressed" />
+    <item android:state_focused="true" android:drawable="@drawable/forza_btn_primary_focused" />
+    <item android:state_hovered="true" android:drawable="@drawable/forza_btn_primary_focused" />
+    <item android:drawable="@drawable/forza_btn_primary_normal" />
+</selector>

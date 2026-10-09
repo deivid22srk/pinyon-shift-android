@@ -1,130 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Game location picker (launcher screen). Compact single column so it
-     fits landscape phone screens; wrapped in a scroll view for small ones. -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Forza-style launcher screen (game location picker).
+
+  Landscape-first, two columns like a racing-game front end:
+    - header: slanted title + kicker + driver chip;
+    - left:   game location status card and the action grid
+              (select / browse / driver / logs / permission);
+    - right:  the big START GAME slab, driver indicator and version.
+
+  View ids are consumed by GamePickerActivity; the cutout insets are
+  applied to picker_root by the activity.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/picker_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/picker_background"
-    android:fillViewport="true"
-    android:scrollbars="none">
+    android:background="@drawable/forza_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:layout_height="match_parent"
+        android:baselineAligned="false"
+        android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/app_name"
-            android:textColor="@color/picker_accent"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="@string/picker_subtitle"
-            android:textColor="@color/picker_text_dim"
-            android:textSize="14sp" />
-
-        <!-- Current selection status -->
+        <!-- ===== Header ===== -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/picker_card"
-            android:orientation="vertical"
-            android:padding="14dp">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/picker_title_block"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/ForzaTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/app_name"
+                        android:textAllCaps="true" />
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="18dp"
+                        android:layout_marginStart="12dp"
+                        android:importantForAccessibility="no"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/forza_chevrons" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="84dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/forza_title_bar" />
+
+                <TextView
+                    style="@style/ForzaKicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/picker_subtitle" />
+            </LinearLayout>
+
+            <!-- Active graphics driver chip -->
             <TextView
-                android:id="@+id/picker_status_title"
+                android:id="@+id/picker_driver_chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/picker_status_none"
-                android:textColor="@color/picker_text"
-                android:textSize="17sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/picker_status_path"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:text="@string/picker_status_none_hint"
-                android:textColor="@color/picker_text_dim"
-                android:textSize="13sp" />
-
-            <TextView
-                android:id="@+id/picker_status_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/picker_help_location"
-                android:textColor="@color/picker_text_dim"
-                android:textSize="13sp" />
+                android:background="@drawable/forza_chip"
+                android:fontFamily="@font/rajdhani_bold"
+                android:letterSpacing="0.08"
+                android:paddingStart="12dp"
+                android:paddingTop="7dp"
+                android:paddingEnd="12dp"
+                android:paddingBottom="7dp"
+                android:text="@string/picker_driver_chip_default"
+                android:textAllCaps="true"
+                android:textColor="@color/forza_cyan"
+                android:textSize="12sp" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/picker_select_button"
+        <!-- ===== Content ===== -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="14dp"
-            android:text="@string/picker_select_button" />
+            android:layout_weight="1"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/picker_permission_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/picker_permission_button"
-            android:visibility="gone" />
+            <!-- Left column: status + actions -->
+            <LinearLayout
+                android:id="@+id/picker_left_column"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1.2"
+                android:orientation="vertical">
 
-        <Button
-            android:id="@+id/picker_browse_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@android:color/transparent"
-            android:text="@string/picker_browse_button"
-            android:textAllCaps="false"
-            android:textColor="@color/picker_text_dim" />
+                <!-- Game location status card -->
+                <LinearLayout
+                    android:id="@+id/picker_status_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/forza_card"
+                    android:orientation="vertical"
+                    android:paddingStart="14dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="14dp"
+                    android:paddingBottom="10dp">
 
-        <Button
-            android:id="@+id/picker_driver_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@android:color/transparent"
-            android:text="@string/picker_gpu_driver_button"
-            android:textAllCaps="false"
-            android:textColor="@color/picker_text_dim" />
+                    <TextView
+                        android:id="@+id/picker_status_title"
+                        style="@style/ForzaStatusTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/picker_status_none" />
 
-        <Button
-            android:id="@+id/picker_logs_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:background="@android:color/transparent"
-            android:text="@string/picker_logs_button"
-            android:textAllCaps="false"
-            android:textColor="@color/picker_text_dim" />
+                    <TextView
+                        android:id="@+id/picker_status_path"
+                        style="@style/ForzaBodyDim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:text="@string/picker_status_none_hint" />
 
-        <Button
-            android:id="@+id/picker_play_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:enabled="false"
-            android:text="@string/picker_play_button"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/picker_status_detail"
+                        style="@style/ForzaBodyDim"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="@string/picker_help_location" />
+                </LinearLayout>
+
+                <!-- Action grid: two buttons per row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/picker_select_button"
+                        style="@style/ForzaButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/forza_btn_height"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/forza_btn_secondary_ripple"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:nextFocusDown="@+id/picker_driver_button"
+                        android:nextFocusRight="@+id/picker_browse_button"
+                        android:text="@string/picker_select_button" />
+
+                    <Button
+                        android:id="@+id/picker_browse_button"
+                        style="@style/ForzaButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/forza_btn_height"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/forza_btn_secondary_ripple"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:nextFocusDown="@+id/picker_logs_button"
+                        android:nextFocusLeft="@id/picker_select_button"
+                        android:text="@string/picker_browse_button" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/picker_driver_button"
+                        style="@style/ForzaButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/forza_btn_height"
+                        android:layout_marginEnd="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/forza_btn_secondary_ripple"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:nextFocusUp="@id/picker_select_button"
+                        android:nextFocusRight="@+id/picker_logs_button"
+                        android:text="@string/picker_gpu_driver_button" />
+
+                    <Button
+                        android:id="@+id/picker_logs_button"
+                        style="@style/ForzaButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/forza_btn_height"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/forza_btn_secondary_ripple"
+                        android:ellipsize="end"
+                        android:focusable="true"
+                        android:maxLines="1"
+                        android:nextFocusLeft="@id/picker_driver_button"
+                        android:nextFocusRight="@+id/picker_play_button"
+                        android:nextFocusUp="@id/picker_browse_button"
+                        android:text="@string/picker_logs_button" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/picker_permission_button"
+                    style="@style/ForzaButtonSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/forza_btn_height"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/forza_btn_secondary_ripple"
+                    android:ellipsize="end"
+                    android:focusable="true"
+                    android:maxLines="1"
+                    android:text="@string/picker_permission_button"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- Right column: the big start slab -->
+            <LinearLayout
+                android:id="@+id/picker_right_column"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="22dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/picker_play_button"
+                    style="@style/ForzaButtonPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/forza_start_height"
+                    android:background="@drawable/forza_btn_primary_ripple"
+                    android:enabled="false"
+                    android:focusable="true"
+                    android:nextFocusLeft="@id/picker_logs_button"
+                    android:nextFocusUp="@id/picker_select_button"
+                    android:text="@string/picker_play_button" />
+
+                <TextView
+                    android:id="@+id/picker_driver_indicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/rajdhani_semibold"
+                    android:letterSpacing="0.16"
+                    android:text="@string/picker_driver_indicator_default"
+                    android:textAllCaps="true"
+                    android:textColor="@color/forza_cyan"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/picker_version_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:alpha="0.7"
+                    android:fontFamily="@font/rajdhani_regular"
+                    android:letterSpacing="0.14"
+                    android:text="@string/picker_version_format"
+                    android:textAllCaps="true"
+                    android:textColor="@color/forza_text_dim"
+                    android:textSize="10sp" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</FrameLayout>

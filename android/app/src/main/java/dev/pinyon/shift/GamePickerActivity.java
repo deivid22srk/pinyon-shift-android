@@ -28,7 +28,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,7 +39,10 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -46,6 +52,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -85,10 +97,31 @@ public class GamePickerActivity extends Activity {
 
     private boolean autoOpenedPicker = false;
 
+    // Forza-style launcher chrome (header, chip, columns, footer).
+    private View rootView;
+    private View titleBlock;
+    private View leftColumn;
+    private View rightColumn;
+    private TextView driverChip;
+    private TextView driverIndicator;
+    private TextView versionText;
+
+    /** Shared easing for the focus glow and the entrance transitions. */
+    private static final DecelerateInterpolator FORZA_INTERPOLATOR =
+            new DecelerateInterpolator(1.4f);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_picker);
+
+        rootView = findViewById(R.id.picker_root);
+        titleBlock = findViewById(R.id.picker_title_block);
+        leftColumn = findViewById(R.id.picker_left_column);
+        rightColumn = findViewById(R.id.picker_right_column);
+        driverChip = findViewById(R.id.picker_driver_chip);
+        driverIndicator = findViewById(R.id.picker_driver_indicator);
+        versionText = findViewById(R.id.picker_version_text);
 
         statusTitle = findViewById(R.id.picker_status_title);
         statusPath = findViewById(R.id.picker_status_path);
@@ -107,7 +140,20 @@ public class GamePickerActivity extends Activity {
         logsButton.setOnClickListener(v -> openLogsDialog());
         playButton.setOnClickListener(v -> startGame());
 
+        setupImmersiveMode();
+        applyDisplayCutoutPadding();
+        showAppVersion();
         refreshUi();
+        attachForzaFeedback();
+        playEntranceAnimation();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemBars();
+        }
     }
 
     @Override
@@ -126,6 +172,11 @@ public class GamePickerActivity extends Activity {
     // ------------------------------------------------------------------ UI
 
     private void refreshUi() {
+        updateDriverStatus();
+        refreshGameStatus();
+    }
+
+    private void refreshGameStatus() {
         String root = currentGameRoot();
 
         if (root == null) {
@@ -532,7 +583,7 @@ public class GamePickerActivity extends Activity {
                     }
                 }
             }
-            list.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, entries));
+            list.setAdapter(new ArrayAdapter<>(this, R.layout.item_forza_list, entries));
             list.setOnItemClickListener((parentView, view, position, id) -> {
                 if (position < dirs.size()) {
                     current[0] = dirs.get(position);
@@ -562,6 +613,9 @@ public class GamePickerActivity extends Activity {
         final CheckBox realtime = new CheckBox(this);
         realtime.setText(R.string.logs_realtime_toggle);
         realtime.setChecked(prefs.getBoolean(LogSessions.PREF_REALTIME, false));
+        realtime.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                getResources(), R.color.forza_yellow, getTheme())));
+        setForzaTypeface(realtime, R.font.rajdhani_medium, false);
         content.addView(realtime);
 
         TextView destination = new TextView(this);
@@ -570,11 +624,15 @@ public class GamePickerActivity extends Activity {
                                                       : R.string.logs_destination_fallback,
                 LogSessions.logRoot(this).getAbsolutePath()));
         destination.setTextSize(12f);
+        setForzaTypeface(destination, R.font.rajdhani_regular, false);
         content.addView(destination);
 
         TextView levelLabel = new TextView(this);
         levelLabel.setText(R.string.logs_level_label);
+        levelLabel.setTextColor(ResourcesCompat.getColor(getResources(),
+                R.color.forza_yellow, getTheme()));
         levelLabel.setPadding(0, padding / 2, 0, 0);
+        setForzaTypeface(levelLabel, R.font.rajdhani_bold, true);
         content.addView(levelLabel);
 
         final RadioGroup level = new RadioGroup(this);
@@ -584,22 +642,32 @@ public class GamePickerActivity extends Activity {
         normal.setText(R.string.logs_level_normal);
         normal.setChecked(!LogSessions.LEVEL_GPU.equals(current)
                 && !LogSessions.LEVEL_FULL.equals(current));
+        normal.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                getResources(), R.color.forza_yellow, getTheme())));
+        setForzaTypeface(normal, R.font.rajdhani_medium, false);
         level.addView(normal);
         RadioButton gpu = new RadioButton(this);
         gpu.setId(R.id.logs_level_gpu);
         gpu.setText(R.string.logs_level_gpu);
         gpu.setChecked(LogSessions.LEVEL_GPU.equals(current));
+        gpu.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                getResources(), R.color.forza_yellow, getTheme())));
+        setForzaTypeface(gpu, R.font.rajdhani_medium, false);
         level.addView(gpu);
         RadioButton full = new RadioButton(this);
         full.setId(R.id.logs_level_full);
         full.setText(R.string.logs_level_full);
         full.setChecked(LogSessions.LEVEL_FULL.equals(current));
+        full.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                getResources(), R.color.forza_yellow, getTheme())));
+        setForzaTypeface(full, R.font.rajdhani_medium, false);
         level.addView(full);
         content.addView(level);
 
         final Button share = new Button(this);
         share.setText(R.string.logs_share_button);
         share.setAllCaps(false);
+        setForzaTypeface(share, R.font.rajdhani_bold, true);
         share.setOnClickListener(v -> shareLatestLogs());
         content.addView(share);
 
@@ -687,7 +755,9 @@ public class GamePickerActivity extends Activity {
         TextView note = new TextView(this);
         note.setText(R.string.picker_driver_active_note);
         note.setTextSize(12);
-        note.setTextColor(0xFF9A9AA2);
+        note.setTextColor(ResourcesCompat.getColor(getResources(),
+                R.color.forza_text_dim, getTheme()));
+        setForzaTypeface(note, R.font.rajdhani_regular, false);
         content.addView(note);
 
         // Item 0 is the system driver; the rest are the installed packages.
@@ -712,11 +782,14 @@ public class GamePickerActivity extends Activity {
         CheckBox turbo = new CheckBox(this);
         turbo.setText(R.string.picker_driver_turbo);
         turbo.setChecked(prefs().getBoolean(PREF_GPU_TURBO, false));
+        turbo.setButtonTintList(ColorStateList.valueOf(ResourcesCompat.getColor(
+                getResources(), R.color.forza_yellow, getTheme())));
+        setForzaTypeface(turbo, R.font.rajdhani_medium, false);
         content.addView(turbo);
 
         ListView list = new ListView(this);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_single_choice, labels);
+                R.layout.item_driver_choice, labels);
         list.setAdapter(adapter);
         list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         list.setItemChecked(choice[0], true);
@@ -732,6 +805,7 @@ public class GamePickerActivity extends Activity {
                             .putString(PREF_GPU_DRIVER, folder)
                             .putBoolean(PREF_GPU_TURBO, turbo.isChecked())
                             .apply();
+                    refreshUi();
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .setNeutralButton(R.string.picker_driver_install, (d, w) -> pickDriverZip())
@@ -804,6 +878,163 @@ public class GamePickerActivity extends Activity {
                 refreshUi();
             });
         }, "driver-import").start();
+    }
+
+    // -------------------------------------------------------- forza chrome
+
+    /**
+     * Immersive mode: system bars hidden (a swipe reveals them
+     * temporarily, like on the in-game activity) and the window allowed
+     * to draw behind display cutouts. The notch insets become padding on
+     * the screen root, so the launcher chrome never lands under a notch.
+     */
+    private void setupImmersiveMode() {
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        hideSystemBars();
+        WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.layoutInDisplayCutoutMode = Build.VERSION.SDK_INT >= 30
+                ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+                : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        getWindow().setAttributes(attributes);
+    }
+
+    private void hideSystemBars() {
+        WindowInsetsControllerCompat controller =
+                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        controller.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        controller.hide(WindowInsetsCompat.Type.systemBars());
+    }
+
+    /** Pads the screen content away from display cutouts and system bars. */
+    private void applyDisplayCutoutPadding() {
+        final int basePadding =
+                getResources().getDimensionPixelSize(R.dimen.forza_screen_padding);
+        rootView.setOnApplyWindowInsetsListener((view, insets) -> {
+            Insets safe = WindowInsetsCompat.toCompatInsets(insets).getInsets(
+                    WindowInsetsCompat.Type.displayCutout()
+                            | WindowInsetsCompat.Type.systemBars());
+            view.setPadding(basePadding + safe.left, safe.top,
+                    basePadding + safe.right, safe.bottom);
+            return insets;
+        });
+    }
+
+    /** Writes the app version under the START GAME slab. */
+    private void showAppVersion() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionText.setText(getString(R.string.picker_version_format, info.versionName));
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.w(TAG, "Could not read the app version", e);
+            versionText.setText(R.string.app_name);
+        }
+    }
+
+    /**
+     * Gamepad + touch feel: every action button grows slightly and picks
+     * up its glow stroke when the D-pad focus lands on it, shrinks on
+     * press and springs back on release. The initial focus goes to the
+     * primary action when the game is ready to play.
+     */
+    private void attachForzaFeedback() {
+        Button[] actions = {selectButton, permissionButton, browseButton,
+                driverButton, logsButton, playButton};
+        for (Button button : actions) {
+            button.setOnFocusChangeListener((view, hasFocus) -> view.animate()
+                    .scaleX(hasFocus ? 1.04f : 1f)
+                    .scaleY(hasFocus ? 1.04f : 1f)
+                    .setDuration(120)
+                    .setInterpolator(FORZA_INTERPOLATOR)
+                    .start());
+            button.setOnTouchListener((view, event) -> {
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_DOWN:
+                        view.animate().scaleX(0.97f).scaleY(0.97f)
+                                .setDuration(60).start();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        float resting = view.isFocused() ? 1.04f : 1f;
+                        view.animate().scaleX(resting).scaleY(resting)
+                                .setDuration(90).start();
+                        break;
+                    default:
+                        break;
+                }
+                // Touch feedback only; the normal click flow keeps running.
+                return false;
+            });
+        }
+        if (playButton.isEnabled()) {
+            playButton.requestFocus();
+        } else {
+            selectButton.requestFocus();
+        }
+    }
+
+    /**
+     * Entrance transition: the header slides in from the left, the driver
+     * chip drops from the top and the two columns slide in from opposite
+     * sides, staggered like a racing front end booting up.
+     */
+    private void playEntranceAnimation() {
+        int step = getResources().getDimensionPixelSize(R.dimen.forza_screen_padding);
+        animateEntrance(titleBlock, -step, 0, 0);
+        animateEntrance(driverChip, 0, -step / 2f, 90);
+        animateEntrance(leftColumn, -step, 0, 150);
+        animateEntrance(rightColumn, step, 0, 220);
+    }
+
+    private void animateEntrance(View view, float fromX, float fromY, long delayMillis) {
+        view.setAlpha(0f);
+        view.setTranslationX(fromX);
+        view.setTranslationY(fromY);
+        view.animate()
+                .alpha(1f)
+                .translationX(0f)
+                .translationY(0f)
+                .setDuration(420)
+                .setStartDelay(delayMillis)
+                .setInterpolator(FORZA_INTERPOLATOR)
+                .start();
+    }
+
+    /**
+     * The driver chip (header) and the indicator under START GAME always
+     * mirror the active Vulkan driver: the system driver when nothing is
+     * selected, otherwise the installed package name and version.
+     */
+    private void updateDriverStatus() {
+        String folder = prefs().getString(PREF_GPU_DRIVER, "");
+        String label = null;
+        if (!folder.isEmpty()) {
+            for (GpuDrivers.InstalledDriver driver : GpuDrivers.list(this)) {
+                if (driver.folderName.equals(folder)) {
+                    label = driver.version.isEmpty()
+                            ? driver.displayName
+                            : driver.displayName + " (" + driver.version + ")";
+                    break;
+                }
+            }
+        }
+        if (label == null) {
+            driverChip.setText(R.string.picker_driver_chip_default);
+            driverIndicator.setText(R.string.picker_driver_indicator_default);
+        } else {
+            driverChip.setText(getString(R.string.picker_driver_chip_format, label));
+            driverIndicator.setText(getString(R.string.picker_driver_indicator_format, label));
+        }
+    }
+
+    /** Applies one of the bundled Forza fonts to a programmatically
+     * created dialog view. */
+    private void setForzaTypeface(TextView view, int fontResId, boolean allCaps) {
+        Typeface face = ResourcesCompat.getFont(this, fontResId);
+        if (face != null) {
+            view.setTypeface(face);
+        }
+        view.setAllCaps(allCaps);
     }
 
     // ------------------------------------------------------------------ game

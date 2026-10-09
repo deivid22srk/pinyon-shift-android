@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Secondary action button, pressed: brightened surface with a thin
+     yellow stroke. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#FF1C2230" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="@color/forza_yellow" />
+        </shape>
+    </item>
+    <item
+        android:width="4dp"
+        android:gravity="start|fill_vertical">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/forza_yellow" />
+        </shape>
+    </item>
+</layer-list>

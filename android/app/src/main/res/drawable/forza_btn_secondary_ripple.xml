@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Secondary button background: Forza states plus a yellow ripple. -->
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/forza_ripple_dark">
+    <item android:drawable="@drawable/forza_btn_secondary_states" />
+</ripple>

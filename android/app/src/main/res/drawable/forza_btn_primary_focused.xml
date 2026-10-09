@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- START GAME button, focused: brighter slab plus a hot white underline
+     glow bar along the bottom edge (the extra pop comes from the focus
+     scale animation in code). -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/forza_yellow_pressed" />
+        </shape>
+    </item>
+    <item android:gravity="bottom" android:height="3dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+    <item
+        android:width="12dp"
+        android:gravity="start|fill_vertical"
+        android:drawable="@drawable/forza_cap_dark" />
+    <item
+        android:width="12dp"
+        android:gravity="end|fill_vertical"
+        android:drawable="@drawable/forza_cap_end_dark" />
+</layer-list>

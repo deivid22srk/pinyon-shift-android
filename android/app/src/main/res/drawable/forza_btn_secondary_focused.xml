@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Secondary action button, focused: cyan glow stroke plus a solid
+     yellow accent bar on the left edge. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/forza_surface_raised" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="2dp" android:color="@color/forza_cyan" />
+        </shape>
+    </item>
+    <item
+        android:width="4dp"
+        android:gravity="start|fill_vertical">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/forza_yellow" />
+        </shape>
+    </item>
+</layer-list>

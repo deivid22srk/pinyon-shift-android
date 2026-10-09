@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Plain row of the Forza-styled folder browser dialog. -->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/text1"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="44dp"
+    android:background="@color/forza_list_item_bg"
+    android:ellipsize="middle"
+    android:fontFamily="@font/rajdhani_medium"
+    android:gravity="center_vertical"
+    android:maxLines="1"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp"
+    android:textColor="@color/forza_text_primary"
+    android:textSize="15sp" />

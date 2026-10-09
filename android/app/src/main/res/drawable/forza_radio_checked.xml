@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Checked radio mark of the driver list: solid Forza yellow square
+     with a cut top-right corner (angular, Forza-style). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp"
+    android:height="16dp"
+    android:viewportWidth="16"
+    android:viewportHeight="16">
+    <path
+        android:fillColor="@color/forza_yellow"
+        android:pathData="M0,0 H16 V16 H0 Z" />
+    <path
+        android:fillColor="@color/forza_background"
+        android:pathData="M16,0 V6 L10,0 Z" />
+</vector>

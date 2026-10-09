@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Forza-style launcher background: graphite gradient with subtle
+     diagonal speed stripes (yellow/cyan), a vignette and a bottom
+     accent fade. Drawn once as the window background. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base: dark horizon gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="315"
+                android:startColor="@color/forza_background_top"
+                android:centerColor="@color/forza_background"
+                android:endColor="@color/forza_background_deep"
+                android:type="linear" />
+        </shape>
+    </item>
+
+    <!-- Diagonal speed stripe (yellow, wide, behind the content) -->
+    <item
+        android:width="2400dp"
+        android:height="120dp"
+        android:gravity="center"
+        android:top="52dp">
+        <rotate android:fromDegrees="-14">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/forza_stripe_yellow" />
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Diagonal speed stripe (cyan, thin, above the yellow one) -->
+    <item
+        android:width="2400dp"
+        android:height="34dp"
+        android:gravity="center"
+        android:top="-24dp">
+        <rotate android:fromDegrees="-14">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/forza_stripe_cyan" />
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Diagonal highlight line (bright yellow hairline) -->
+    <item
+        android:width="2400dp"
+        android:height="2dp"
+        android:gravity="center"
+        android:top="118dp">
+        <rotate android:fromDegrees="-14">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/forza_stripe_yellow_bright" />
+            </shape>
+        </rotate>
+    </item>
+
+    <!-- Vignette: darker towards the screen edges -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="900dp"
+                android:centerX="0.5"
+                android:centerY="0.5"
+                android:startColor="#00000000"
+                android:centerColor="@color/forza_vignette_mid"
+                android:endColor="@color/forza_vignette_edge" />
+        </shape>
+    </item>
+
+    <!-- Bottom accent fade: yellow bar fading out to the right -->
+    <item android:gravity="bottom" android:height="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:startColor="#8CFFD400"
+                android:centerColor="#33FFD400"
+                android:endColor="#00FFD400"
+                android:type="linear" />
+        </shape>
+    </item>
+</layer-list>

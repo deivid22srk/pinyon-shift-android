@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Two slanted speed chevrons next to the launcher title: the yellow
+     Forza accent followed by the electric cyan one. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="18dp"
+    android:viewportWidth="30"
+    android:viewportHeight="18">
+    <path
+        android:fillColor="@color/forza_yellow"
+        android:pathData="M2,18 L9,0 L14,0 L7,18 Z" />
+    <path
+        android:fillColor="@color/forza_cyan"
+        android:pathData="M14,18 L21,0 L26,0 L19,18 Z" />
+</vector>

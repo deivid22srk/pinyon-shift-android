@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dimensions of the Forza-style launcher screen. -->
+<resources>
+    <!-- Base screen padding; display-cutout insets are added on top. -->
+    <dimen name="forza_screen_padding">20dp</dimen>
+    <dimen name="forza_btn_height">44dp</dimen>
+    <dimen name="forza_btn_height_small">40dp</dimen>
+    <dimen name="forza_start_height">64dp</dimen>
+    <dimen name="forza_card_corner">2dp</dimen>
+</resources>

@@ -1,9 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Game picker palette: dark horizon-inspired. -->
-    <color name="picker_background">#FF101014</color>
-    <color name="picker_card">#FF1C1C22</color>
-    <color name="picker_accent">#FFFFB300</color>
-    <color name="picker_text">#FFF2F2F2</color>
-    <color name="picker_text_dim">#FF9A9AA2</color>
+    <!-- Forza-style launcher palette: graphite horizon with the Forza
+         yellow accent and the electric cyan focus color. The legacy
+         picker_* names stay defined (dialogs and the theme reference
+         them) and now resolve to the same Forza palette. -->
+    <color name="picker_background">#FF0B0D12</color>
+    <color name="picker_card">#E6131720</color>
+    <color name="picker_accent">#FFFFD400</color>
+    <color name="picker_text">#FFF2F4F8</color>
+    <color name="picker_text_dim">#FF9AA0AC</color>
+
+    <!-- Core surfaces -->
+    <color name="forza_background">#FF0B0D12</color>
+    <color name="forza_background_deep">#FF07080C</color>
+    <color name="forza_background_top">#FF171B26</color>
+    <color name="forza_surface">#E6131720</color>
+    <color name="forza_surface_raised">#F0171C27</color>
+
+    <!-- Accents -->
+    <color name="forza_yellow">#FFFFD400</color>
+    <color name="forza_yellow_pressed">#FFE8C200</color>
+    <color name="forza_yellow_disabled">#FF2A2F3B</color>
+    <color name="forza_cyan">#FF00B7FF</color>
+    <color name="forza_cyan_soft">#6600B7FF</color>
+
+    <!-- Text -->
+    <color name="forza_text_primary">#FFF2F4F8</color>
+    <color name="forza_text_secondary">#FFB8BEC9</color>
+    <color name="forza_text_dim">#FF9AA0AC</color>
+    <color name="forza_text_on_accent">#FF0B0D12</color>
+    <color name="forza_text_on_accent_disabled">#FF707886</color>
+
+    <!-- Strokes and decorations -->
+    <color name="forza_stroke">#FF2E3442</color>
+    <color name="forza_stroke_focus">#FF00B7FF</color>
+    <color name="forza_stroke_focus_yellow">#FFFFD400</color>
+    <color name="forza_accent_bar">#66FFD400</color>
+    <color name="forza_stripe_yellow">#12FFD400</color>
+    <color name="forza_stripe_yellow_bright">#26FFD400</color>
+    <color name="forza_stripe_cyan">#0D00B7FF</color>
+    <color name="forza_chip_bg">#F011141B</color>
+    <color name="forza_ripple_dark">#40FFD400</color>
+    <color name="forza_ripple_light">#40000000</color>
+    <color name="forza_vignette_edge">#B8000000</color>
+    <color name="forza_vignette_mid">#30000000</color>
+
+    <!-- List highlight inside Forza dialogs -->
+    <color name="forza_list_checked">#26FFD400</color>
+    <color name="forza_list_pressed">#33FFFFFF</color>
 </resources>
