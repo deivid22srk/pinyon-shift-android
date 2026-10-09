@@ -35,6 +35,7 @@
 #include "ui/host_style.h"
 #include "ui/hostui/host_ui.h"
 #include "cheats.h"
+#include "lut_fallback.h"
 #include "mod/mod_host.h"
 #include "mod/overlay_device.h"
 #include "save/car_cards.h"
@@ -83,6 +84,12 @@ REXCVAR_DEFINE_BOOL(pinyon_shift_prepare_all_scales, false, "Pinyon Shift",
     .lifecycle(rex::cvar::Lifecycle::kRequiresRestart);
 REXCVAR_DEFINE_BOOL(pinyon_shift_capture_performance, true, "Pinyon Shift",
                     "Capture lightweight per-frame performance counters to a session CSV");
+REXCVAR_DEFINE_BOOL(pinyon_shift_identity_lut_fallback, false, "Graphics",
+                    "Write an identity 16x16x16 colour-grading LUT (colorgradinglookup00.dds) "
+                    "next to a track that has none, so grading samples a neutral table instead "
+                    "of missing files (blown highlights, near-black panels). Off by default: "
+                    "the synthetic DDS format is not verified against the original files - "
+                    "re-copy Media/tracks from the disc extraction when possible");
 namespace {
 
 // Schema 22 added the renderer choice (fh1_renderer) and schema 23 made the
@@ -787,6 +794,16 @@ void PinyonShiftApp::OnPostSetup() {
       window()->app_context().CallInUIThreadDeferred([this] { OpenSettingsMenu(); });
     }
   });
+  // Identity colour-grading LUT seeding (BUG-03/10.2): before the title
+  // enumerates Media/tracks, give track folders without any grading LUT a
+  // synthetic neutral one, so grading runs on identity instead of nothing.
+  if (REXCVAR_GET(pinyon_shift_identity_lut_fallback)) {
+    const size_t luts_seeded = pinyon_shift::SeedIdentityLuts(game_data_root());
+    if (luts_seeded) {
+      pinyon_shift::diagnostics::RecordEvent(
+          "colourgrading.luts_seeded", {{"count", std::to_string(luts_seeded)}});
+    }
+  }
   if (!enabled_mods_.empty()) {
     pinyon_shift::mod::HostServices services;
     services.config = host_config_.get();
