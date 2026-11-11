@@ -232,7 +232,8 @@ PC at its next build), the graphics driver's own shader cache, and the files
 
 ### Requirements
 
-- The USA retail base disc, serial `MS-2505`, title ID `4D5309C9`.
+- A supported retail base disc, serial `MS-2505`, title ID `4D5309C9`: the
+  USA disc or the European disc (`En,Fr,De,Es,It,Nl`).
 - Windows 10 or 11, x64.
 - A GPU with Vulkan 1.3 (the default) or Direct3D 12. Only NVIDIA GPUs are
   qualified so far; AMD and Intel are untested.

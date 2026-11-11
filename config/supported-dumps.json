@@ -64,6 +64,52 @@
           "sha256": "ED285BEEFEAFCDC90CF64D6085D19C874E3F1E15072C12CDF9BA2237C88E2CE5"
         }
       ]
+    },
+    {
+      "id": "forza-horizon-europe-ms-2505-retail-base",
+      "status": "locally_verified_not_redump_hash_matched",
+      "platform": "Xbox 360",
+      "region": "Europe",
+      "serial": "MS-2505",
+      "title_id": "4D5309C9",
+      "languages": [
+        "English",
+        "French",
+        "German",
+        "Spanish",
+        "Italian",
+        "Dutch"
+      ],
+      "iso": {
+        "size_bytes": 8738846720,
+        "sha256": "8CA4FCEA7DE7FC26F3E4F2D4DBDC11EC8E68E434D93A2A7E361B1DBBFB0C8189"
+      },
+      "extraction": {
+        "tool": "extract-xiso",
+        "skip_system_update": true,
+        "file_count": 2414,
+        "size_bytes": 7509980004
+      },
+      "executables": [
+        {
+          "guest_path": "default.xex",
+          "role": "entrypoint",
+          "size_bytes": 20856832,
+          "sha256": "4DE2FF6545088CBABC4E18080A67A85EAAFCCB292B6CBDA3630FCF53E5C8C2CA"
+        },
+        {
+          "guest_path": "SpeechFacade_default.xex",
+          "role": "candidate_module",
+          "size_bytes": 2138112,
+          "sha256": "A14A6ADE33EC967AEEF2A28FFFC496FBBCA05DE1F1D94AE8C342CF3F3819B3CA"
+        },
+        {
+          "guest_path": "XMediaFacade_default.xex",
+          "role": "candidate_module",
+          "size_bytes": 2662400,
+          "sha256": "DF4D92608FD16E696A3D46C56A67F5077FEC56218AECDB196DE991C151BAC208"
+        }
+      ]
     }
   ]
 }

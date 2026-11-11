@@ -155,13 +155,17 @@ if (Get-Process pinyon_shift -ErrorAction SilentlyContinue) { throw 'Close the p
 $game = if ($GameRoot) { (Resolve-Path -LiteralPath $GameRoot).Path } else { Join-Path $root '.local/game/base' }
 $script = (Resolve-Path -LiteralPath $RenderTestScript).Path
 $python = Get-PinyonPython
-$dump = (Get-Content (Join-Path $root 'config/supported-dumps.json') -Raw | ConvertFrom-Json).dumps[0]
-foreach ($entry in $dump.executables) {
-    $path = Join-Path $game $entry.guest_path
-    if ((Get-Item -LiteralPath $path).Length -ne $entry.size_bytes -or
-        (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash -ne $entry.sha256) {
-        throw 'The extracted game executables do not match the supported FH1 revision.'
-    }
+$supportedDumps = (Get-Content (Join-Path $root 'config/supported-dumps.json') -Raw | ConvertFrom-Json).dumps
+# The game root may come from either supported dump; keep the one it matches.
+$dump = $supportedDumps | Where-Object {
+    @($_.executables | Where-Object {
+        $path = Join-Path $game $_.guest_path
+        (Get-Item -LiteralPath $path).Length -eq [int64]$_.size_bytes -and
+        (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash -eq $_.sha256
+    }).Count -eq $_.executables.Count
+} | Select-Object -First 1
+if ($null -eq $dump) {
+    throw 'The extracted game executables do not match the supported FH1 revision.'
 }
 [void](New-Item -ItemType Directory -Path $work)
 $build = if ($BuildDirectory) { (Resolve-Path -LiteralPath $BuildDirectory).Path } else { Join-Path $root 'out/build/win-amd64-release' }
