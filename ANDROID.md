@@ -1,6 +1,7 @@
 # Pinyon Shift for Android
 
-Forza Horizon (Xbox 360, USA retail disc MS-2505 / title 4D5309C9), recompiled
+Forza Horizon (Xbox 360, retail disc serial MS-2505, USA or European base disc /
+title 4D5309C9), recompiled
 to run natively on Android. This repository is the Android port of
 [Pinyon Shift](https://github.com/arcanite24/pinyon-shift): the game's PowerPC
 code is translated ahead of time into C++ with the pinned

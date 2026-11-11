@@ -147,7 +147,7 @@
                                 <StackPanel VerticalAlignment="Center" Margin="0,0,16,0">
                                     <TextBlock x:Name="DropHintText" Text="Drop your Forza Horizon .iso here"
                                                FontSize="17" FontFamily="Bahnschrift SemiBold" TextTrimming="CharacterEllipsis"/>
-                                    <TextBlock Text="The USA retail disc (MS-2505), dumped from your own copy."
+                                    <TextBlock Text="A supported retail disc (MS-2505, USA or Europe), dumped from your own copy."
                                                FontSize="13" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0"/>
                                 </StackPanel>
                             </DockPanel>

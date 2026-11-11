@@ -2,10 +2,11 @@
 
 ## The ISO is rejected
 
-Only the USA retail base disc listed in `config/supported-dumps.json` is
-supported. A bad dump, another region, a title update, or a modified image will
-not match. The launcher does not accept nearly matching images and cannot
-download or repair one.
+Only the retail base discs listed in `config/supported-dumps.json` are
+supported: the USA disc and the European disc, both serial `MS-2505`. A bad
+dump, another region, a title update, or a modified image will not match. The
+launcher does not accept nearly matching images and cannot download or repair
+one.
 
 ## Setup asks for administrator permission
 

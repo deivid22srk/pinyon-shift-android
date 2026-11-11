@@ -48,16 +48,19 @@ $cpuFlags = if ($cpuBaseline -eq 'fma') { '-msse4.1 -mfma -ffp-contract=off' } e
 
 $supportedDumps = Get-Content -LiteralPath (Join-Path $root 'config/supported-dumps.json') -Raw |
     ConvertFrom-Json
-$supportedXex = $supportedDumps.dumps[0].executables |
-    Where-Object { $_.guest_path -eq 'default.xex' } | Select-Object -First 1
+$supportedEntrypoints = @($supportedDumps.dumps | ForEach-Object {
+    $_.executables | Where-Object { $_.guest_path -eq 'default.xex' } | Select-Object -First 1
+})
 $gameXex = Resolve-PinyonLocalPath -RelativePath '.local/game/base/default.xex'
-if ($null -eq $supportedXex -or -not (Test-Path -LiteralPath $gameXex -PathType Leaf)) {
+if ($supportedEntrypoints.Count -eq 0 -or -not (Test-Path -LiteralPath $gameXex -PathType Leaf)) {
     throw 'The supported default.xex is not available for code generation.'
 }
 $gameXexInfo = Get-Item -LiteralPath $gameXex
 $gameXexSha256 = (Get-FileHash -LiteralPath $gameXex -Algorithm SHA256).Hash
-if ($gameXexInfo.Length -ne [int64]$supportedXex.size_bytes -or
-    $gameXexSha256 -ne $supportedXex.sha256) {
+$supportedXex = $supportedEntrypoints | Where-Object {
+    [int64]$_.size_bytes -eq $gameXexInfo.Length -and $_.sha256 -eq $gameXexSha256
+} | Select-Object -First 1
+if ($null -eq $supportedXex) {
     throw 'default.xex does not match the exact supported EPIC-08 patch target.'
 }
 $guestPatchPath = Join-Path $root 'config/rexglue/analysis/fh1-post-processing.toml'
